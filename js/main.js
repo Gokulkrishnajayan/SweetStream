@@ -13,7 +13,7 @@
     // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {
-            if ($(window).width() > 992) {
+            if ($(window).width() > 980) {
                 $('.navbar .dropdown').on('mouseover', function () {
                     $('.dropdown-toggle', this).trigger('click');
                 }).on('mouseout', function () {
@@ -30,7 +30,7 @@
     // Collapse navbar on link click (for mobile)
     $(document).ready(function () {
         $('.navbar-nav .nav-link').on('click', function () {
-            if ($(window).width() <= 992) {
+            if ($(window).width() <= 980) {
                 $('.navbar-collapse').collapse('hide');
             }
         });
