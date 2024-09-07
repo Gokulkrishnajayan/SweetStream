@@ -59,18 +59,18 @@
             $('.back-to-top').fadeIn('slow');
         } else {
             $('.back-to-top').fadeOut('slow');
-            return false;
         }
     });
+
     $('.back-to-top').click(function () {
         $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
-        return ;
+        return false; // Prevent default action and ensure multiple clicks don't cause issues
     });
 
     // Facts counter
     $('[data-toggle="counter-up"]').counterUp({
         delay: 200,
-        timetime: 2000
+        time: 2000 // Corrected from "timetime" to "time"
     });
 
 })(jQuery);
