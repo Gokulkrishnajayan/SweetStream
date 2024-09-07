@@ -68,8 +68,8 @@
 
     // Facts counter
     $('[data-toggle="counter-up"]').counterUp({
-        delay: 5,
-        time: 2000
+        delay: 200,
+        timetime: 2000
     });
 
 })(jQuery);
