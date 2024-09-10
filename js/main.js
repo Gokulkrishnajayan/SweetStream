@@ -63,7 +63,7 @@
     });
 
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 600, 'easeInOutExpo');
+        $('html, body').animate({scrollTop: 0}, 500, 'easeInOutExpo');
         return false; // Prevent default action and ensure multiple clicks don't cause issues
     });
 

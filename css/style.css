@@ -311,9 +311,9 @@ h6,
 
 .bg-img {
     background: linear-gradient(rgba(43, 40, 37, .5), rgba(43, 40, 37, .5)), url(../img/bg.jpg) center center no-repeat;
-    background-size: cover;
+    background-size: screen;
 }
 
  .scroll-to {
-          scroll-margin-top: 56px; /* Same as the padding-top */
+          scroll-margin-top: 90px; /* Same as the padding-top */
  }
