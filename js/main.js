@@ -69,7 +69,7 @@
 
     // Facts counter
     $('[data-toggle="counter-up"]').counterUp({
-        delay: 200,
+        delay: 20,
         time: 2000 // Corrected from "timetime" to "time"
     });
 
