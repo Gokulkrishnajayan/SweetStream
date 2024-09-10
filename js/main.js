@@ -63,13 +63,13 @@
     });
 
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({scrollTop: 0}, 600, 'easeInOutExpo');
         return false; // Prevent default action and ensure multiple clicks don't cause issues
     });
 
     // Facts counter
     $('[data-toggle="counter-up"]').counterUp({
-        delay: 200,
+        delay: 20,
         time: 2000 // Corrected from "timetime" to "time"
     });
 
