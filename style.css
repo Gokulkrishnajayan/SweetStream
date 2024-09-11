@@ -5,18 +5,28 @@ body {
 }
 
 .sidebar {
-    background-color: #1b1f3a;
+    background: linear-gradient(135deg, #1b263b, #324a5f);
+    color: #fff;
 }
 
 .sidebar .nav-link {
     padding: 10px 15px;
     font-weight: 500;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.2rem;
 }
 
 .sidebar .nav-link:hover {
-    background-color: #283049;
+    background-color: #3c5d73;
+}
+
+.sidebar .nav-link.active {
+    background-color: #ff6f61;
+    color: white;
 }
 
 h1, h2, h5 {
