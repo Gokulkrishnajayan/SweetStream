@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - SweetStream Payasam</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Sidebar -->
+        <div class="row flex-nowrap">
+            <nav class="col-auto col-md-3 col-lg-2 d-flex flex-column bg-dark text-light min-vh-100 p-3 sidebar">
+                <a href="/" class="text-center text-decoration-none mb-4 logo text-white fs-4">SweetStream</a>
+                <ul class="nav flex-column gap-3">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active d-flex align-items-center gap-2 text-white">
+                            <i class="fa fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#orders" class="nav-link d-flex align-items-center gap-2 text-white">
+                            <i class="fa fa-box"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#history" class="nav-link d-flex align-items-center gap-2 text-white">
+                            <i class="fa fa-clock"></i> Order History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#account" class="nav-link d-flex align-items-center gap-2 text-white">
+                            <i class="fa fa-user"></i> Account Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="col py-4 px-5 main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="mb-5">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="display-6">Welcome, John!</h1>
+                        <button class="btn btn-primary shadow-sm">Order New Payasam</button>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5>Recent Orders</h5>
+                                        <span class="badge bg-warning text-dark">2 Pending</span>
+                                    </div>
+                                    <p class="text-muted">You have pending orders waiting to be processed.</p>
+                                    <a href="#orders" class="btn btn-outline-primary btn-sm">View Orders</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5>Profile Information</h5>
+                                    <p class="text-muted">Name: John Doe</p>
+                                    <p class="text-muted">Email: john@example.com</p>
+                                    <a href="#account" class="btn btn-outline-primary btn-sm">Update Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="orders" class="mt-5">
+                    <h2 class="mb-4">Current Orders</h2>
+                    <table class="table table-hover shadow-sm">
+                        <thead class="bg-light text-muted">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Item</th>
+                                <th>Status</th>
+                                <th>Estimated Delivery</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <!-- Orders dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Order History Section -->
+                <div id="history" class="mt-5">
+                    <h2 class="mb-4">Order History</h2>
+                    <p class="text-muted">No past orders available.</p>
+                </div>
+
+                <!-- Account Settings Section -->
+                <div id="account" class="mt-5">
+                    <h2 class="mb-4">Account Settings</h2>
+                    <form class="shadow-sm p-4 bg-white rounded">
+                        <div class="mb-3">
+                            <label for="nameInput" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="nameInput" value="John Doe">
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailInput" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="emailInput" value="john@example.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
