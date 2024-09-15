@@ -1,79 +1,62 @@
 /* style.css */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f0f2f5;
+    background-color: #f5f7fa;
 }
 
 .sidebar {
-    background-color: #1a1a2e;
+    background-color: #1b1f3a;
 }
 
 .sidebar .nav-link {
+    padding: 10px 15px;
     font-weight: 500;
-    padding: 15px;
-    transition: background-color 0.2s ease-in-out;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-.sidebar .nav-link.active,
 .sidebar .nav-link:hover {
-    background-color: #162447;
+    background-color: #283049;
 }
 
-.sidebar .nav-link i {
-    font-size: 18px;
+h1, h2, h5 {
+    font-weight: 700;
 }
 
-.main-content {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-h1, h2 {
-    font-weight: 600;
-}
-
-.card {
-    border-radius: 12px;
+.btn-gradient {
+    background: linear-gradient(135deg, #ff6f61, #ff4040);
+    color: white;
     border: none;
-    transition: transform 0.3s ease-in-out;
+    transition: background 0.3s;
 }
 
-.card:hover {
-    transform: translateY(-5px);
+.btn-gradient:hover {
+    background: linear-gradient(135deg, #ff5045, #ff3030);
 }
 
-.btn {
-    border-radius: 8px;
+.product-card {
+    border-radius: 12px;
+    transition: transform 0.3s;
+    overflow: hidden;
 }
 
-.btn-primary {
-    background-color: #1a73e8;
-    border: none;
-    transition: background-color 0.3s ease-in-out;
+.product-card img {
+    transition: transform 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: #165bb7;
+.product-card:hover img {
+    transform: scale(1.1);
 }
 
-.table th, .table td {
-    vertical-align: middle;
+.product-card:hover {
+    transform: translateY(-10px);
 }
 
-.table th {
-    font-weight: 600;
+.modal-footer .btn-gradient {
+    background: linear-gradient(135deg, #ff6f61, #ff4040);
+    transition: 0.3s;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #f9f9f9;
-}
-
-.form-control {
-    border-radius: 8px;
-}
-
-.form-control:focus {
-    box-shadow: none;
+.modal-footer .btn-gradient:hover {
+    background: linear-gradient(135deg, #ff5045, #ff3030);
 }
