@@ -1,2 +1,2 @@
 # SweetStream
-this website is an ecommerce website for payasam
+this website is an ecommerce website for payasam.
