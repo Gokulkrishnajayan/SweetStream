@@ -1,0 +1,114 @@
+/* Import Google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600&family=Pacifico&display=swap');
+
+/* Color palette */
+:root {
+    --primary: #E88F2A; /* Accent orange */
+    --secondary: #FAF3EB; /* Subtle yellowish background */
+    --light: #FFFFFF; /* Light color */
+    --dark: #2B2825; /* Dark color */
+}
+
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Oswald', sans-serif; /* Default font */
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(43, 40, 37, .9), rgba(43, 40, 37, .9)), url('../img/bg.jpg') center center no-repeat;
+    background-size: cover;
+}
+
+.container {
+    background: var(--light); /* White background for the form container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+}
+
+.container h1 {
+    color: var(--dark);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--dark);
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.form-group input:focus {
+    border-color: var(--primary); /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: var(--light);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, opacity 0.3s; /* Smooth transition for hover */
+}
+
+.btn:hover {
+    background: #d6792f; /* Change to a darker shade on hover */
+    opacity: 0.9; /* Slightly fade on hover, but not fully */
+}
+
+.signup {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 500;
+}
+
+.signup a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.signup a:hover {
+    text-decoration: underline;
+    color: darken(var(--primary), 10%);
+}
+
+/* Additional styles for login and signup forms (if needed) */
+.container .registration {
+    display: none;
+}
+
+#check:checked ~ .registration {
+    display: block;
+}
+
+#check:checked ~ .login {
+    display: none;
+}
+
+#check {
+    display: none;
+}
+
+/* Add any other common styles here as needed */
