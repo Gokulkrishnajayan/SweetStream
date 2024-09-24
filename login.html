@@ -12,20 +12,42 @@
 
     <div class="container">
         <h1>Login</h1>
+        <div id="error-message" style="color: red; display: none;"></div>
         <form class="form">
             <div class="form-group">
-                <input type="email" placeholder="Email" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Email" required>
             </div>
             <div class="form-group">
-                <input type="password" placeholder="Password" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Password" required>
+                <a href="forgot-password.html">Forgot Password?</a>
             </div>
+
             <button type="submit" class="btn">Login</button>
         </form>
+        
         <div class="signup">
             <p>Don't have an account? <a href="signup.html">Sign up</a></p>
         </div>
     </div>
-    
+
+    <script>
+        document.querySelector('.form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Example validation (customize as needed)
+            if (email === "" || password === "") {
+                document.getElementById('error-message').textContent = 'Email and Password are required.';
+                document.getElementById('error-message').style.display = 'block';
+            } else {
+                // Perform your login logic here
+                console.log('Logging in with:', email, password);
+            }
+        });
+    </script>
 
 </body>
 </html>

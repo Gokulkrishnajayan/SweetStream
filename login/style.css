@@ -43,7 +43,7 @@ body {
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.3rem;
 }
 
 .form-group input {
@@ -80,7 +80,7 @@ body {
 
 .signup {
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1.0rem;
     font-weight: 500;
 }
 
@@ -89,9 +89,17 @@ body {
     text-decoration: none;
 }
 
-.signup a:hover {
+.signup a:hover,.form-group a:hover {
     text-decoration: underline;
     color: darken(var(--primary), 10%);
+}
+
+/* Forgot Password Styles */
+
+.form-group a {
+    margin-top: 0.5rem;
+    color: var(--primary); /* Use the primary color for the link */
+    text-decoration: none; /* Remove underline */
 }
 
 /* Additional styles for login and signup forms (if needed) */
@@ -109,6 +117,6 @@ body {
 
 #check {
     display: none;
-}
 
-/* Add any other common styles here as needed */
+/* Add any other common styles here as needed */ 
+}
