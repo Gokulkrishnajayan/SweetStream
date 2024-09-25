@@ -13,7 +13,7 @@
     <div class="container">
         <h1>Login</h1>
         <div id="error-message" style="color: red; display: none;"></div>
-        <form class="form">
+        <form class="form"  method="POST" action="./user/index.html">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" placeholder="Email" required>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         document.querySelector('.form').addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent the default form submission
             const email = document.getElementById('email').value;
@@ -47,7 +47,7 @@
                 console.log('Logging in with:', email, password);
             }
         });
-    </script>
+    </script> -->
 
 </body>
 </html>
