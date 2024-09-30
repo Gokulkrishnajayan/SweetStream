@@ -228,58 +228,54 @@
 	</div>
 	<!-- end copyright -->
 
-	<!-- jquery -->
-	<script src="assets/js/jquery-1.12.4.min.js"></script>
-	<!-- popper js -->
-	<script src="assets/js/popper.min.js"></script>
-	<!-- bootstrap js -->
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- mean menu js -->
-	<script src="assets/js/jquery.meanmenu.min.js"></script>
-	<!-- wow js -->
-	<script src="assets/js/wow.min.js"></script>
-	<!-- owl carousel js -->
-	<script src="assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup js -->
-	<script src="assets/js/jquery.magnific-popup.js"></script>
-	<!-- custom js -->
-	<script src="assets/js/main.js"></script>
 
-	<script>
-		$(document).ready(function(){
-			$("#edit-btn").click(function(){
-				$("input").prop("disabled", false);
-			});
-		});
-	</script>
+    <script>
+        $(document).ready(function(){
+            $("#edit-btn").click(function(){
+                $("input").prop("disabled", false);
+                $("textarea").prop("disabled", false);
+                $("#edit-btn").hide();
+                $("#save-btn").show();
+                $("#cancel-btn").show();
+            });
+    
+            $("#save-btn").click(function(){
+                $("input").prop("disabled", true);
+                $("textarea").prop("disabled", true);
+                $("#edit-btn").show();
+                $("#save-btn").hide();
+                $("#cancel-btn").hide();
+            });
+    
+            $("#cancel-btn").click(function(){
+                $("input").prop("disabled", true);
+                $("textarea").prop("disabled", true);
+                $("#edit-btn").show();
+                $("#save-btn").hide();
+                $("#cancel-btn").hide();
+            });
+        });
+    </script>
 
-<script>
-	$(document).ready(function(){
-		$("#edit-btn").click(function(){
-			$("input").prop("disabled", false);
-			$("textarea").prop("disabled", false);
-			$("#edit-btn").hide();
-			$("#save-btn").show();
-			$("#cancel-btn").show();
-		});
+    <!-- jquery -->
+<script src="assets/js/jquery-1.12.4.min.js"></script>
+<!-- popper js -->
+<script src="assets/js/popper.min.js"></script>
+<!-- bootstrap js -->
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<!-- mean menu js -->
+<script src="assets/js/jquery.meanmenu.min.js"></script>
+<!-- wow js -->
+<script src="assets/js/wow.min.js"></script>
+<!-- owl carousel js -->
+<script src="assets/js/owl.carousel.min.js"></script>
+<!-- magnific popup js -->
+<script src="assets/js/jquery.magnific-popup.js"></script>
+<!-- custom js -->
+<script src="assets/js/main.js"></script>
 
-		$("#save-btn").click(function(){
-			$("input").prop("disabled", true);
-			$("textarea").prop("disabled", true);
-			$("#edit-btn").show();
-			$("#save-btn").hide();
-			$("#cancel-btn").hide();
-		});
 
-		$("#cancel-btn").click(function(){
-			$("input").prop("disabled", true);
-			$("textarea").prop("disabled", true);
-			$("#edit-btn").show();
-			$("#save-btn").hide();
-			$("#cancel-btn").hide();
-		});
-	});
-</script>
 
+	
 </body>
 </html>
