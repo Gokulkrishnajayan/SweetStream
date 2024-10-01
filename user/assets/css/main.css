@@ -2797,36 +2797,53 @@ table.order-details tbody td {
 .order-status {
   text-align: right; /* Align status to the right */
 }
+
 /* Search Area Styles */
 .search-area2 {
-  margin-bottom: 20px; /* Space below the search area */
+  margin-bottom: 0; /* Remove space below the search area */
   display: flex; /* Flexbox for alignment */
   justify-content: center; /* Center elements horizontally */
+  align-items: center; /* Center elements vertically */
+  padding: 0; /* Remove padding around the search area */
 }
+
 .input-group {
   width: 100%; /* Make input group full width */
   max-width: 600px; /* Optional: limit max width */
   border-radius: 5px; /* Rounded corners for the entire group */
   overflow: hidden; /* Ensure no overflow */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  margin: 0; /* Remove any margin */
 }
+
 .search-input {
   border: 1px solid #ccc; /* Border color */
-  border-right: none; /* Remove right border for seamless connection */
   border-radius: 5px 0 0 5px; /* Rounded corners for left side */
   padding: 10px; /* Padding for input */
   transition: border-color 0.3s; /* Smooth transition for focus */
+  width: 100%; /* Ensure it takes full width of input group */
+  margin: 0; /* Ensure no margin */
+  height: auto;
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
+
 .search-input:focus {
   border-color: #28a745; /* Change border color on focus */
   box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Add shadow on focus */
   outline: none; /* Remove default outline */
 }
+
 .search-button {
+  border: 1px solid #ccc; /* Match border with input */
+  background-color: #28a745; /* Match background with input */
+  color: white; /* Text color for the button */
   border-radius: 0 5px 5px 0; /* Rounded corners for right side */
   padding: 10px 15px; /* Padding for button */
   transition: background-color 0.3s; /* Smooth transition for hover */
+  margin: 0; /* Ensure no margin */
+  height: 100%; /* Make button full height of input group */
 }
+
 .search-button:hover {
   background-color: #218838; /* Darker shade on hover */
 }
@@ -2843,3 +2860,7 @@ table.order-details tbody td {
       border-radius: 5px; /* Full rounded corners on small screens */
   }
 }
+
+
+
+
