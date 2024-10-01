@@ -2757,6 +2757,9 @@ table.order-details tbody td {
   width: 100%;
 }
 
+
+
+/* Order Page */
 .order-tracking-section {
   padding: 50px 15px; /* Increased padding for better spacing */
 }
@@ -2766,9 +2769,60 @@ table.order-details tbody td {
   padding: 30px;
   background-color: #ffffff;
 }
-.table {
-  margin-top: 20px;
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  margin: 15px 0; /* Space between individual orders */
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect for each order */
+  border-radius: 8px; /* Rounded corners */
 }
-.badge {
-  font-size: 0.9rem; /* Slightly smaller badge font */
+.order-item:last-child {
+  margin-bottom: 0; /* Remove bottom margin for last item */
+}
+.order-item img {
+  width: 80px; /* Fixed width for product image */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 15px; /* Space between image and text */
+}
+.order-info {
+  flex-grow: 1; /* Allow this section to take available space */
+  margin-right: 15px; /* Space between details and status */
+}
+.product-price {
+  margin-right: 15px; /* Space between price and status */
+}
+.order-status {
+  text-align: right; /* Align status to the right */
+}
+/* Search Area Styles */
+.search-area2 {
+  margin-bottom: 20px; /* Space below the search area */
+  display: flex; /* Flexbox for alignment */
+  justify-content: center; /* Center elements horizontally */
+}
+.input-group {
+  width: 100%; /* Make input group full width */
+  max-width: 600px; /* Optional: limit max width */
+}
+.input-group .form-control {
+  border-radius: 5px 0 0 5px; /* Rounded corners for left side */
+}
+.input-group .btn {
+  border-radius: 0 5px 5px 0; /* Rounded corners for right side */
+}
+
+/* Responsive Styles */
+@media (max-width: 576px) {
+  .search-area2 {
+    flex-direction: column; /* Stack elements on smaller screens */
+  }
+  .input-group {
+    width: 100%; /* Full width on small screens */
+  }
+  .input-group .btn {
+    border-radius: 5px; /* Full rounded corners on small screens */
+  }
 }

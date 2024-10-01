@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Order Tracking Page for SweetStream">
+    <meta name="description"
+        content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
     <!-- title -->
-    <title>Order Tracking - SweetStream</title>
+    <title>About</title>
 
     <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
@@ -18,48 +20,21 @@
     <link rel="stylesheet" href="assets/css/all.min.css">
     <!-- bootstrap -->
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.css">
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <!-- animate css -->
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <!-- mean menu css -->
+    <link rel="stylesheet" href="assets/css/meanmenu.min.css">
     <!-- main style -->
     <link rel="stylesheet" href="assets/css/main.css">
     <!-- responsive -->
     <link rel="stylesheet" href="assets/css/responsive.css">
-    <style>
-        /* Additional styles for full display */
-        .order-tracking-section {
-            padding: 50px 15px; /* Increased padding for better spacing */
-        }
-        .tracking-card {
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            background-color: #ffffff;
-        }
-        .order-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #eaeaea;
-        }
-        .order-item:last-child {
-            border-bottom: none; /* Remove border for last item */
-        }
-        .order-item img {
-            width: 80px; /* Fixed width for product image */
-            height: auto; /* Maintain aspect ratio */
-            margin-right: 15px; /* Space between image and text */
-        }
-        .order-details {
-            flex-grow: 1; /* Allow this section to take available space */
-            margin-right: 15px; /* Space between details and status */
-        }
-        .order-status {
-            text-align: right; /* Align status to the right */
-        }
-        .search-area {
-            margin-bottom: 30px; /* Space below search bar */
-        }
-    </style>
+
 </head>
+
 <body>
     <!-- header -->
     <div class="top-header-area" id="sticker">
@@ -67,29 +42,34 @@
             <div class="row">
                 <div class="col-lg-12 col-sm-12 text-center">
                     <div class="main-menu-wrap">
+                        <!-- logo -->
                         <div class="site-logo">
                             <a href="#">
                                 <h3 class="orange-text">SweetStream</h3>
                             </a>
                         </div>
+                        <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
                                 <li><a href="index.html">Home</a></li>
                                 <li><a href="shop.html">Shop</a></li>
-                                <li class="current-list-item"><a href="order.html">Order</a></li>
-                                <li><a href="about.html">About</a></li>
+                                <li><a href="order.html">Order</a></li>
+                                <li class="current-list-item"><a href="about.html">About</a></li>
                                 <li><a href="contact.html">Contact</a></li>
                                 <li><a href="profile.html">Profile</a></li>
                                 <li>
                                     <div class="header-icons">
-                                        <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-                                        <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                                        <a class="shopping-cart" href="cart.html"><i
+                                                class="fas fa-shopping-cart"></i></a>
+                                        <a class="mobile-hide search-bar-icon" href="#"><i
+                                                class="fas fa-search"></i></a>
                                     </div>
                                 </li>
                             </ul>
                         </nav>
                         <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
                         <div class="mobile-menu"></div>
+                        <!-- menu end -->
                     </div>
                 </div>
             </div>
@@ -97,7 +77,26 @@
     </div>
     <!-- end header -->
 
-    <!-- breadcrumb section -->
+    <!-- search area -->
+    <div class="search-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <span class="close-btn"><i class="fas fa-window-close"></i></span>
+                    <div class="search-bar">
+                        <div class="search-bar-tablecell">
+                            <h3>Search For:</h3>
+                            <input type="text" placeholder="Keywords">
+                            <button type="submit">Search <i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end search area -->
+
+    <!-- breadcrumb-section -->
     <div class="breadcrumb-section breadcrumb-bg">
         <div class="container">
             <div class="row">
@@ -112,24 +111,6 @@
     </div>
     <!-- end breadcrumb section -->
 
-    <!-- search area -->
-    <div class="search-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="search-bar">
-                        <div class="search-bar-tablecell">
-                            <h3>Search Your Orders:</h3>
-                            <input type="text" placeholder="Search by product name or order ID">
-                            <button type="submit">Search <i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end search area -->
-
     <!-- order tracking section -->
     <div class="order-tracking-section">
         <div class="container-fluid">
@@ -137,37 +118,53 @@
                 <div class="col-lg-12">
                     <div class="tracking-card">
                         <h3 class="text-center">Your Recent Orders</h3>
+
+                      <!-- Search Area for Order Tracking -->
+<div class="search-area2 mb-4">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search by product name or order ID">
+        <div class="input-group-append">
+            <button class="btn btn-success" type="submit">
+                Search <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+                        <!-- Order Items -->
                         <div class="order-item">
                             <img src="assets/img/products/parippu.jpg" alt="Parippu">
-                            <div class="order-details">
+                            <div class="order-info">
                                 <h5>Parippu</h5>
-                                <p class="product-price">₹240.00</p>
+                                <p class="order-id">Order ID: #12345</p>
                             </div>
+                            <p class="product-price">₹240.00</p>
                             <div class="order-status">
-                                <span class="badge badge-success">Delivered on Mar 29</span>
-                                <p>Your item has been delivered</p>
+                                <span class="badge badge-success">Delivered</span>
                             </div>
                         </div>
                         <div class="order-item">
                             <img src="assets/img/products/palada.jpg" alt="Palada">
-                            <div class="order-details">
+                            <div class="order-info">
                                 <h5>Palada</h5>
-                                <p class="product-price">₹299.00</p>
+                                <p class="order-id">Order ID: #12346</p>
                             </div>
+                            <p class="product-price">₹299.00</p>
                             <div class="order-status">
-                                <span class="badge badge-success">Delivered on Jun 09, 2022</span>
-                                <p>Your item has been delivered</p>
+                                <span class="badge badge-success">Delivered</span>
                             </div>
                         </div>
                         <div class="order-item">
                             <img src="assets/img/products/gothambu.jpg" alt="Gothambu">
-                            <div class="order-details">
+                            <div class="order-info">
                                 <h5>Gothambu</h5>
-                                <p class="product-price">₹1,099.00</p>
+                                <p class="order-id">Order ID: #12347</p>
                             </div>
+                            <p class="product-price">₹1,099.00</p>
                             <div class="order-status">
-                                <span class="badge badge-danger">Cancelled on Aug 07, 2021</span>
-                                <p>Your order was cancelled</p>
+                                <span class="badge badge-danger">Cancelled</span>
                             </div>
                         </div>
                     </div>
@@ -184,7 +181,8 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-box about-widget">
                         <h2 class="widget-title">About us</h2>
-                        <p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
+                        <p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
+                            doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -220,16 +218,16 @@
                     </div>
                 </div>
             </div>
+            <!-- footer end -->
         </div>
     </div>
-    <!-- end footer -->
-
     <!-- copyright -->
     <div class="copyright">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <p>Copyrights &copy; 2023 SweetStream. All Rights Reserved.</p>
+                    <p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
+                        Reserved.</p>
                 </div>
                 <div class="col-lg-6 text-right col-md-12">
                     <div class="social-icons">
@@ -247,9 +245,27 @@
     </div>
     <!-- end copyright -->
 
-    <!-- jQuery -->
+    <!-- jquery -->
     <script src="assets/js/jquery-1.11.3.min.js"></script>
     <!-- bootstrap -->
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- count down -->
+    <script src="assets/js/jquery.countdown.js"></script>
+    <!-- isotope -->
+    <script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+    <!-- waypoints -->
+    <script src="assets/js/waypoints.js"></script>
+    <!-- owl carousel -->
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <!-- magnific popup -->
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- mean menu -->
+    <script src="assets/js/jquery.meanmenu.min.js"></script>
+    <!-- sticker js -->
+    <script src="assets/js/sticker.js"></script>
+    <!-- main js -->
+    <script src="assets/js/main.js"></script>
+
 </body>
+
 </html>
