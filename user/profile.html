@@ -7,7 +7,7 @@
 	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
-	<title>Profile</title>
+	<title>About</title>
 
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
@@ -32,8 +32,7 @@
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
 </head>
-<body>
-	
+<body>	
 	<!-- header -->
 	<div class="top-header-area" id="sticker">
 		<div class="container">
@@ -113,50 +112,52 @@
 
 	<!-- profile section -->
 <div class="profile-section mt-150 mb-150">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 offset-lg-2">
-				<div class="profile-card">
-					<div class="profile-info">
-						<h3>Profile Information</h3>
-						<p>Below is your profile information</p>
-					</div>
-					<div class="profile-form">
-						<form>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label for="first-name">First Name:</label>
-									<input type="text" class="form-control" id="first-name" value="John" disabled>
-								</div>
-								<div class="form-group col-md-6">
-									<label for="last-name">Last Name:</label>
-									<input type="text" class="form-control" id="last-name" value="Doe" disabled>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="email">Email:</label>
-								<input type="email" class="form-control" id="email" value="johndoe@example.com" disabled>
-							</div>
-							<div class="form-group">
-								<label for="phone">Phone Number:</label>
-								<input type="text" class="form-control" id="phone" value="123-456-7890" disabled>
-							</div>
-							<div class="form-group">
-								<label for="address">Address:</label>
-								<textarea class="form-control" id="address" rows="3" disabled>123 Main St, Anytown, USA</textarea>
-							</div>
-							<button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-							<button type="button" class="btn btn-secondary" id="save-btn" style="display: none;">Save Changes</button>
-							<button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="profile-card shadow-lg p-4 rounded">
+                    <div class="profile-info text-center">
+                        <h3>Profile Information</h3>
+                    </div>
+                    <div class="profile-form">
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="first-name">First Name:</label>
+                                    <input type="text" class="form-control" id="first-name" value="John" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="last-name">Last Name:</label>
+                                    <input type="text" class="form-control" id="last-name" value="Doe" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" value="johndoe@example.com" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number:</label>
+                                <input type="text" class="form-control" id="phone" value="123-456-7890" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address:</label>
+                                <textarea class="form-control" id="address" rows="3" disabled>123 Main St, Anytown, USA</textarea>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+                                <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
+                                <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- end profile section -->
 
+	
 
 	<!-- footer -->
 	<div class="footer-area">
@@ -229,53 +230,30 @@
 	<!-- end copyright -->
 
 
-    <script>
-        $(document).ready(function(){
-            $("#edit-btn").click(function(){
-                $("input").prop("disabled", false);
-                $("textarea").prop("disabled", false);
-                $("#edit-btn").hide();
-                $("#save-btn").show();
-                $("#cancel-btn").show();
-            });
-    
-            $("#save-btn").click(function(){
-                $("input").prop("disabled", true);
-                $("textarea").prop("disabled", true);
-                $("#edit-btn").show();
-                $("#save-btn").hide();
-                $("#cancel-btn").hide();
-            });
-    
-            $("#cancel-btn").click(function(){
-                $("input").prop("disabled", true);
-                $("textarea").prop("disabled", true);
-                $("#edit-btn").show();
-                $("#save-btn").hide();
-                $("#cancel-btn").hide();
-            });
-        });
-    </script>
-
-    <!-- jquery -->
-<script src="assets/js/jquery-1.12.4.min.js"></script>
-<!-- popper js -->
-<script src="assets/js/popper.min.js"></script>
-<!-- bootstrap js -->
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<!-- mean menu js -->
-<script src="assets/js/jquery.meanmenu.min.js"></script>
-<!-- wow js -->
-<script src="assets/js/wow.min.js"></script>
-<!-- owl carousel js -->
-<script src="assets/js/owl.carousel.min.js"></script>
-<!-- magnific popup js -->
-<script src="assets/js/jquery.magnific-popup.js"></script>
-<!-- custom js -->
-<script src="assets/js/main.js"></script>
-
-
-
 	
+	
+	<!-- jquery -->
+	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<!-- bootstrap -->
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<!-- count down -->
+	<script src="assets/js/jquery.countdown.js"></script>
+	<!-- isotope -->
+	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<!-- waypoints -->
+	<script src="assets/js/waypoints.js"></script>
+	<!-- owl carousel -->
+	<script src="assets/js/owl.carousel.min.js"></script>
+	<!-- magnific popup -->
+	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<!-- mean menu -->
+	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<!-- sticker js -->
+	<script src="assets/js/sticker.js"></script>
+	<!-- main js -->
+	<script src="assets/js/main.js"></script>
+	<!-- form updation -->
+	<script src="assets/js/form-updation.js"></script>
+
 </body>
 </html>

@@ -2756,3 +2756,19 @@ table.order-details tbody td {
   vertical-align: middle;
   width: 100%;
 }
+
+.order-tracking-section {
+  padding: 50px 15px; /* Increased padding for better spacing */
+}
+.tracking-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  background-color: #ffffff;
+}
+.table {
+  margin-top: 20px;
+}
+.badge {
+  font-size: 0.9rem; /* Slightly smaller badge font */
+}

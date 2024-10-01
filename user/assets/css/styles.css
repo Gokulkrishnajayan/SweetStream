@@ -1,0 +1,31 @@
+.order-tracking-section {
+    background-color: #f9f9f9;
+    padding: 50px 0;
+}
+
+.tracking-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.breadcrumb-section {
+    background: #007bff;
+    color: white;
+    padding: 20px 0;
+}
+
+.breadcrumb-text h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
