@@ -2763,12 +2763,14 @@ table.order-details tbody td {
 .order-tracking-section {
   padding: 50px 15px; /* Increased padding for better spacing */
 }
+
 .tracking-card {
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 30px;
   background-color: #ffffff;
 }
+
 .order-item {
   display: flex;
   align-items: center;
@@ -2779,24 +2781,65 @@ table.order-details tbody td {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect for each order */
   border-radius: 8px; /* Rounded corners */
 }
+
 .order-item:last-child {
   margin-bottom: 0; /* Remove bottom margin for last item */
 }
+
 .order-item img {
   width: 80px; /* Fixed width for product image */
   height: auto; /* Maintain aspect ratio */
   margin-right: 15px; /* Space between image and text */
 }
+
 .order-info {
   flex-grow: 1; /* Allow this section to take available space */
   margin-right: 15px; /* Space between details and status */
 }
+
 .product-price {
   margin-right: 15px; /* Space between price and status */
 }
+
 .order-status {
   text-align: right; /* Align status to the right */
 }
+
+/* Responsive Styles */
+@media (max-width: 425px) { /* Medium devices (tablets) */
+  .order-item {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text for better alignment */
+  }
+
+  .order-item img {
+    margin-bottom: 10px; /* Space below image */
+    width: 100%; /* Make image full width */
+    max-width: 80px; /* Limit max width for smaller screens */
+  }
+
+  .order-info {
+    margin: 0; /* Remove margins for a cleaner layout */
+    margin-bottom: 10px; /* Space below order info */
+  }
+
+  .product-price {
+    margin-right: 0; /* Remove right margin */
+    margin-bottom: 5px; /* Space below price */
+  }
+
+  .order-status {
+    text-align: center; /* Center status text */
+  }
+}
+
+@media (max-width: 320px) { /* Small devices (phones) */
+  .order-item {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+}
+
 
 /* Search Area Styles */
 .search-area2 {
