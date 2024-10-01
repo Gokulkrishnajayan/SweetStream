@@ -2806,7 +2806,7 @@ table.order-details tbody td {
 }
 
 /* Responsive Styles */
-@media (max-width: 425px) { /* Medium devices (tablets) */
+@media (max-width: 576px) { /* Medium devices (tablets) */
   .order-item {
     flex-direction: column; /* Stack items vertically */
     align-items: center; /* Center items horizontally */
@@ -2834,7 +2834,7 @@ table.order-details tbody td {
   }
 }
 
-@media (max-width: 320px) { /* Small devices (phones) */
+@media (max-width: 425px) { /* Small devices (phones) */
   .order-item {
     padding: 10px; /* Reduce padding for smaller screens */
   }
