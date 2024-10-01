@@ -2806,23 +2806,40 @@ table.order-details tbody td {
 .input-group {
   width: 100%; /* Make input group full width */
   max-width: 600px; /* Optional: limit max width */
+  border-radius: 5px; /* Rounded corners for the entire group */
+  overflow: hidden; /* Ensure no overflow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
 }
-.input-group .form-control {
+.search-input {
+  border: 1px solid #ccc; /* Border color */
+  border-right: none; /* Remove right border for seamless connection */
   border-radius: 5px 0 0 5px; /* Rounded corners for left side */
+  padding: 10px; /* Padding for input */
+  transition: border-color 0.3s; /* Smooth transition for focus */
 }
-.input-group .btn {
+.search-input:focus {
+  border-color: #28a745; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Add shadow on focus */
+  outline: none; /* Remove default outline */
+}
+.search-button {
   border-radius: 0 5px 5px 0; /* Rounded corners for right side */
+  padding: 10px 15px; /* Padding for button */
+  transition: background-color 0.3s; /* Smooth transition for hover */
+}
+.search-button:hover {
+  background-color: #218838; /* Darker shade on hover */
 }
 
 /* Responsive Styles */
 @media (max-width: 576px) {
   .search-area2 {
-    flex-direction: column; /* Stack elements on smaller screens */
+      flex-direction: column; /* Stack elements on smaller screens */
   }
   .input-group {
-    width: 100%; /* Full width on small screens */
+      width: 100%; /* Full width on small screens */
   }
   .input-group .btn {
-    border-radius: 5px; /* Full rounded corners on small screens */
+      border-radius: 5px; /* Full rounded corners on small screens */
   }
 }
