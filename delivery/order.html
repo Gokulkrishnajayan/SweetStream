@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="../user/assets/css/responsive.css">
 
     <style>
-        /* Additional styles for sticky header */
         .top-header-area {
             position: sticky;  
             top: 0;           
@@ -56,38 +55,42 @@
         .order-status {
             margin-left: 10px; 
         }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1001; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.5); /* Background color with opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff; 
+            padding: 20px;
+            border-radius: 5px; 
+            width: 600px; /* Increased width */
+            max-height: 80%; /* Set max height */
+            overflow-y: auto; /* Allow scrolling */
+            position: relative;
+        }
         .footer-area {
             background-color: #051922;
             color: #ffffff; 
             padding: 20px 0;
         }
-        .social-icons ul {
-            padding: 0;
-            list-style: none;
+        .product-row {
+            display: flex;
+            align-items: center;
+            margin: 10px 0; /* Space between products */
         }
-        .social-icons ul li {
-            display: inline; 
-            margin-right: 10px; 
-        }
-        .social-icons ul li a {
-            color: #ffffff; 
-        }
-        /* Prevent overlap */
-        .order-tracking-section {
-            margin-top: 4.5%; /* Add margin to prevent overlap */
-        }
-        .delivery-success {
-            display: block;
-            margin-top: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #28a745; /* Green color for success */
-            background-color: #eafaf1; /* Light green background */
-            padding: 10px;
-            border: 1px solid #28a745; /* Green border */
-            border-radius: 5px; /* Slightly rounded corners */
-            text-align: center; /* Centered text */
-            transition: all 0.3s ease; /* Smooth transition */
+        .product-row img {
+            width: 60px; /* Smaller image size */
+            height: auto;
+            margin-right: 15px; /* Space between image and name */
         }
     </style>
 </head>
@@ -109,15 +112,8 @@
                                 <li class="current-list-item"><a href="order.html">Order</a></li>
                                 <li><a href="about.html">About</a></li>
                                 <li><a href="profile.html">Profile</a></li>
-                                <li>
-                                    <div class="header-icons">
-                                        <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-                                    </div>
-                                </li>
                             </ul>
                         </nav>
-                        <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-                        <div class="mobile-menu"></div>
                     </div>
                 </div>
             </div>
@@ -149,37 +145,34 @@
                         <div class="order-item">
                             <img src="assets/img/products/parippu.jpg" alt="Parippu">
                             <div class="order-info">
-                                <h5>Parippu</h5>
-                                <p class="order-id">Order ID: #12345</p>
+                                <h5>Order ID: #12345</h5>
+                                <p>Customer: John Doe</p>
+                                <p>Address: 34/8, East Hukupara, Gifirtok, Sadan.</p>
                             </div>
-                            <p class="product-price">₹240.00</p>
                             <div class="order-status">
-                                <button class="btn btn-primary" onclick="confirmOrder(this)">Confirm Order</button>
-                                <span class="delivery-status"></span>
+                                <button class="btn btn-primary" onclick="openModal(this, 'John Doe', '#12345')">Accept Order</button>
                             </div>
                         </div>
                         <div class="order-item">
                             <img src="assets/img/products/palada.jpg" alt="Palada">
                             <div class="order-info">
-                                <h5>Palada</h5>
-                                <p class="order-id">Order ID: #12346</p>
+                                <h5>Order ID: #12346</h5>
+                                <p>Customer: Jane Smith</p>
+                                <p>Address: 12/5, North Avenue, City Center.</p>
                             </div>
-                            <p class="product-price">₹299.00</p>
                             <div class="order-status">
-                                <button class="btn btn-primary" onclick="confirmOrder(this)">Confirm Order</button>
-                                <span class="delivery-status"></span>
+                                <button class="btn btn-primary" onclick="openModal(this, 'Jane Smith', '#12346')">Accept Order</button>
                             </div>
                         </div>
                         <div class="order-item">
                             <img src="assets/img/products/gothambu.jpg" alt="Gothambu">
                             <div class="order-info">
-                                <h5>Gothambu</h5>
-                                <p class="order-id">Order ID: #12347</p>
+                                <h5>Order ID: #12347</h5>
+                                <p>Customer: Alice Johnson</p>
+                                <p>Address: 45/2, South Road, Downtown.</p>
                             </div>
-                            <p class="product-price">₹1,099.00</p>
                             <div class="order-status">
-                                <button class="btn btn-primary" onclick="confirmOrder(this)">Confirm Order</button>
-                                <span class="delivery-status"></span>
+                                <button class="btn btn-primary" onclick="openModal(this, 'Alice Johnson', '#12347')">Accept Order</button>
                             </div>
                         </div>
                     </div>
@@ -188,6 +181,19 @@
         </div>
     </div>
     <!-- end order tracking section -->
+
+    <!-- Modal Structure -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <h5 class="text-center">Order Details</h5>
+            <div id="orderDetails"></div>
+            <div class="mt-3">
+                <button class="btn btn-success" id="confirmOrder" onclick="confirmOrder()" disabled>Confirm Order</button>
+                <button class="btn btn-danger" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!-- end Modal -->
 
     <!-- footer -->
     <div class="footer-area">
@@ -263,41 +269,57 @@
     <script src="../user/assets/js/jquery-1.11.3.min.js"></script>
     <!-- bootstrap -->
     <script src="../user/assets/bootstrap/js/bootstrap.min.js"></script>
-    <!-- count down -->
-    <script src="../user/assets/js/jquery.countdown.js"></script>
-    <!-- isotope -->
-    <script src="../user/assets/js/jquery.isotope-3.0.6.min.js"></script>
-    <!-- waypoints -->
-    <script src="../user/assets/js/waypoints.js"></script>
-    <!-- owl carousel -->
-    <script src="../user/assets/js/owl.carousel.min.js"></script>
-    <!-- magnific popup -->
-    <script src="../user/assets/js/jquery.magnific-popup.min.js"></script>
-    <!-- mean menu -->
-    <script src="../user/assets/js/jquery.meanmenu.min.js"></script>
-    <!-- sticker js -->
-    <script src="../user/assets/js/sticker.js"></script>
     <!-- main js -->
     <script src="../user/assets/js/main.js"></script>
 
     <script>
-        function confirmOrder(button) {
-            // Change button to 'Delivered'
-            button.textContent = "Delivered";
-            button.className = "btn btn-success"; // Change button style
-            button.setAttribute("onclick", "markAsDelivered(this)"); // Change the onclick event
-            button.nextElementSibling.textContent = ""; // Clear any previous message
+        function openModal(button, customerName, orderId) {
+            const modal = $('#orderModal');
+            const orderDetails = `
+                <h6>Order ID: ${orderId}</h6>
+                <h6>Customer: ${customerName}</h6>
+                <h6>Products:</h6>
+                <div class="product-row">
+                    <img src="assets/img/products/parippu.jpg" alt="Parippu"> 
+                    <span>Parippu (Quantity: 1)</span>
+                    <input type="checkbox" class="product-checkbox" onchange="checkAll(this)">
+                </div>
+                <div class="product-row">
+                    <img src="assets/img/products/palada.jpg" alt="Palada"> 
+                    <span>Palada (Quantity: 2)</span>
+                    <input type="checkbox" class="product-checkbox" onchange="checkAll(this)">
+                </div>
+                <div class="product-row">
+                    <img src="assets/img/products/gothambu.jpg" alt="Gothambu"> 
+                    <span>Gothambu (Quantity: 1)</span>
+                    <input type="checkbox" class="product-checkbox" onchange="checkAll(this)">
+                </div>
+            `;
+            $('#orderDetails').html(orderDetails);
+            modal.show();
         }
 
-        function markAsDelivered(button) {
-            // Hide the button
-            button.style.display = "none";
-
-            // Display 'Order Delivered Successfully'
-            const deliveryStatus = button.nextElementSibling;
-            deliveryStatus.textContent = "Order Successfully";
-            deliveryStatus.className = "delivery-success"; // Updated class for styling
+        function closeModal() {
+            $('#orderModal').hide();
         }
+
+        function checkAll(checkbox) {
+            const allCheckboxes = $('.product-checkbox');
+            const confirmButton = $('#confirmOrder');
+            const allChecked = allCheckboxes.length === allCheckboxes.filter(':checked').length;
+            confirmButton.prop('disabled', !allChecked);
+        }
+
+        function confirmOrder() {
+            alert('Order confirmed!');
+            $('#orderModal').hide(); // Hide the modal
+        }
+
+        $(window).click(function(event) {
+            if ($(event.target).is('#orderModal')) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
