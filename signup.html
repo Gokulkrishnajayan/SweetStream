@@ -11,21 +11,22 @@
 <body>
     <div class="container">
         <h1>Sign Up</h1>
-        <form class="form">
+        <form class="form" action="./php/user_signup.php" method="POST">
             <div class="form-group">
-                <input type="text" placeholder="Full Name" required>
+                <input type="text" name="full_name" placeholder="Full Name" required>
             </div>
             <div class="form-group">
-                <input type="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Email" required>
             </div>
             <div class="form-group">
-                <input type="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
             <div class="form-group">
-                <input type="password" placeholder="Confirm Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
             </div>
             <button type="submit" class="btn">Sign Up</button>
         </form>
+        
         <div class="signup">
             <p>Already have an account? <a href="login.html">Log in</a></p>
         </div>
