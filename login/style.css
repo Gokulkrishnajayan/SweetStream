@@ -120,3 +120,29 @@ body {
 
 /* Add any other common styles here as needed */ 
 }
+
+.custom-select {
+        padding: 10px;
+        border: 1px solid var(--dark); /* Primary color border */
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Light background color */
+        color: #333; /* Text color */
+        font-size: 16px; /* Font size */
+        transition: border-color 0.3s;
+    }
+
+    .custom-select:hover,
+    .custom-select:focus {
+        border-color: var(--primary); /* Darker primary color on hover/focus */
+        outline: none; /* Remove default outline */
+    }
+    .custom-select option {
+        background-color: #f8f9fa; /* Background color of options */
+        color: #838383; /* Text color of options */
+    }
+    
+    /* Hover effects (not supported in all browsers) */
+    .custom-select option:hover {
+        background-color: #000000; /* Primary color on hover */
+        color: #ffffff; /* White text on hover */
+    }

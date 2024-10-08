@@ -34,9 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         session_start();
         $_SESSION['user_id'] = $user['id']; // Adjust this to your user ID field
         $_SESSION['user_email'] = $user['email'];
+        echo "Login successful!";
 
-        // Redirect to a welcome page or dashboard
-        header("Location: ../user/index.html");
+        if("admin"===$user['privilege']){
+            header("Location: ../admin/dark/dashboard-analytics.html");
+        }
+        elseif("user"===$user['privilege']){
+            header("Location: ../user/index.html");
+        }
+        elseif("delivery"=== $user['privilege']){
+            header("Location: ../delivery/index.html");
+        }
         exit;
     } else {
         echo "Invalid email or password.";

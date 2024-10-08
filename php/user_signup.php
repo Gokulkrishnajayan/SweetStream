@@ -19,9 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $confirmPassword = trim($_POST['confirm_password']);
+    $userPrivilege =  trim($_POST['user_privileges']);
 
     // Basic validation
-    if (empty($fullName) || empty($email) || empty($password) || empty($confirmPassword)) {
+    if (empty($fullName) || empty($email) || empty($password) || empty($confirmPassword) || empty($userPrivilege)) {
         echo "All fields are required.";
         exit;
     }
@@ -44,11 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert new user into the database
-    $stmt = $pdo->prepare("INSERT INTO user_table (name, email, password) VALUES (?, ?, ?)");
-    
-    if ($stmt->execute([$fullName, $email, $hashedPassword])) {
+    $stmt = $pdo->prepare("INSERT INTO user_table (name, email, password,privilege) VALUES (?, ?, ?, ?)");
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($stmt->execute([$fullName, $email, $hashedPassword,$userPrivilege])) {
         echo "Registration successful!";
-        header("Location: ../user/index.html ");
+        
+        if("user"===$userPrivilege){
+            header("Location: ../user/index.html");
+        }
+        elseif("delivery"=== $userPrivilege){
+            header("Location: ../delivery/index.html");
+        }
+        exit;
         
     } else {
         echo "Something went wrong. Please try again.";
