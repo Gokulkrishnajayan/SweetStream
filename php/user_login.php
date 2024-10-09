@@ -1,9 +1,9 @@
 <?php
 // Database configuration
-$host = 'localhost'; // Your database host
-$dbname = 'sweetstream'; // Your database name
-$username = 'root'; // Your database username
-$password = ''; // Your database password
+$host = 'sql104.infinityfree.com'; // Your database host
+$dbname = 'if0_37456290_Sweetstream'; // Your database name
+$username = 'if0_37456290'; // Your database username
+$password = 'gokuldragon@123'; // Your database password
 
 // Create a new PDO instance
 try {
