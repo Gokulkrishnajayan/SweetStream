@@ -1,4 +1,4 @@
-name: FTP Deploy to InfinityFree
+name: FTP Deploy
 
 on:
   push:
@@ -7,22 +7,21 @@ on:
 
 jobs:
   ftp-deploy:
-    name: Deploy to InfinityFree FTP
+    name: Deploy to FTP
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the latest code
+      # Step 1: Checkout the latest code from the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Deploy to FTP using FTP-Deploy-Action
+      # Step 2: Deploy code to FTP server using SamKirkland's FTP-Deploy-Action
       - name: Deploy to FTP server
-        uses: SamKirkland/FTP-Deploy-Action@4.3.1
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.1
         with:
-          ftp-server: ${{ secrets.FTP_HOST }}
-          ftp-username: ${{ secrets.FTP_USERNAME }}
-          ftp-password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./           # The directory to upload, adjust if needed
-          server-dir: /htdocs/    # InfinityFree's public directory is usually /htdocs/
-          port: ${{ secrets.FTP_PORT }}
-          method: ftp
+          server: ${{ secrets.FTP_HOST }}       # Your FTP server host
+          username: ${{ secrets.FTP_USERNAME }} # Your FTP username
+          password: ${{ secrets.FTP_PASSWORD }} # Your FTP password
+          local-dir: ./                         # Local directory to upload (your project root)
+          server-dir: /htdocs/                  # Target directory on the FTP server
+          protocol: ftp                         # Set FTP as the protocol
