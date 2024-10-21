@@ -8,7 +8,7 @@
 
 	<!-- title -->
 	<title>About</title>
-
+	
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
 	<!-- google font -->
@@ -30,6 +30,9 @@
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
+	
+	<!-- form updation -->
+	<script src="assets/js/form-updation.js"></script>
 
 </head>
 <body>	
@@ -56,7 +59,7 @@
 								<li><a href="order.html">Order</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
-								<li class="current-list-item"><a href="profile.html">Profile</a></li>
+								<li class="current-list-item"><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
@@ -93,7 +96,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- end search arewa -->
+	<!-- end search area -->
 	
 	<!-- breadcrumb-section -->
 	<div class="breadcrumb-section breadcrumb-bg">
@@ -120,28 +123,28 @@
                         <h3>Profile Information</h3>
                     </div>
                     <div class="profile-form">
-                        <form>
+                        <form id="profile-form">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="first-name">First Name:</label>
-                                    <input type="text" class="form-control" id="first-name" value="John" disabled>
+                                    <input type="text" class="form-control" id="first-name" disabled>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="last-name">Last Name:</label>
-                                    <input type="text" class="form-control" id="last-name" value="Doe" disabled>
+                                    <input type="text" class="form-control" id="last-name" disabled>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" value="johndoe@example.com" disabled>
+                                <input type="email" class="form-control" id="email" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number:</label>
-                                <input type="text" class="form-control" id="phone" value="123-456-7890" disabled>
+                                <input type="text" class="form-control" id="phone" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="address">Address:</label>
-                                <textarea class="form-control" id="address" rows="3" disabled>123 Main St, Anytown, USA</textarea>
+                                <textarea class="form-control" id="address" rows="3" disabled></textarea>
                             </div>
                             <div class="button-group">
                                 <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
