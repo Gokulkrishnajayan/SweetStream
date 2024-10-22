@@ -159,7 +159,7 @@
 
       <main role="main" class="main-content">
 
-      <?php
+        <?php
 $host = 'localhost';
 $user = 'root';
 $password = '';
@@ -186,86 +186,65 @@ if ($result->num_rows > 0) {
 ?>
 
 <!-- HTML Section -->
-<div class="container-fluid py-5">
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="page-title">Stock Inventory</h2>
-                <button type="button" class="btn btn-lg btn-primary">
-                    <span class="fe fe-plus fe-16 mr-2"></span>Add New Product
-                </button>
+        <div class="col-md-12">
+            <div class="row align-items-center my-3">
+                <div class="col">
+                    <h2 class="page-title">Stock Inventory</h2>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-lg btn-primary">
+                        <span class="fe fe-plus fe-16 mr-3"></span>New
+                    </button>
+                </div>
             </div>
 
-            <div class="file-container border-top pt-4">
-                <div class="file-panel">
+            <div class="file-container border-top">
+                <div class="file-panel mt-4">
                     <h6 class="mb-3">Inventory Overview</h6>
                     <hr class="my-4">
 
                     <div class="row">
                         <?php foreach ($products as $product): ?>
-                            <div class="col-md-6 col-lg-4 mb-4">
-                                <div class="card shadow-sm border-0 h-100 hover-shadow">
-                                    <div class="card-body d-flex align-items-center">
-                                        <div class="circle circle-md bg-primary text-center">
-                                            <span class="fe fe-folder fe-16 text-white"></span>
-                                        </div>
-                                        <div class="flex-fill ml-4">
-                                            <strong class="d-block text-dark">
-                                                <?php echo htmlspecialchars($product['pname']); ?>
-                                            </strong>
-                                            <span class="badge badge-secondary">
-                                                <?php echo $product['current_stock']; ?> stock
-                                            </span>
-                                        </div>
-                                        <div class="file-action ml-auto">
-                                            <button type="button" class="btn btn-sm btn-link text-muted p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fe fe-more-vertical fe-16"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#"><i class="fe fe-edit-3 mr-2"></i>Edit</a>
-                                                <a class="dropdown-item" href="#"><i class="fe fe-trash mr-2"></i>Delete</a>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card shadow mb-4">
+                                    <div class="card-body file-list">
+                                        <div class="d-flex align-items-center">
+                                            <div class="circle circle-md bg-secondary">
+                                                <span class="fe fe-folder fe-16 text-white"></span>
+                                            </div>
+                                            <div class="flex-fill ml-4 fname">
+                                                <strong><?php echo htmlspecialchars($product['name']); ?></strong><br />
+                                                <span class="badge badge-light text-muted">
+                                                    <?php echo $product['current_stock']; ?> in stock
+                                                </span>
+                                            </div>
+                                            <div class="file-action">
+                                                <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="text-muted sr-only">Action</span>
+                                                </button>
+                                                <div class="dropdown-menu m-2">
+                                                    <a class="dropdown-item" href="#"><i class="fe fe-edit-3 fe-12 mr-4"></i>Edit</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    </div> <!-- .card-body -->
+                                </div> <!-- .card -->
+                            </div> <!-- .col -->
                         <?php endforeach; ?>
                     </div> <!-- .row -->
+
                 </div> <!-- .file-panel -->
             </div> <!-- .file-container -->
         </div> <!-- .col -->
     </div> <!-- .row -->
 </div> <!-- .container-fluid -->
 
-<!-- CSS Enhancements -->
-<style>
-    .hover-shadow:hover {
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
-        transition: all 0.3s;
-    }
-    .circle {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .page-title {
-        font-size: 28px;
-        font-weight: 600;
-    }
-    .btn-lg {
-        font-size: 16px;
-    }
-</style>
-
-
 
 
         
-<div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -300,10 +279,32 @@ if ($result->num_rows > 0) {
                       </div>
                     </div>
                   </div>
-
+                  <div class="list-group-item bg-transparent">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="fe fe-inbox fe-24"></span>
+                      </div>
+                      <div class="col">
+                        <small><strong>Notifications have been sent</strong></small>
+                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
+                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
+                      </div>
+                    </div> <!-- / .row -->
+                  </div>
+                  <div class="list-group-item bg-transparent">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <span class="fe fe-link fe-24"></span>
+                      </div>
+                      <div class="col">
+                        <small><strong>Link was attached to menu</strong></small>
+                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
+                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
+                      </div>
+                    </div>
+                  </div> <!-- / .row -->
                 </div> <!-- / .list-group -->
               </div>
-              
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
               </div>
@@ -368,8 +369,6 @@ if ($result->num_rows > 0) {
         </div>
       </main> <!-- main -->
     </div> <!-- .wrapper -->
-
-    
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/moment.min.js"></script>
