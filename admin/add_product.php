@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("sdss", $name, $price, $description, $dbImagePath);
 
             if ($stmt->execute()) {
-                echo "Product added successfully!<br>";
+                echo "Product added successfully!";
             } else {
                 echo "Database error: " . $stmt->error;
             }
