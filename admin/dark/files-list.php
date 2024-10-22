@@ -23,6 +23,67 @@
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    /* Product Card Styling */
+    .product-card {
+        border-radius: 10px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Aspect Ratio Control */
+    .ratio-4-3 {
+        position: relative;
+        width: 100%;
+        padding-bottom: 75%; /* 4:3 ratio (3/4 * 100) */
+        overflow: hidden;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .ratio-4-3 img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures proper aspect ratio */
+        object-position: center; /* Aligns the image to the center */
+        transform: translate(-50%, -50%);
+    }
+
+    /* Stock Badge Styling */
+    .stock-badge {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 30px;
+        background-color: rgba(255, 0, 0, 0.8); /* Optional: Add background color */
+        color: white; /* Optional: Change text color */
+    }
+
+    /* Truncate Long Text */
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Typography */
+    .price {
+        font-size: 18px;
+        font-weight: 600;
+    }
+</style>
+
+
+
 </head>
 
 
@@ -159,12 +220,12 @@
     <!-- side nav bar end -->
 
     <?php
-     include '../../php/db_connection.php'; // Include database connection
+include '../../php/db_connection.php'; // Include database connection
 
-      // Fetch products from the database
-     $sql = "SELECT pid, pname, pphoto, pdescription, pprice, current_stock FROM product_table";
-     $result = $conn->query($sql);
-    ?>
+// Fetch products from the database
+$sql = "SELECT pid, pname, pphoto, pdescription, pprice, current_stock FROM product_table";
+$result = $conn->query($sql);
+?>
 
 <main role="main" class="main-content">
   <div class="container-fluid">
@@ -175,173 +236,187 @@
             <h2 class="page-title">Products</h2>
           </div>
           <div class="col-auto">
-            <!-- Button to Open the Modal -->
             <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#addProductModal">
-              <span class="fe fe-plus fe-16 mr-3"></span>New
+              <span class="fe fe-plus fe-16 mr-2"></span>New Product
             </button>
           </div>
         </div>
 
-        <h6 class="mb-3">Quick Access</h6>
-        <div class="card-deck mb-4">
+        <h6 class="mb-4">Explore Our Products</h6>
+
+        <div class="row">
           <?php if ($result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
-              <div class="card border-0 bg-transparent">
-                <img src="../<?php echo htmlspecialchars($row['pphoto']); ?>" 
-                     alt="<?php echo htmlspecialchars($row['pname']); ?>" 
-                     class="card-img-top img-fluid rounded">
-                <div class="card-body">
-                  <h5 class="h6 card-title mb-1"><?php echo htmlspecialchars($row['pname']); ?></h5>
-                  <p class="card-text">
-                    <?php echo htmlspecialchars($row['pdescription']); ?>
-                  </p>
-                  <p class="card-text text-muted">
-                    <strong>Price:</strong> ₹<?php echo number_format($row['pprice'], 2); ?>
-                  </p>
+              <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card product-card h-100 border-0 shadow-sm">
+                  <div class="card-img-wrapper ratio-4-3 position-relative">
+                    <img src="/SweetStream/<?php echo htmlspecialchars($row['pphoto']); ?>" 
+                         alt="<?php echo htmlspecialchars($row['pname']); ?>" 
+                         class="card-img-top" loading="lazy">
+                    <?php if ($row['current_stock'] <= 5): ?>
+                      <span class="badge badge-danger position-absolute stock-badge">Low Stock</span>
+                    <?php endif; ?>
+                  </div>
+
+                  <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title text-truncate"><?php echo htmlspecialchars($row['pname']); ?></h5>
+                    <p class="card-text text-muted small mb-3 text-truncate-2">
+                      <?php echo htmlspecialchars($row['pdescription']); ?>
+                    </p>
+
+                    <div class="mt-auto">
+                      <p class="price mb-2">
+                        <strong>₹<?php echo number_format($row['pprice'], 2); ?></strong>
+                      </p>
+                      <a href="#" class="btn btn-outline-danger btn-block remove-product" data-id="<?php echo $row['pid']; ?>">Remove</a>
+
+                    </div>
+                  </div>
                 </div>
-              </div> <!-- .card -->
+              </div>
             <?php endwhile; ?>
           <?php else: ?>
-            <p>No products found.</p>
+            <p class="text-center w-100">No products found.</p>
           <?php endif; ?>
-        </div> <!-- .card-deck -->
+        </div>
       </div>
-    </div> <!-- .row -->
-  </div> <!-- .container-fluid -->
+    </div>
+  </div>
 </main>
 
 <?php
 $conn->close(); // Close the database connection
 ?>
 
-    
 
-      <!-- notification -->
-      <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="list-group list-group-flush my-n3">
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-box fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Package has uploaded successfull</strong></small>
-                      <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                      <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                    </div>
+
+
+    <!-- notification -->
+    <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="list-group list-group-flush my-n3">
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-box fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Package has uploaded successfull</strong></small>
+                    <div class="my-0 text-muted small">Package is zipped and uploaded</div>
+                    <small class="badge badge-pill badge-light text-muted">1m ago</small>
                   </div>
                 </div>
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-download fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Widgets are updated successfull</strong></small>
-                      <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                      <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                    </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-download fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Widgets are updated successfull</strong></small>
+                    <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
+                    <small class="badge badge-pill badge-light text-muted">2m ago</small>
                   </div>
                 </div>
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-inbox fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Notifications have been sent</strong></small>
-                      <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                      <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                    </div>
-                  </div> <!-- / .row -->
-                </div>
-                <div class="list-group-item bg-transparent">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <span class="fe fe-link fe-24"></span>
-                    </div>
-                    <div class="col">
-                      <small><strong>Link was attached to menu</strong></small>
-                      <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                      <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                    </div>
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-inbox fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Notifications have been sent</strong></small>
+                    <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
+                    <small class="badge badge-pill badge-light text-muted">30m ago</small>
                   </div>
                 </div> <!-- / .row -->
-              </div> <!-- / .list-group -->
+              </div>
+              <div class="list-group-item bg-transparent">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    <span class="fe fe-link fe-24"></span>
+                  </div>
+                  <div class="col">
+                    <small><strong>Link was attached to menu</strong></small>
+                    <div class="my-0 text-muted small">New layout has been attached to the menu</div>
+                    <small class="badge badge-pill badge-light text-muted">1h ago</small>
+                  </div>
+                </div>
+              </div> <!-- / .row -->
+            </div> <!-- / .list-group -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body px-5">
+            <div class="row align-items-center">
+              <div class="col-6 text-center">
+                <div class="squircle bg-success justify-content-center">
+                  <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
+                </div>
+                <p>Control area</p>
+              </div>
+              <div class="col-6 text-center">
+                <div class="squircle bg-primary justify-content-center">
+                  <i class="fe fe-activity fe-32 align-self-center text-white"></i>
+                </div>
+                <p>Activity</p>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+            <div class="row align-items-center">
+              <div class="col-6 text-center">
+                <div class="squircle bg-primary justify-content-center">
+                  <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
+                </div>
+                <p>Droplet</p>
+              </div>
+              <div class="col-6 text-center">
+                <div class="squircle bg-primary justify-content-center">
+                  <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
+                </div>
+                <p>Upload</p>
+              </div>
+            </div>
+            <div class="row align-items-center">
+              <div class="col-6 text-center">
+                <div class="squircle bg-primary justify-content-center">
+                  <i class="fe fe-users fe-32 align-self-center text-white"></i>
+                </div>
+                <p>Users</p>
+              </div>
+              <div class="col-6 text-center">
+                <div class="squircle bg-primary justify-content-center">
+                  <i class="fe fe-settings fe-32 align-self-center text-white"></i>
+                </div>
+                <p>Settings</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body px-5">
-              <div class="row align-items-center">
-                <div class="col-6 text-center">
-                  <div class="squircle bg-success justify-content-center">
-                    <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
-                  </div>
-                  <p>Control area</p>
-                </div>
-                <div class="col-6 text-center">
-                  <div class="squircle bg-primary justify-content-center">
-                    <i class="fe fe-activity fe-32 align-self-center text-white"></i>
-                  </div>
-                  <p>Activity</p>
-                </div>
-              </div>
-              <div class="row align-items-center">
-                <div class="col-6 text-center">
-                  <div class="squircle bg-primary justify-content-center">
-                    <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
-                  </div>
-                  <p>Droplet</p>
-                </div>
-                <div class="col-6 text-center">
-                  <div class="squircle bg-primary justify-content-center">
-                    <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
-                  </div>
-                  <p>Upload</p>
-                </div>
-              </div>
-              <div class="row align-items-center">
-                <div class="col-6 text-center">
-                  <div class="squircle bg-primary justify-content-center">
-                    <i class="fe fe-users fe-32 align-self-center text-white"></i>
-                  </div>
-                  <p>Users</p>
-                </div>
-                <div class="col-6 text-center">
-                  <div class="squircle bg-primary justify-content-center">
-                    <i class="fe fe-settings fe-32 align-self-center text-white"></i>
-                  </div>
-                  <p>Settings</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
     </main> <!-- main -->
   </div> <!-- .wrapper -->
 
@@ -402,6 +477,42 @@ $conn->close(); // Close the database connection
   </div>
 
 
+ 
+<script>
+$(document).on('click', '.remove-product', function(e) {
+    e.preventDefault();
+
+    var productId = $(this).data('id');
+    var confirmDelete = confirm("Are you sure you want to remove this product?");
+
+    if (confirmDelete) {
+        $.ajax({
+            type: "POST",
+            url: "../delete_product.php", // Adjust path if needed
+            data: { pid: productId },
+            cache: false, // Avoid cached responses
+            success: function(response) {
+                try {
+                    var result = JSON.parse(response);
+                    alert(result.message);
+                    if (result.success) {
+                        location.reload(); // Reload the page to reflect changes
+                    }
+                } catch (error) {
+                    console.error("Parsing error:", error);
+                    alert("Unexpected response from the server.");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX Error:", textStatus, errorThrown);
+                alert("An error occurred. Please try again.");
+            }
+        });
+    }
+});
+</script>
+
+
 
   <script>
     $(document).ready(function () {
@@ -421,6 +532,7 @@ $conn->close(); // Close the database connection
             alert(response); // Show success message or handle errors
             $('#addProductModal').modal('hide'); // Close the modal
             $('#addProductForm')[0].reset(); // Reset form fields
+            location.reload();
           },
           error: function (err) {
             alert('An error occurred while adding the product.');
