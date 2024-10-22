@@ -21,6 +21,8 @@
   <!-- App CSS -->
   <link rel="stylesheet" href="css/app-light.css" id="lightTheme" disabled>
   <link rel="stylesheet" href="css/app-dark.css" id="darkTheme">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 
@@ -156,113 +158,65 @@
     </aside>
     <!-- side nav bar end -->
 
+    <?php
+     include '../../php/db_connection.php'; // Include database connection
 
-    <main role="main" class="main-content">
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-12">
-            <div class="row align-items-center my-4">
-              <div class="col">
-                <h2 class="h3 mb-0 page-title">Users</h2>
-              </div>
-              <div class="col-auto">
-                <button type="button" class="btn btn-secondary"><span
-                    class="fe fe-trash fe-12 mr-2"></span>Delete</button>
-                <button type="button" class="btn btn-primary"><span
-                    class="fe fe-filter fe-12 mr-2"></span>Create</button>
-              </div>
-            </div>
-            <!-- table -->
-            <div class="card shadow">
-              <div class="card-body">
-                <table class="table table-borderless table-hover" id="userTable">
-                  <thead>
-                    <tr>
-                      <th>
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="all2">
-                          <label class="custom-control-label" for="all2"></label>
-                        </div>
-                      </th>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Email</th>
-                      <th>Address</th>
-                      <th>Privilege</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Dynamic rows will be inserted here -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
+      // Fetch products from the database
+     $sql = "SELECT pid, pname, pphoto, pdescription, pprice, current_stock FROM product_table";
+     $result = $conn->query($sql);
+    ?>
 
-            <nav aria-label="Table Paging" class="my-3">
-              <ul class="pagination justify-content-end mb-0">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-              </ul>
-            </nav>
-          </div> <!-- .col-12 -->
-        </div> <!-- .row -->
-      </div> <!-- .container-fluid -->
-
-
-      <!-- Edit User Modal -->
-      <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form id="editUserForm">
-                <input type="hidden" id="editUserId">
-                <div class="form-group">
-                  <label for="editName">Name</label>
-                  <input type="text" class="form-control" id="editName" required>
-                </div>
-                <div class="form-group">
-                  <label for="editPhone">Phone</label>
-                  <input type="text" class="form-control" id="editPhone" required>
-                </div>
-                <div class="form-group">
-                  <label for="editEmail">Email</label>
-                  <input type="email" class="form-control" id="editEmail" required>
-                </div>
-                <div class="form-group">
-                  <label for="editAddress">Address</label>
-                  <input type="text" class="form-control" id="editAddress" required>
-                </div>
-                <div class="form-group">
-                  <label for="editPrivilege">Privilege</label>
-                  <select class="form-control" id="editPrivilege" required>
-                    <option value="" disabled selected>Select Privilege</option>
-                    <option value="user">User</option>
-                    <option value="delivery">Delivery</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-              </form>
-            </div>
+<main role="main" class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        <div class="row align-items-center my-4">
+          <div class="col">
+            <h2 class="page-title">Products</h2>
+          </div>
+          <div class="col-auto">
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#addProductModal">
+              <span class="fe fe-plus fe-16 mr-3"></span>New
+            </button>
           </div>
         </div>
+
+        <h6 class="mb-3">Quick Access</h6>
+        <div class="card-deck mb-4">
+          <?php if ($result->num_rows > 0): ?>
+            <?php while ($row = $result->fetch_assoc()): ?>
+              <div class="card border-0 bg-transparent">
+                <img src="../<?php echo htmlspecialchars($row['pphoto']); ?>" 
+                     alt="<?php echo htmlspecialchars($row['pname']); ?>" 
+                     class="card-img-top img-fluid rounded">
+                <div class="card-body">
+                  <h5 class="h6 card-title mb-1"><?php echo htmlspecialchars($row['pname']); ?></h5>
+                  <p class="card-text">
+                    <?php echo htmlspecialchars($row['pdescription']); ?>
+                  </p>
+                  <p class="card-text text-muted">
+                    <strong>Price:</strong> ₹<?php echo number_format($row['pprice'], 2); ?>
+                  </p>
+                </div>
+              </div> <!-- .card -->
+            <?php endwhile; ?>
+          <?php else: ?>
+            <p>No products found.</p>
+          <?php endif; ?>
+        </div> <!-- .card-deck -->
       </div>
+    </div> <!-- .row -->
+  </div> <!-- .container-fluid -->
+</main>
 
+<?php
+$conn->close(); // Close the database connection
+?>
 
+    
 
-      <!-- notification area -->
+      <!-- notification -->
       <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
@@ -390,6 +344,97 @@
       </div>
     </main> <!-- main -->
   </div> <!-- .wrapper -->
+
+
+
+  <!-- Add Product Modal -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form id="addProductForm" method="post" enctype="multipart/form-data"> <!-- Added enctype -->
+          <div class="modal-body">
+
+            <!-- Product Name -->
+            <div class="form-group">
+              <label for="productName">Product Name</label>
+              <input type="text" class="form-control" id="productName" name="productName"
+                placeholder="Enter product name" required>
+            </div>
+
+            <!-- Product Price -->
+            <div class="form-group">
+              <label for="productPrice">Price</label>
+              <input type="number" class="form-control" id="productPrice" name="productPrice" placeholder="Enter price"
+                min="0" step="0.01" required>
+            </div>
+
+            <!-- Product Description -->
+            <div class="form-group">
+              <label for="productDescription">Description</label>
+              <textarea class="form-control" id="productDescription" name="productDescription" rows="3"
+                placeholder="Enter product description" required></textarea>
+            </div>
+
+            <!-- Product Image -->
+            <div class="form-group">
+              <label for="productImage">Product Image</label>
+              <input type="file" class="form-control-file" id="productImage" name="productImage" accept="image/*"
+                required>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    $(document).ready(function () {
+      $('#addProductForm').on('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Collect form data
+        const formData = new FormData(this);
+
+        $.ajax({
+          url: '../add_product.php', // Backend PHP script to handle the data
+          type: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            alert(response); // Show success message or handle errors
+            $('#addProductModal').modal('hide'); // Close the modal
+            $('#addProductForm')[0].reset(); // Reset form fields
+          },
+          error: function (err) {
+            alert('An error occurred while adding the product.');
+          }
+        });
+      });
+    });
+  </script>
+
+
+
+
+
+
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/moment.min.js"></script>
@@ -400,6 +445,7 @@
   <script src="js/tinycolor-min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/apps.js"></script>
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
   <script>
@@ -411,132 +457,6 @@
     gtag('js', new Date());
     gtag('config', 'UA-56159088-1');
   </script>
-
-
-
-  <script>
-    // Fetch and render user data
-    fetch('../fetch_users.php')
-      .then(response => response.json())
-      .then(data => {
-        const tbody = document.querySelector('#userTable tbody');
-        data.forEach(user => {
-          const checkboxId = `checkbox-${user.id}`;
-
-          const row = document.createElement('tr');
-          row.innerHTML = `
-                  <td>
-                      <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="${checkboxId}">
-                          <label class="custom-control-label" for="${checkboxId}"></label>
-                      </div>
-                  </td>
-                  <td>${user.id}</td>
-                  <td>${user.name}</td>
-                  <td>${user.phone_no}</td>
-                  <td>${user.email}</td>
-                  <td>${user.address}</td>
-                  <td>${user.privilege}</td>
-                  <td>
-                      <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item edit-user" href="#" data-user='${JSON.stringify(user)}'>Edit</a>
-                          <a class="dropdown-item remove-user" href="#" data-id="${user.id}">Remove</a>
-                      </div>
-                  </td>
-              `;
-          tbody.appendChild(row);
-        });
-
-        // Attach click event to Edit buttons
-        document.querySelectorAll('.edit-user').forEach(button => {
-          button.addEventListener('click', event => {
-            event.preventDefault();
-            const user = JSON.parse(button.getAttribute('data-user'));
-            openEditModal(user);
-          });
-        });
-
-        // Attach click event to Remove buttons
-        document.querySelectorAll('.remove-user').forEach(button => {
-          button.addEventListener('click', event => {
-            event.preventDefault();
-            const userId = button.getAttribute('data-id');
-            removeUser(userId, button.closest('tr'));
-          });
-        });
-      })
-      .catch(error => console.error('Error fetching data:', error));
-
-    // Open the modal and prefill the form with user data
-    function openEditModal(user) {
-      $('#editUserId').val(user.id);
-      $('#editName').val(user.name);
-      $('#editPhone').val(user.phone_no);
-      $('#editEmail').val(user.email);
-      $('#editAddress').val(user.address);
-      $('#editPrivilege').val(user.privilege);
-      $('#editUserModal').modal('show');
-    }
-
-    // Handle form submission to update the user
-    $('#editUserForm').on('submit', function (event) {
-      event.preventDefault();
-      const userData = {
-        id: $('#editUserId').val(),
-        name: $('#editName').val(),
-        phone_no: $('#editPhone').val(),
-        email: $('#editEmail').val(),
-        address: $('#editAddress').val(),
-        privilege: $('#editPrivilege').val()
-      };
-
-      // Send the updated data to the backend
-      fetch('../update_user.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-      })
-        .then(response => response.json())
-        .then(result => {
-          if (result.success) {
-            alert('User updated successfully!');
-            location.reload(); // Reload the page to reflect changes
-          } else {
-            alert('Error updating user!');
-          }
-        })
-        .catch(error => console.error('Error updating user:', error));
-    });
-
-    // Function to remove user
-    function removeUser(userId, row) {
-      if (confirm('Are you sure you want to remove this user?')) {
-        fetch('../remove_user.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: userId })
-        })
-          .then(response => response.json())
-          .then(result => {
-            if (result.success) {
-              alert('User removed successfully!');
-              row.remove(); // Remove row from the DOM
-            } else {
-              alert('Error removing user!');
-            }
-          })
-          .catch(error => console.error('Error removing user:', error));
-      }
-    }
-  </script>
-
-
-
-
-
 </body>
 
 </html>
