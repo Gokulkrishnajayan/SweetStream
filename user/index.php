@@ -1,3 +1,10 @@
+<?php
+// Start the session
+session_start();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -174,38 +181,91 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/parippu.jpg" alt=""></a>
-						</div>
-						<h3>Parippu</h3>
-						<p class="product-price"><span>1000 ml</span> $240 </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/palada.jpg" alt=""></a>
-						</div>
-						<h3>Palada</h3>
-						<p class="product-price"><span>1000 ml</span> $240 </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/gothambu.jpg" alt=""></a>
-						</div>
-						<h3>Gothambu</h3>
-						<p class="product-price"><span>1000 ml</span> $240</p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-			</div>
+			<?php
+    // Connect to the database
+    $host = 'localhost';
+    $user = 'root';
+    $password = '';
+    $dbname = 'sweetstream';
+
+    $conn = new mysqli($host, $user, $password, $dbname);
+
+    // Check the connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Fetch products from the database
+    $sql = "SELECT * FROM product_table";
+    $result = $conn->query($sql);
+?>
+
+<style>
+
+/* Styling for consistent product image frame */
+.product-image {
+    width: 100%;               /* Full width of the parent */
+    height: 300px;             /* Fixed height for uniform frames */
+    overflow: hidden;          /* Hide overflow outside the frame */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    background-color: #f9f9f9; /* Optional: background for smaller images */
+    border-radius: 8px;         /* Optional: rounded corners */
+    position: relative;         /* Ensures proper alignment */
+}
+
+/* Image styling to fit perfectly inside the frame */
+.product-image img {
+    max-width: 100%;            /* Ensure image does not exceed frame width */
+    max-height: 100%;           /* Ensure image does not exceed frame height */
+    width: auto;                /* Maintain natural width */
+    height: auto;               /* Maintain natural height */
+    object-fit: contain;        /* Fit the image proportionally within the frame */
+    object-position: center;    /* Center the image within the frame */
+}
+
+
+
+</style>
+
+<div class="row">
+    <?php
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="col-lg-4 col-md-6 text-center">';
+            echo '<div class="single-product-item">';
+            echo '<div class="product-image">';
+            echo '<a href="single-product.html"><img src="/sweetstream/' . $row['pphoto'] . '" alt=""></a>';
+            echo '</div>';
+            echo '<h3>' . $row['pname'] . '</h3>';
+            echo '<p class="product-price"><span>1000 ml</span> $' . $row['pprice'] . '</p>';
+
+            // Add form for "Add to Cart"
+            echo '<form method="POST" action="add_to_cart.php" id="cart-form-' . $row['pid'] . '">';
+            echo '<input type="hidden" name="product_id" value="' . $row['pid'] . '">';
+            echo '</form>';
+
+            // JavaScript-triggered <a> tag
+            echo '<a href="#" onclick="document.getElementById(\'cart-form-' . $row['pid'] . '\').submit();" class="cart-btn">';
+            echo '<i class="fas fa-shopping-cart"></i> Add to Cart';
+            echo '</a>';
+
+            echo '</div>';
+            echo '</div>';
+        }
+    } else {
+        echo '<p>No products available.</p>';
+    }
+    $conn->close();
+    ?>
+</div>
+
+
+
+
+			
 		</div>
 	</div>
 	<!-- end product section -->
