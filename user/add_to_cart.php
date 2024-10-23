@@ -11,10 +11,8 @@ $user_id = $_SESSION['user_id']; // Get the logged-in user's ID
 $product_id = $_POST['product_id']; // Get the product ID from the form
 
 // Database connection
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbname = 'sweetstream';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
 $conn = new mysqli($host, $user, $password, $dbname);
 
 if ($conn->connect_error) {

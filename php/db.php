@@ -1,9 +1,6 @@
 <?php
 // Database configuration
-$host = 'localhost'; // Your database host
-$dbname = 'sweetstream'; // Your database name
-$username = 'root'; // Your database username
-$password = ''; // Your database password
+include 'db_connection.php';
 
 // Create a new PDO instance
 try {

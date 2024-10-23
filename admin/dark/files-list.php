@@ -220,7 +220,7 @@
     <!-- side nav bar end -->
 
     <?php
-include '../../php/db_connection.php'; // Include database connection
+include '../../php/db_withcon.php'; // Include database connection
 
 // Fetch products from the database
 $sql = "SELECT pid, pname, pphoto, pdescription, pprice, current_stock FROM product_table";

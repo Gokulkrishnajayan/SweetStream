@@ -1,9 +1,7 @@
 <?php
-// Database connection details
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbname = 'sweetstream';
+// Database configuration
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
 
 // Create connection
 $conn = new mysqli($host, $user, $password, $dbname);

@@ -8,10 +8,8 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbname = 'sweetstream';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
 $conn = new mysqli($host, $user, $password, $dbname);
 
 if ($conn->connect_error) {

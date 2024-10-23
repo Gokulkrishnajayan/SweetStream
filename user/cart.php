@@ -52,15 +52,15 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li><a href="index.html">Home</a></li>
-								<li><a href="shop.html">Shop</a></li>
+								<li><a href="index.php">Home</a></li>
+								<li><a href="shop.php">Shop</a></li>
 								<li><a href="order.html">Order</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
@@ -124,10 +124,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id']; // Get the logged-in user's ID
 
 // Database connection
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbname = 'sweetstream';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 $conn = new mysqli($host, $user, $password, $dbname);
 
 // Check if the connection failed
@@ -165,49 +162,56 @@ $subtotal = 0;
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-12">
-			<form id="cartForm" method="POST">
-    <div class="cart-table-wrap">
-        <table class="cart-table">
-            <thead class="cart-table-head">
-                <tr class="table-head-row">
-                    <th class="product-remove"></th>
-                    <th class="product-image">Product Image</th>
-                    <th class="product-name">Name</th>
-                    <th class="product-price">Price</th>
-                    <th class="product-quantity">Quantity</th>
-                    <th class="product-total">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $total_price = $row['pprice'] * $row['quantity'];
-                        $subtotal += $total_price;
-                        echo '
-                        <tr class="table-body-row">
-                            <td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-                            <td class="product-image"><img src="/sweetstream/' . $row['pphoto'] . '" alt=""></td>
-                            <td class="product-name">' . $row['pname'] . '</td>
-                            <td class="product-price">$' . number_format($row['pprice'], 2) . '</td>
-                            <td class="product-quantity">
-                                <input type="number" name="quantity[]" value="' . $row['quantity'] . '" 
-                                       class="quantity-input" data-price="' . $row['pprice'] . '" 
-                                       onchange="updateTotal(this)">
-                            </td>
-                            <td class="product-total">$' . number_format($total_price, 2) . '</td>
-                            <input type="hidden" name="product_id[]" value="' . $row['pid'] . '">
-                        </tr>';
-                    }
-                } else {
-                    echo '<tr><td colspan="6">Your cart is empty.</td></tr>';
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
-</form>
+                <form id="cartForm" method="POST">
+                    <div class="cart-table-wrap">
+                        <table class="cart-table">
+                            <thead class="cart-table-head">
+                                <tr class="table-head-row">
+                                    <th class="product-remove"></th>
+                                    <th class="product-image">Product Image</th>
+                                    <th class="product-name">Name</th>
+                                    <th class="product-price">Price</th>
+                                    <th class="product-quantity">Quantity</th>
+                                    <th class="product-total">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $subtotal = 0;
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        $total_price = $row['pprice'] * $row['quantity'];
+                                        $subtotal += $total_price;
 
+                                        echo '
+                                        <tr class="table-body-row" data-product-id="' . $row['pid'] . '">
+                                            <td class="product-remove">
+                                                <button type="button" onclick="removeProduct(' . $row['pid'] . ')" class="remove-btn">
+                                                    <i class="far fa-window-close"></i>
+                                                </button>
+                                            </td>
+                                            <td class="product-image">
+                                                <img src="/sweetstream/' . $row['pphoto'] . '" alt="">
+                                            </td>
+                                            <td class="product-name">' . $row['pname'] . '</td>
+                                            <td class="product-price">$' . number_format($row['pprice'], 2) . '</td>
+                                            <td class="product-quantity">
+                                                <input type="number" name="quantity[]" value="' . $row['quantity'] . '" 
+                                                       class="quantity-input" min="1" data-price="' . $row['pprice'] . '" 
+                                                       onchange="updateTotal(this)">
+                                            </td>
+                                            <td class="product-total">$' . number_format($total_price, 2) . '</td>
+                                            <input type="hidden" name="product_id[]" value="' . $row['pid'] . '">
+                                        </tr>';
+                                    }
+                                } else {
+                                    echo '<tr><td colspan="6">Your cart is empty.</td></tr>';
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
             </div>
 
             <div class="col-lg-4">
@@ -222,7 +226,7 @@ $subtotal = 0;
                         <tbody>
                             <tr class="total-data">
                                 <td><strong>Subtotal: </strong></td>
-                                <td id="subtotal">$<?php echo number_format($subtotal, 2); ?></td> <!-- Display subtotal -->
+                                <td id="subtotal">$<?php echo number_format($subtotal, 2); ?></td>
                             </tr>
                             <tr class="total-data">
                                 <td><strong>Shipping: </strong></td>
@@ -230,115 +234,130 @@ $subtotal = 0;
                             </tr>
                             <tr class="total-data">
                                 <td><strong>Total: </strong></td>
-                                <td id="grandtotal">$<?php echo number_format($subtotal + 45, 2); ?></td> <!-- Display grand total -->
+                                <td id="grandtotal">$<?php echo number_format($subtotal + 45, 2); ?></td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="cart-buttons">
-						<a href="#" onclick="updateCart(); return false;" class="boxed-btn">Update Cart</a>
-						<a href="checkout.html" class="boxed-btn black">Check Out</a>
-					</div>
-
-				
-                <div class="coupon-section">
-                    <h3>Apply Coupon</h3>
-                    <div class="coupon-form-wrap">
-                        <form action="index.html">
-                            <p><input type="text" placeholder="Coupon"></p>
-                            <p><input type="submit" value="Apply"></p>
-                        </form>
+                        <a href="#" onclick="updateCart(); return false;" class="boxed-btn">Update Cart</a>
+                        <a href="checkout.html" class="boxed-btn black">Check Out</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script>
+    // Update the total price for a single product row
     function updateTotal(element) {
-        // Get the price from the data attribute
         const price = parseFloat(element.dataset.price);
-        let quantity = parseInt(element.value) || 0; // Fallback to 0 if parsing fails
+        let quantity = parseInt(element.value) || 0;
 
-        // If quantity is less than 1, set it to 1
+        // Ensure the quantity is at least 1
         if (quantity < 1) {
             quantity = 1;
-            element.value = 1; // Update the input field to reflect the change
+            element.value = 1;
         }
 
+        // Update the total price for the product row
         const totalCell = element.closest('tr').querySelector('.product-total');
-        
-        // Calculate the new total price
         const total = price * quantity;
         totalCell.textContent = `$${total.toFixed(2)}`;
-        
-        // Update subtotal and grand total
+
+        // Recalculate the grand total for the cart
         updateGrandTotal();
     }
 
+    // Calculate and update the subtotal and grand total
     function updateGrandTotal() {
         let subtotal = 0;
-        const totalCells = document.querySelectorAll('.product-total');
+        const productTotals = document.querySelectorAll('.product-total');
 
-        // Sum up the totals
-        totalCells.forEach(cell => {
-            const cellValue = cell.textContent.replace('$', ''); // Remove dollar sign
-            const parsedValue = parseFloat(cellValue);
-            if (!isNaN(parsedValue)) { // Ensure the value is a number
-                subtotal += parsedValue;
-            }
+        // Sum all product totals to get the subtotal
+        productTotals.forEach(cell => {
+            const value = parseFloat(cell.textContent.replace('$', '')) || 0;
+            subtotal += value;
         });
 
-        // Update the subtotal
+        // Update the subtotal display
         document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-        
-        // Shipping cost
-        const shipping = 45; // Set your shipping cost here
-        const grandTotal = subtotal + shipping;
 
-        // Update the grand total
+        // Add shipping cost and update the grand total
+        const shipping = 45; // Flat shipping rate
+        const grandTotal = subtotal + shipping;
         document.getElementById('grandtotal').textContent = `$${grandTotal.toFixed(2)}`;
     }
 
+    // Update the cart quantities on the server
     function updateCart() {
-    const formData = new FormData(document.getElementById('cartForm'));
+        const formData = new FormData(document.getElementById('cartForm'));
 
-    const quantities = document.querySelectorAll('.quantity-input');
-    quantities.forEach(input => {
-        let quantity = parseInt(input.value) || 0;
-        if (quantity < 1) {
-            quantity = 1;
-            input.value = 1;
-        }
-        // No need to append manually since form inputs are automatically captured.
-    });
+        // Validate all quantities before sending to the server
+        const quantities = document.querySelectorAll('.quantity-input');
+        quantities.forEach(input => {
+            let quantity = parseInt(input.value) || 0;
+            if (quantity < 1) {
+                quantity = 1;
+                input.value = 1;
+            }
+        });
 
-    // Send the data to the server using fetch
-    fetch('update_cart.php', {
+        // Send updated data to the server using fetch
+        fetch('update_cart.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || 'Cart updated successfully!');
+            updateGrandTotal(); // Recalculate totals
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Remove a product from the cart
+function removeProduct(productId) {
+    if (!confirm('Are you sure you want to remove this product?')) return;
+
+    fetch('remove_product.php', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: productId })
     })
     .then(response => response.json())
     .then(data => {
-        alert(data.message || 'Cart updated successfully!');
-        updateGrandTotal(); // Recalculate totals
+        if (data.success) {
+            // Remove the product row from the table
+            const productRow = document.querySelector(`tr[data-product-id="${productId}"]`);
+            if (productRow) productRow.remove();
+
+            // Recalculate the grand total
+            updateGrandTotal();
+
+            // Check if the cart is now empty
+            const remainingProducts = document.querySelectorAll('tbody tr.table-body-row'); 
+            if (remainingProducts.length === 0) {
+                // Ensure reload after small delay to avoid async issues
+                setTimeout(() => {
+                    window.location.reload(true); // Force reload to avoid cache issues
+                }, 100);
+            }
+        } else {
+            alert('Failed to remove the product. Please try again.');
+        }
     })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    .catch(error => console.error('Error:', error));
 }
 
 
-    // Initialize the totals on page load
+
+    // Initialize the totals when the page loads
     document.addEventListener('DOMContentLoaded', updateGrandTotal);
 </script>
 
 
-<?php
-// Close the statement and connection
-$stmt->close();
-$conn->close();
-?>
 
 
 	<!-- logo carousel -->

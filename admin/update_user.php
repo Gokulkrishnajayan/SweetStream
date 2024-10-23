@@ -1,9 +1,10 @@
 <?php
-// Database connection
-$host = "localhost";  // Adjust according to your DB config
-$db_name = "sweetstream";
-$username = "root";
-$password = "";
+// Database configuration
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
+
+// Create connection
+$conn = new mysqli($host, $user, $password, $dbname);
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);

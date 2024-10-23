@@ -2,8 +2,12 @@
 header('Content-Type: application/json');
 
 
-// Connect to the database
-$conn = new mysqli('localhost', 'root', '', 'sweetstream');
+// Database configuration
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
+
+// Create connection
+$conn = new mysqli($host, $user, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {

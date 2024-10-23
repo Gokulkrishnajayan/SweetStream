@@ -60,15 +60,15 @@ session_start();
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li class="current-list-item"><a href="index.html">Home</a></li>
-								<li><a href="shop.html">Shop</a></li>
+								<li class="current-list-item"><a href="index.php">Home</a></li>
+								<li><a href="shop.php">Shop</a></li>
 								<li><a href="order.html">Order</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
@@ -114,7 +114,7 @@ session_start();
 							<p class="subtitle">Fresh & Organic</p>
 							<h1>Delicious Payasam</h1>
 							<div class="hero-btns">
-								<a href="shop.html" class="boxed-btn">Payasam Collection</a>
+								<a href="shop.php" class="boxed-btn">Payasam Collection</a>
 								<a href="contact.html" class="bordered-btn">Contact Us</a>
 							</div>
 						</div>
@@ -175,7 +175,7 @@ session_start();
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> Products</h3>
+						<h3><span class="orange-text">Our</span> Best Sellers</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
 					</div>
 				</div>
@@ -183,10 +183,7 @@ session_start();
 
 			<?php
     // Connect to the database
-    $host = 'localhost';
-    $user = 'root';
-    $password = '';
-    $dbname = 'sweetstream';
+    include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 
     $conn = new mysqli($host, $user, $password, $dbname);
 
@@ -329,7 +326,7 @@ session_start();
     	<div class="container">
         	<h3>December sale is on! <br> with big <span class="orange-text">Discount...</span></h3>
             <div class="sale-percent"><span>Sale! <br> Upto</span>50% <span>off</span></div>
-            <a href="shop.html" class="cart-btn btn-lg">Shop Now</a>
+            <a href="shop.php" class="cart-btn btn-lg">Shop Now</a>
         </div>
     </section>
 	<!-- end shop banner -->

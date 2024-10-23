@@ -1,11 +1,9 @@
 <?php
-// Database connection
-$host = "localhost";
-$user = "root";  // Your MySQL username
-$pass = "";  // Your MySQL password
-$dbname = "sweetstream";
+// Database configuration
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+
+$conn = new mysqli($host, $user, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {

@@ -1,7 +1,12 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Database connection
-    $conn = new mysqli('localhost', 'root', '', 'sweetstream');
+
+    // Database configuration
+    include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
+    
+    $conn = new mysqli($host, $user, $password, $dbname);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
