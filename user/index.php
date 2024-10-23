@@ -234,7 +234,7 @@ session_start();
             echo '<div class="col-lg-4 col-md-6 text-center">';
             echo '<div class="single-product-item">';
             echo '<div class="product-image">';
-            echo '<a href="single-product.html"><img src="/sweetstream/' . $row['pphoto'] . '" alt=""></a>';
+            echo '<a href="single-product.html"><img src="' . $row['pphoto'] . '" alt=""></a>';
             echo '</div>';
             echo '<h3>' . $row['pname'] . '</h3>';
             echo '<p class="product-price"><span>1000 ml</span> $' . $row['pprice'] . '</p>';

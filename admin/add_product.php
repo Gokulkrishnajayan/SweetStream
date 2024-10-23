@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Define the upload directory (relative to SweetStream root)
         $uploadDir = __DIR__ . '/../product/';  // Adjust path to product/ inside SweetStream
-        $dbImagePath = 'product/' . $newImageName;  // Path to store in the database
+        $dbImagePath =  $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/product/' . $newImageName;  // Path to store in the database
 
         // Ensure the product directory exists
         if (!is_dir($uploadDir)) {

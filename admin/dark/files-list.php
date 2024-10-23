@@ -250,7 +250,7 @@ $result = $conn->query($sql);
               <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                 <div class="card product-card h-100 border-0 shadow-sm">
                   <div class="card-img-wrapper ratio-4-3 position-relative">
-                    <img src="/SweetStream/<?php echo htmlspecialchars($row['pphoto']); ?>" 
+                    <img src="<?php echo htmlspecialchars($row['pphoto']); ?>" 
                          alt="<?php echo htmlspecialchars($row['pname']); ?>" 
                          class="card-img-top" loading="lazy">
                     <?php if ($row['current_stock'] <= 5): ?>
