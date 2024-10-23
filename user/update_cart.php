@@ -1,8 +1,5 @@
 <?php
-echo "gokul";
-include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
-
-
+session_start();
 
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 
