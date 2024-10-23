@@ -239,7 +239,7 @@ $subtotal = 0;
 						<a href="checkout.html" class="boxed-btn black">Check Out</a>
 					</div>
 
-
+				
                 <div class="coupon-section">
                     <h3>Apply Coupon</h3>
                     <div class="coupon-form-wrap">
