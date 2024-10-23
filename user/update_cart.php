@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+
+$user_id = $_SESSION['user_id'];
+
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 
 $conn = new mysqli($host, $user, $password, $dbname);
