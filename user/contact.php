@@ -1,3 +1,8 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,9 +59,9 @@
 							<ul>
 								<li><a href="index.php">Home</a></li>
 								<li><a href="shop.php">Shop</a></li>
-								<li><a href="order.html">Order</a></li>
-								<li><a href="about.html">About</a></li>
-								<li class="current-list-item"><a href="contact.html">Contact</a></li>
+								<li><a href="order.php">Order</a></li>
+								<li><a href="about.php">About</a></li>
+								<li class="current-list-item"><a href="contact.php">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
@@ -201,11 +206,11 @@
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="about.html">About</a></li>
+							<li><a href="index.php">Home</a></li>
+							<li><a href="about.php">About</a></li>
 							<li><a href="services.html">Shop</a></li>
 							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="contact.php">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -213,7 +218,7 @@
 					<div class="footer-box subscribe">
 						<h2 class="widget-title">Subscribe</h2>
 						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
+						<form action="index.php">
 							<input type="email" placeholder="Email">
 							<button type="submit"><i class="fas fa-paper-plane"></i></button>
 						</form>

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pid'])) {
 
     if ($result->num_rows > 0) {
         $product = $result->fetch_assoc();
-        $photoPath = __DIR__ . "/../" . $product['pphoto']; // Adjust path as per directory structure
+        $photoPath = $_SERVER['DOCUMENT_ROOT']. $product['pphoto']; // Adjust path as per directory structure
 
         // Debugging: Check if the photo path is correct
         // echo "Photo Path: $photoPath";

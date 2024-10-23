@@ -20,8 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && password_verify($password, $user['password'])) {
         // Start the session and store user information
         session_start();
-        $_SESSION['user_id'] = $user['id']; // Adjust this to your user ID field
-        $_SESSION['user_email'] = $user['email'];
+       // Store user data in session
+       $_SESSION['user_id'] = $user['id'];
+       $_SESSION['name'] = $user['name'];
+       $_SESSION['privilege'] = $user['privilege'];
         echo "Login successful!";
 
         if("admin"===$user['privilege']){

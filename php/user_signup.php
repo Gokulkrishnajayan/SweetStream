@@ -1,5 +1,6 @@
 <?php
- require_once 'db.php';
+session_start(); // Start the session
+require_once 'db.php';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $confirmPassword = trim($_POST['confirm_password']);
-    $userPrivilege =  trim($_POST['user_privileges']);
+    $userPrivilege = trim($_POST['user_privileges']);
 
     // Basic validation
     if (empty($fullName) || empty($email) || empty($password) || empty($confirmPassword) || empty($userPrivilege)) {
@@ -33,19 +34,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert new user into the database
-    $stmt = $pdo->prepare("INSERT INTO user_table (name, email, password,privilege) VALUES (?, ?, ?, ?)");
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($stmt->execute([$fullName, $email, $hashedPassword,$userPrivilege])) {
+    $stmt = $pdo->prepare("INSERT INTO user_table (name, email, password, privilege) VALUES (?, ?, ?, ?)");
+    if ($stmt->execute([$fullName, $email, $hashedPassword, $userPrivilege])) {
+        // Retrieve the user ID of the newly inserted user
+        $userId = $pdo->lastInsertId();
+
+        // Store user data in the session
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['name'] = $fullName;
+        $_SESSION['privilege'] = $userPrivilege;
+
         echo "Registration successful!";
-        
-        if("user"===$userPrivilege){
+
+        // Redirect based on user privilege
+        if ($userPrivilege === "user") {
             header("Location: ../user/index.php");
-        }
-        elseif("delivery"=== $userPrivilege){
+        } elseif ($userPrivilege === "delivery") {
             header("Location: ../delivery/index.html");
         }
         exit;
-        
+
     } else {
         echo "Something went wrong. Please try again.";
     }

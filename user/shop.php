@@ -1,3 +1,8 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,9 +59,9 @@
 							<ul>
 								<li><a href="index.php">Home</a></li>
 								<li class="current-list-item"><a href="shop.php">Shop</a></li>
-								<li><a href="order.html">Order</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="contact.html">Contact</a></li>
+								<li><a href="order.php">Order</a></li>
+								<li><a href="about.php">About</a></li>
+								<li><a href="contact.php">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
@@ -161,7 +166,7 @@
             echo '<div class="col-lg-4 col-md-6 text-center">';
             echo '<div class="single-product-item">';
             echo '<div class="product-image">';
-            echo '<a href="single-product.html"><img src="/sweetstream/' . $row['pphoto'] . '" alt=""></a>';
+            echo '<a href="single-product.html"><img src="'. $row['pphoto'] . '" alt=""></a>';
             echo '</div>';
             echo '<h3>' . $row['pname'] . '</h3>';
             echo '<p class="product-price"><span>1000 ml</span> $' . $row['pprice'] . '</p>';
@@ -256,11 +261,11 @@
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="about.html">About</a></li>
+							<li><a href="index.php">Home</a></li>
+							<li><a href="about.php">About</a></li>
 							<li><a href="services.html">Shop</a></li>
 							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="contact.php">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -268,7 +273,7 @@
 					<div class="footer-box subscribe">
 						<h2 class="widget-title">Subscribe</h2>
 						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
+						<form action="index.php">
 							<input type="email" placeholder="Email">
 							<button type="submit"><i class="fas fa-paper-plane"></i></button>
 						</form>

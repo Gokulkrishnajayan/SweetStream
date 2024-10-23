@@ -1,6 +1,5 @@
 <?php
-// Start the session
-session_start();
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 ?>
 
 
@@ -62,9 +61,9 @@ session_start();
 							<ul>
 								<li class="current-list-item"><a href="index.php">Home</a></li>
 								<li><a href="shop.php">Shop</a></li>
-								<li><a href="order.html">Order</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="contact.html">Contact</a></li>
+								<li><a href="order.php">Order</a></li>
+								<li><a href="about.php">About</a></li>
+								<li><a href="contact.php">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
@@ -115,7 +114,7 @@ session_start();
 							<h1>Delicious Payasam</h1>
 							<div class="hero-btns">
 								<a href="shop.php" class="boxed-btn">Payasam Collection</a>
-								<a href="contact.html" class="bordered-btn">Contact Us</a>
+								<a href="contact.php" class="bordered-btn">Contact Us</a>
 							</div>
 						</div>
 					</div>
@@ -313,7 +312,7 @@ session_start();
 						<h2>We are <span class="orange-text">SweetStream</span></h2>
 						<p>Etiam vulputate ut augue vel sodales. In sollicitudin neque et massa porttitor vestibulum ac vel nisi. Vestibulum placerat eget dolor sit amet posuere. In ut dolor aliquet, aliquet sapien sed, interdum velit. Nam eu molestie lorem.</p>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente facilis illo repellat veritatis minus, et labore minima mollitia qui ducimus.</p>
-						<a href="about.html" class="boxed-btn mt-4">know more</a>
+						<a href="about.php" class="boxed-btn mt-4">know more</a>
 					</div>
 				</div>
 			</div>
@@ -357,11 +356,11 @@ session_start();
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="about.html">About</a></li>
+							<li><a href="index.php">Home</a></li>
+							<li><a href="about.php">About</a></li>
 							<li><a href="services.html">Shop</a></li>
 							<li><a href="news.html">News</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="contact.php">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -369,7 +368,7 @@ session_start();
 					<div class="footer-box subscribe">
 						<h2 class="widget-title">Subscribe</h2>
 						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
+						<form action="index.php">
 							<input type="email" placeholder="Email">
 							<button type="submit"><i class="fas fa-paper-plane"></i></button>
 						</form>

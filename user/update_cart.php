@@ -1,12 +1,7 @@
 <?php
-session_start();
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
-}
 
-$user_id = $_SESSION['user_id'];
 
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 

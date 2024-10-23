@@ -1,3 +1,7 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,16 +115,8 @@
 	</div>
 	<!-- end breadcrumb section -->
 
-	<!-- Cart -->
+<!-- Cart -->
 <?php
-session_start(); // Start the session
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
-}
-
 $user_id = $_SESSION['user_id']; // Get the logged-in user's ID
 
 // Database connection
@@ -191,7 +187,7 @@ $subtotal = 0;
                                                 </button>
                                             </td>
                                             <td class="product-image">
-                                                <img src="/sweetstream/' . $row['pphoto'] . '" alt="">
+                                                <img src="' . $row['pphoto'] . '" alt="">
                                             </td>
                                             <td class="product-name">' . $row['pname'] . '</td>
                                             <td class="product-price">$' . number_format($row['pprice'], 2) . '</td>
@@ -240,7 +236,7 @@ $subtotal = 0;
                     </table>
                     <div class="cart-buttons">
                         <a href="#" onclick="updateCart(); return false;" class="boxed-btn">Update Cart</a>
-                        <a href="checkout.html" class="boxed-btn black">Check Out</a>
+                        <a href="checkout.php" class="boxed-btn black">Check Out</a>
                     </div>
                 </div>
             </div>
