@@ -23,5 +23,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }} # Your FTP username
           password: ${{ secrets.FTP_PASSWORD }} # Your FTP password
           local-dir: ./                         # Local directory to upload (your project root)
-          server-dir: /htdocs/                  # Target directory on the FTP server
+          server-dir: /htdocs/SweetStream/      # Target directory on the FTP server
           protocol: ftp                         # Set FTP as the protocol
