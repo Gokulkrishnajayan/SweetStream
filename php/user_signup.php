@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Registration successful!";
         
         if("user"===$userPrivilege){
-            header("Location: ../user/index.html");
+            header("Location: ../user/index.php");
         }
         elseif("delivery"=== $userPrivilege){
             header("Location: ../delivery/index.html");

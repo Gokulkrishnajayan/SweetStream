@@ -4,7 +4,7 @@ include 'db_connection.php';
 
 // Create a new PDO instance
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Could not connect to the database: ' . $e->getMessage()]);
@@ -16,7 +16,7 @@ try {
 
 
 // Optional: If you still need a MySQLi connection, you can create it as follows:
-$conn = new mysqli($host, $username, $password, $dbname);
+$conn = new mysqli($host, $user, $password, $dbname);
 
 // Check MySQLi connection
 if ($conn->connect_error) {

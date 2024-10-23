@@ -1,5 +1,5 @@
 <?php
- require_once 'db.php';
+ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../admin/dark/dashboard-analytics.html");
         }
         elseif("user"===$user['privilege']){
-            header("Location: ../user/index.html");
+            header("Location: ../user/index.php");
         }
         elseif("delivery"=== $user['privilege']){
             header("Location: ../delivery/index.html");
