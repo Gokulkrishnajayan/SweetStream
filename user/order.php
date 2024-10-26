@@ -65,7 +65,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+										<!-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> -->
 									</div>
 								</li>
 							</ul>
@@ -114,48 +114,260 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
     </div>
     <!-- end breadcrumb section -->
 
-    <!-- order tracking section -->
-    <div class="order-tracking-section">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="tracking-card">
-                        <h3 class="text-center">Your Recent Orders</h3>
 
-                        <!-- Search Area for Order Tracking -->
-                        <div class="search-area2 mb-4">
-                            <div class="input-group">
-                                <input type="text" class="form-control search-input"
-                                    placeholder="Search by product name or order ID">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success search-button" type="submit">
-                                        Search <i class="fas fa-search"></i>
-                                    </button>
+
+
+    <?php
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Database connection
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
+$conn = new mysqli($host, $user, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch orders for the logged-in user
+$sql = "
+    SELECT d.did, d.product_id, d.product_quantity, d.price, d.delivery_date_time, d.status, p.pname, p.pphoto, d.address
+    FROM delivery_table d
+    JOIN product_table p ON d.product_id = p.pid
+    WHERE d.user_id = ?
+    ORDER BY d.delivery_date_time DESC
+";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$order_groups = [];
+
+// Group orders by delivery date and time
+while ($row = $result->fetch_assoc()) {
+    $delivery_time = $row['delivery_date_time'];
+
+    // Initialize the group if it doesn't exist
+    if (!isset($order_groups[$delivery_time])) {
+        $order_groups[$delivery_time] = [
+            'products' => [],
+            'total_price' => 0,
+            'total_quantity' => 0,
+            'status' => $row['status'],
+            'date_time' => date('Y-m-d H:i', strtotime($row['delivery_date_time'])),
+            'order_id' => $row['did']
+        ];
+    }
+
+    // Add the product to the order group
+    $order_groups[$delivery_time]['products'][] = $row;
+    $order_groups[$delivery_time]['total_price'] += $row['price'] * $row['product_quantity'];
+    $order_groups[$delivery_time]['total_quantity'] += $row['product_quantity'];
+}
+
+// Close database connection
+$stmt->close();
+$conn->close();
+?>
+
+<!-- Order Tracking Section -->
+<div class="order-tracking-section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tracking-card">
+                    <h3 class="text-center">Your Recent Orders</h3>
+
+                    <!-- Search Area for Order Tracking -->
+                    <div class="search-area mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-input" placeholder="Search by product name, order ID, or date" onkeyup="searchOrders()">
+                            <div class="input-group-append">
+                                <button class="btn btn-success search-button" type="button" onclick="searchOrders()">
+                                    Search <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items Grouped by Delivery Date and Time -->
+                    <div class="order-list">
+                        <?php if (!empty($order_groups)): ?>
+                            <?php foreach ($order_groups as $delivery_time => $order): ?>
+                                <div class="order-card" onclick="toggleDetails(this)">
+                                    <div class="order-header">
+                                        <div class="order-id">
+                                            <h4>Order ID: #<?php echo $order['order_id']; ?></h4>
+                                            <span>Total Products: <?php echo $order['total_quantity']; ?></span>
+                                            <span>Ordered on: <?php echo $order['date_time']; ?></span>
+                                        </div>
+                                        <div class="order-summary">
+                                            <div class="total-price">
+                                                <strong>Total Price: </strong>₹<?php echo number_format($order['total_price'], 2); ?>
+                                            </div>
+                                            <div class="order-status">
+                                                <span class="badge badge-<?php echo ($order['status'] == 'Delivered') ? 'success' : 'warning'; ?>">
+                                                    <?php echo ucfirst($order['status']); ?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-details" style="display: none;">
+                                        <div class="order-info">
+                                            <h5>Order Details</h5>
+                                            <ul>
+                                                <?php foreach ($order['products'] as $item): ?>
+                                                    <li class="order-item">
+                                                        <img src="<?php echo $item['pphoto']; ?>" alt="<?php echo $item['pname']; ?>">
+                                                        <div class="product-details">
+                                                            <span><?php echo $item['pname']; ?></span>
+                                                            <span class="product-quantity">Quantity: <?php echo $item['product_quantity']; ?></span>
+                                                            <span class="product-price">Price/liter: ₹<?php echo number_format($item['price'], 2); ?></span>
+                                                        </div>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Order Items -->
-                        <div class="order-item">
-                            <img src="assets/img/products/parippu.jpg" alt="Parippu">
-                            <div class="order-info">
-                                <h5>Parippu</h5>
-                                <p class="order-id">Order ID: #12345</p>
-                            </div>
-                            <p class="product-price">₹240.00</p>
-                            <div class="order-status">
-                                <span class="badge badge-success">Delivered</span>
-                            </div>
-                        </div>
-
-                        
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="text-center">You have no recent orders.</p>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- end order tracking section -->
+</div>
 
+<style>
+    .order-tracking-section {
+        background-color: #f9f9f9;
+        padding: 20px 0;
+        border-radius: 10px;
+    }
+
+    .tracking-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-area {
+        margin-bottom: 20px;
+    }
+
+    .order-card {
+        background: #fff;
+        border: none; /* Removed border */
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
+
+    .order-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-id h4 {
+        margin: 0;
+    }
+
+    .order-summary {
+        text-align: right;
+    }
+
+    .total-price {
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    .order-status {
+        margin-top: 5px;
+    }
+
+    .order-details {
+        margin-top: 10px;
+    }
+
+    .order-info ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .order-info li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 10px 0;
+    }
+
+    .order-info img {
+        width: 60px; /* Set image size */
+        height: auto; /* Maintain aspect ratio */
+        margin-right: 15px;
+        border-radius: 5px;
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    .product-details {
+        flex-grow: 1; /* Allow text to take up available space */
+    }
+
+    .product-quantity,
+    .product-price {
+        display: block;
+        font-size: 0.9em; /* Smaller font size for quantity and price */
+        color: #666; /* Lighter color for quantity and price */
+    }
+</style>
+
+
+<script>
+    function toggleDetails(card) {
+        const details = card.querySelector('.order-details');
+        details.style.display = (details.style.display === 'none' || details.style.display === '') ? 'block' : 'none';
+    }
+
+    function searchOrders() {
+        const query = document.querySelector('.search-input').value;
+
+        // Create an AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'search_orders.php?q=' + encodeURIComponent(query), true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                document.querySelector('.order-list').innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+    }
+</script>
+
+
+
+
+    
     <!-- footer -->
     <div class="footer-area">
         <div class="container">

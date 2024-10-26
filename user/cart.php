@@ -58,7 +58,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 							<ul>
 								<li><a href="index.php">Home</a></li>
 								<li><a href="shop.php">Shop</a></li>
-								<li><a href="order.html">Order</a></li>
+								<li><a href="order.php">Order</a></li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
@@ -236,7 +236,8 @@ $subtotal = 0;
                     </table>
                     <div class="cart-buttons">
                         <a href="#" onclick="updateCart(); return false;" class="boxed-btn">Update Cart</a>
-                        <a href="checkout.php" class="boxed-btn black">Check Out</a>
+						<a href="#" onclick="checkoutAndUpdateCart(); return false;" class="boxed-btn black">Check Out</a>
+
                     </div>
                 </div>
             </div>
@@ -346,6 +347,31 @@ function removeProduct(productId) {
     })
     .catch(error => console.error('Error:', error));
 }
+
+// Checkout and update the cart before proceeding
+function checkoutAndUpdateCart() {
+    const formData = new FormData(document.getElementById('cartForm'));
+
+    fetch('update_cart.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateGrandTotal(); // Recalculate totals
+
+            // Redirect to checkout page after successful cart update
+            window.location.href = 'checkout.php';
+        } else {
+            alert('Failed to update the cart. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 
 
 
