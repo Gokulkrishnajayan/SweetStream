@@ -1658,6 +1658,34 @@ p.excerpt {
   margin-top: 80px;
 }
 
+.latest-news button.boxed-btn {
+  margin-top: 80px;
+}
+
+button.boxed-btn:hover {
+  background-color: #051922;
+  color: #F28123;
+}
+
+button.boxed-btn {
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  display: inline-block;
+  background-color: #F28123;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+
+
+
+
+
 .news-text-box {
   padding: 25px;
   border-bottom-left-radius: 5px;
