@@ -320,76 +320,117 @@ if (!$user) {
                 <div class="col-lg-8">
                     <div class="checkout-accordion-wrap">
                         <div class="accordion" id="accordionExample">
-                            <div class="card single-accordion">
-                                <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Billing Address
-                                        </button>
-                                    </h5>
-                                </div>
+ 
+                        
+                        <div class="card single-accordion">
+    <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse"
+                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Billing Address
+            </button>
+        </h5>
+    </div>
 
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="billing-address-form">
-                                            <form action="update_delivery_address.php" method="POST">
-                                                <p>
-                                                    <input type="text" name="name" id="name"
-                                                        value="<?php echo htmlspecialchars($user['name']); ?>"
-                                                        placeholder="Name" readonly>
-                                                </p>
-                                                <p>
-                                                    <input type="email" name="email" id="email"
-                                                        value="<?php echo htmlspecialchars($user['email']); ?>"
-                                                        placeholder="Email" readonly>
-                                                </p>
-                                                <p>
-                                                    <input type="text" name="address" id="address"
-                                                        value="<?php echo htmlspecialchars($user['address']); ?>"
-                                                        placeholder="Delivery Address" readonly>
-                                                </p>
-                                                <p>
-                                                    <input type="tel" name="phone_no" id="phone_no"
-                                                        value="<?php echo htmlspecialchars($user['phone_no']); ?>"
-                                                        placeholder="Phone Number" readonly>
-                                                </p>
-                                                <div class="button-group">
-                                                    <button type="button" id="edit-btn"
-                                                        class="boxed-btn">Change</button>
-                                                    <button type="submit" id="save-btn" class="boxed-btn"
-                                                        style="display: none;">Save</button>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+        data-parent="#accordionExample">
+        <div class="card-body">
+            <div class="billing-address-form">
+                <form id="addressForm">
+                    <p>
+                        <input type="text" name="name" id="name" 
+                            value="<?php echo htmlspecialchars($user['name']); ?>" 
+                            placeholder="Name" readonly>
+                    </p>
+                    <p>
+                        <input type="email" name="email" id="email" 
+                            value="<?php echo htmlspecialchars($user['email']); ?>" 
+                            placeholder="Email" readonly>
+                    </p>
+                    <p>
+                        <input type="text" name="address" id="address" 
+                            value="<?php echo htmlspecialchars($user['address']); ?>" 
+                            placeholder="Delivery Address" readonly>
+                    </p>
+                    <p>
+                        <input type="tel" name="phone_no" id="phone_no" 
+                            value="<?php echo htmlspecialchars($user['phone_no']); ?>" 
+                            placeholder="Phone Number" readonly>
+                    </p>
 
-                                                </div>
-                                            </form>
-                                        </div>
+                    <div class="button-group">
+                        <button type="button" id="edit-btn" class="boxed-btn">Change</button>
+                        <button type="button" id="save-btn" class="boxed-btn" 
+                                style="display: none;">Save</button>
+                    </div>
+                </form>
+            </div>
 
-                                        <script>
-                                            // JavaScript to toggle the readonly state
-                                            const editBtn = document.getElementById('edit-btn');
-                                            const saveBtn = document.getElementById('save-btn');
-                                            const fields = ['address', 'phone_no'];
+            <p id="status-message" style="display: none;"></p> <!-- Status Message -->
 
-                                            editBtn.addEventListener('click', () => {
-                                                fields.forEach(fieldId => {
-                                                    document.getElementById(fieldId).readOnly = false;
-                                                });
-                                                editBtn.style.display = 'none'; // Hide the 'Change' button
-                                                saveBtn.style.display = 'inline-block'; // Show the 'Save' button
-                                            });
-                                        </script>
-                                        <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-                                        <p style="color: green;">Delivery address updated successfully!</p>
-                                        <?php elseif (isset($_GET['status']) && $_GET['status'] == 'error'): ?>
-                                        <p style="color: red;">Failed to update the address. Please try again.</p>
-                                        <?php endif;?>
+            <script>
+                const editBtn = document.getElementById('edit-btn');
+                const saveBtn = document.getElementById('save-btn');
+                const statusMessage = document.getElementById('status-message');
+                const fields = ['address', 'phone_no'];
 
+                // Toggle fields between readonly and editable states
+                editBtn.addEventListener('click', () => {
+                    fields.forEach(fieldId => {
+                        document.getElementById(fieldId).readOnly = false;
+                    });
+                    editBtn.style.display = 'none'; 
+                    saveBtn.style.display = 'inline-block';
+                });
 
+                // AJAX to save the updated address
+                saveBtn.addEventListener('click', () => {
+                    const formData = new FormData(document.getElementById('addressForm'));
 
-                                    </div>
-                                </div>
-                            </div>
+                    fetch('update_delivery_address.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json()) 
+                    .then(data => {
+                        if (data.status === 'success') {
+                            showMessage('Delivery address updated successfully!', 'green');
+                        } else {
+                            showMessage('Failed to update the address. Please try again.', 'red');
+                        }
+                        toggleButtons();
+                    })
+                    .catch(() => {
+                        showMessage('An error occurred. Please try again.', 'red');
+                        toggleButtons();
+                    });
+                });
+
+                // Function to display status messages and auto-hide them
+                function showMessage(message, color) {
+                    statusMessage.textContent = message;
+                    statusMessage.style.color = color;
+                    statusMessage.style.display = 'block';
+
+                    // Hide the message after 3 seconds
+                    setTimeout(() => {
+                        statusMessage.style.display = 'none';
+                    }, 3000);
+                }
+
+                // Function to reset buttons and fields
+                function toggleButtons() {
+                    fields.forEach(fieldId => {
+                        document.getElementById(fieldId).readOnly = true;
+                    });
+                    editBtn.style.display = 'inline-block';
+                    saveBtn.style.display = 'none';
+                }
+            </script>
+        </div>
+    </div>
+</div>
+
 
                             <div class="card single-accordion">
                                 <div class="card-header" id="headingTwo">
