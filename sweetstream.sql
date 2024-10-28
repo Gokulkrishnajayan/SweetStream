@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2024 at 07:29 PM
+-- Generation Time: Oct 28, 2024 at 07:36 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.11
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `sweetstream`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_table`
+--
+
+CREATE TABLE `cart_table` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cart_table`
+--
+
+INSERT INTO `cart_table` (`id`, `user_id`, `product_id`, `quantity`) VALUES
+(29, 16, 58, 3),
+(30, 16, 59, 4);
 
 -- --------------------------------------------------------
 
@@ -112,6 +133,12 @@ INSERT INTO `user_table` (`id`, `name`, `phone_no`, `email`, `password`, `addres
 --
 
 --
+-- Indexes for table `cart_table`
+--
+ALTER TABLE `cart_table`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `delivery_table`
 --
 ALTER TABLE `delivery_table`
@@ -133,6 +160,12 @@ ALTER TABLE `user_table`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `cart_table`
+--
+ALTER TABLE `cart_table`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `delivery_table`
