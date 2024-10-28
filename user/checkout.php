@@ -1,7 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
-include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/php/db.php';
-
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
 
 // Get the current user's ID from the session
 $userId = $_SESSION['user_id'];
@@ -361,7 +360,7 @@ if (!$user) {
                                                         class="boxed-btn">Change</button>
                                                     <button type="submit" id="save-btn" class="boxed-btn"
                                                         style="display: none;">Save</button>
-                                                        
+
                                                 </div>
                                             </form>
                                         </div>
@@ -384,7 +383,7 @@ if (!$user) {
                                         <p style="color: green;">Delivery address updated successfully!</p>
                                         <?php elseif (isset($_GET['status']) && $_GET['status'] == 'error'): ?>
                                         <p style="color: red;">Failed to update the address. Please try again.</p>
-                                        <?php endif; ?>
+                                        <?php endif;?>
 
 
 
@@ -406,30 +405,30 @@ if (!$user) {
                                     data-parent="#accordionExample">
                                     <div class="card-body">
                                         <?php
-            include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
 
-            // Fetch cart items for the logged-in user
-            $user_id = $_SESSION['user_id'] ?? 0;
-            $stmt = $pdo->prepare("
-                SELECT c.quantity, p.pid, p.pname, p.pprice, p.pphoto 
-                FROM cart_table c 
-                JOIN product_table p ON c.product_id = p.pid 
+// Fetch cart items for the logged-in user
+$user_id = $_SESSION['user_id'] ?? 0;
+$stmt = $pdo->prepare("
+                SELECT c.quantity, p.pid, p.pname, p.pprice, p.pphoto
+                FROM cart_table c
+                JOIN product_table p ON c.product_id = p.pid
                 WHERE c.user_id = ?
             ");
-            $stmt->execute([$user_id]);
-            $cart_items = $stmt->fetchAll();
+$stmt->execute([$user_id]);
+$cart_items = $stmt->fetchAll();
 
-            $grand_total = 0; // Initialize total amount
-            $shipping = 50; // Fixed shipping cost
-            
-            if (empty($cart_items)) {
-                echo "<p>Your cart is empty.</p>";
-            } else {
-                foreach ($cart_items as $item) {
-                    $quantity = $item['quantity'];
-                    $total_price = $item['pprice'] * $quantity;
-                    $grand_total += $total_price; // Accumulate grand total
-            ?>
+$grand_total = 0; // Initialize total amount
+$shipping = 50; // Fixed shipping cost
+
+if (empty($cart_items)) {
+    echo "<p>Your cart is empty.</p>";
+} else {
+    foreach ($cart_items as $item) {
+        $quantity = $item['quantity'];
+        $total_price = $item['pprice'] * $quantity;
+        $grand_total += $total_price; // Accumulate grand total
+        ?>
                 <div class="order-item">
                     <div class="product-image">
                         <img src="<?php echo htmlspecialchars($item['pphoto']); ?>"
@@ -449,14 +448,17 @@ if (!$user) {
                         <p>Combined Price: ₹
                             <?php echo number_format($total_price, 2); ?>
                         </p>
-                        <?php endif; ?>
+                        <?php endif;?>
                     </div>
                 </div>
                 <hr>
-                <?php 
-                }
-            }
-            ?>
+                <?php
+}
+}
+?>
+<?php
+ $grand_total+=$shipping;
+?>
 
                                         <!-- Hidden input to pass the total amount to JavaScript -->
                                         <input type="hidden" id="phpGrandTotal" value="<?php echo $grand_total; ?>">
@@ -483,8 +485,8 @@ if (!$user) {
             <form id="paymentForm" action="process_payment.php" method="POST">
                 <!-- Total Amount Display -->
 <div class="total-amount">
-    <h5>Total Amount: ₹<span id="totalAmount"><?php echo number_format($grand_total + $shipping, 2); ?></span></h5>
-    <input type="hidden" name="total_amount" id="totalAmountInput" value="<?php echo $grand_total + $shipping; ?>">
+    <h5>Total Amount: ₹<span id="totalAmount"><?php echo number_format($grand_total); ?></span></h5>
+    <input type="hidden" name="total_amount" id="totalAmountInput" value="<?php echo $grand_total; ?>">
 </div>
 
 
@@ -562,7 +564,7 @@ if (!$user) {
         const name = document.getElementById('name').value.trim();
         const address = document.getElementById('address').value.trim();
         const phone_no = document.getElementById('phone_no').value.trim();
-        
+
         if (!name || !address || !phone_no) {
             alert("Please fill in all billing address fields.");
             return false;
@@ -695,18 +697,22 @@ if (!$user) {
 
     /* Button-specific styles */
     button.boxed-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
+        -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  display: inline-block;
+  background-color: #F28123;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
     }
 
-    button.boxed-btn:hover {
-        background-color: #0056b3;
+    button.boxed-btn:hover {  
+        background-color: #051922;
+        color: #F28123;
     }
 </style>
 
@@ -719,7 +725,7 @@ if (!$user) {
                 </div>
 
 
-                
+
 
                 <div class="col-lg-4">
                     <div class="order-details-wrap">
@@ -731,11 +737,11 @@ if (!$user) {
                                 </tr>
                             </thead>
                             <tbody class="order-details-body">
-                                <?php 
-                                $grand_total = 0; 
-                                $shipping = 50; // Fixed shipping cost
+                                <?php
+$grand_total = 0;
+$shipping = 50; // Fixed shipping cost
 
-                                if (empty($cart_items)): ?>
+if (empty($cart_items)): ?>
                                     <tr>
                                         <td colspan="2" class="text-center">Your cart is empty.</td>
                                     </tr>
@@ -745,18 +751,18 @@ if (!$user) {
                                         <td>Total</td>
                                     </tr>
 
-                                    <?php 
-                                    foreach ($cart_items as $item):
-                                        $quantity = $item['quantity'];
-                                        $total_price = $item['pprice'] * $quantity;
-                                        $grand_total += $total_price;
-                                    ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($item['pname']); ?> (x<?php echo $quantity; ?>)</td>
-                                        <td>₹<?php echo number_format($total_price, 2); ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                                    <?php
+foreach ($cart_items as $item):
+    $quantity = $item['quantity'];
+    $total_price = $item['pprice'] * $quantity;
+    $grand_total += $total_price;
+    ?>
+	                                    <tr>
+	                                        <td><?php echo htmlspecialchars($item['pname']); ?> (x<?php echo $quantity; ?>)</td>
+	                                        <td>₹<?php echo number_format($total_price, 2); ?></td>
+	                                    </tr>
+	                                    <?php endforeach;?>
+                                <?php endif;?>
                             </tbody>
 
                             <?php if (!empty($cart_items)): ?>
@@ -774,9 +780,8 @@ if (!$user) {
                                     <td>₹<?php echo number_format($grand_total + $shipping, 2); ?></td>
                                 </tr>
                             </tbody>
-                            <?php endif; ?>
+                            <?php endif;?>
                         </table>
-                        <a href="#" class="boxed-btn">Place Order</a>
                     </div>
                 </div>
 
