@@ -213,6 +213,7 @@ $(document).ready(function() {
         const phone = $("#phone").val();
         const address = $("#address").val();
 
+		alert("Error updating profile: "); 
         $.ajax({
             type: "POST",
             url: "update_profile.php", // Update this with the correct path to your update script
