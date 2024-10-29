@@ -188,59 +188,49 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 	    </div>
 	</div>
 	<!-- end profile section -->
-
 	<script>
 	$(document).ready(function() {
-    $("#edit-btn").click(function() {
-        $("input, textarea").prop("disabled", false);
-        $("#save-btn, #cancel-btn").show();
-        $(this).hide();
-    });
+	    $("#edit-btn").click(function() {
+	        $("input, textarea").prop("disabled", false);
+	        $("#save-btn, #cancel-btn").show();
+	        $(this).hide();
+	    });
 
-    $("#cancel-btn").click(function() {
-        $("input, textarea").prop("disabled", true);
-        $("#save-btn, #cancel-btn").hide();
-        $("#edit-btn").show();
-    });
+	    $("#cancel-btn").click(function() {
+	        $("input, textarea").prop("disabled", true);
+	        $("#save-btn, #cancel-btn").hide();
+	        $("#edit-btn").show();
+	    });
 
-    $("#save-btn").click(function() {
-        const firstName = $("#first-name").val().trim();
-        const lastName = $("#last-name").val().trim();
-        const email = $("#email").val().trim();
-        const phone = $("#phone").val().trim();
-        const address = $("#address").val().trim();
+	    $("#save-btn").click(function() {
+	        const firstName = $("#first-name").val();
+	        const lastName = $("#last-name").val();
+	        const email = $("#email").val();
+	        const phone = $("#phone").val();
+	        const address = $("#address").val();
 
-        // Check if any fields are empty before sending
-        if (!firstName || !lastName || !email || !phone || !address) {
-            alert("Please fill in all fields.");
-            return;
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "update_profile.php",
-            data: {
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                phone: phone,
-                address: address
-            },
-            success: function(response) {
-                console.log("Response from server:", response); // Log server response
-                alert("Profile updated successfully!");
-                $("input, textarea").prop("disabled", true);
-                $("#save-btn, #cancel-btn").hide();
-                $("#edit-btn").show();
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", status, error); // Log any AJAX errors
-                alert("Error updating profile. Please try again.");
-            }
-        });
-    });
-});
-
+	        $.ajax({
+	            type: "POST",
+	            url: "update_profile.php", // Update this with the correct path to your update script
+	            data: {
+	                first_name: firstName,
+	                last_name: lastName,
+	                email: email,
+	                phone: phone,
+	                address: address
+	            },
+	            success: function(response) {
+	                alert("Profile updated successfully!");
+	                $("input, textarea").prop("disabled", true);
+	                $("#save-btn, #cancel-btn").hide();
+	                $("#edit-btn").show();
+	            },
+	            error: function() {
+	                alert("Error updating profile. Please try again.");
+	            }
+	        });
+	    });
+	});
 	</script>
 	
 

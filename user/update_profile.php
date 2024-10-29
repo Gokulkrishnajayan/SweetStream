@@ -3,17 +3,15 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 
-// Start session if not already started
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Create connection
     $conn = new mysqli($host, $user, $password, $dbname);
 
- 
-
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    
     $userId = $_SESSION['user_id']; // Get user ID from session
 
     // Fetch current user data
@@ -38,16 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Update user data in the database
         $sql = "UPDATE user_table SET name = ?, email = ?, phone_no = ?, address = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        if ($stmt === false) {
-            die("Prepare failed: " . htmlspecialchars($conn->error));
-        }
-
         $stmt->bind_param("ssssi", $fullName, $email, $phone, $address, $userId);
 
         if ($stmt->execute()) {
             echo "Profile updated successfully.";
         } else {
-            echo "Error updating profile: " . htmlspecialchars($stmt->error);
+            echo "Error updating profile: " . $stmt->error;
         }
     } else {
         echo "No changes detected.";
