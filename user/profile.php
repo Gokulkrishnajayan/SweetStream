@@ -36,30 +36,32 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
 	<style>
-		/* Add this to your main CSS file */
+/* Hide the logout dropdown by default */
+.logout-dropdown {
+    display: none; /* Hidden by default */
+    position: absolute; /* Position it absolutely */
+    background-color: #fff; /* Background color to match the nav */
+    border: 1px solid #ddd; /* Optional border for styling */
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Show the logout dropdown on hover over the profile menu */
+.profile-menu:hover .logout-dropdown {
+    display: block; /* Show dropdown */
+}
+
+/* Style for the logout button */
 .logout-btn {
-    color: #fff; /* Text color */
-    background-color: #dc3545; /* Bootstrap's danger color */
-    border-radius: 5px; /* Rounded corners */
+    color: #333; /* Match with the nav link color */
     padding: 10px 15px; /* Padding for the button */
     text-decoration: none; /* Remove underline */
+    display: block; /* Make it block-level for full width */
 }
 
 .logout-btn:hover {
-    background-color: #c82333; /* Darker red on hover */
-    color: #fff; /* Ensure text remains white */
+    background-color: #f0f0f0; /* Light grey on hover */
 }
 
-.main-menu ul li {
-    display: inline-block; /* Align items horizontally */
-    margin-right: 20px; /* Spacing between menu items */
-}
-
-.main-menu ul li a {
-    color: #333; /* Default link color */
-    text-decoration: none; /* Remove underline */
-    padding: 10px; /* Add padding */
-}
 
 	</style>
 
@@ -86,16 +88,21 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 								<li><a href="order.php">Order</a></li>
 								<li><a href="about.php">About</a></li>
 								<li><a href="contact.php">Contact</a></li>
-								<li class="current-list-item"><a href="profile.php">Profile</a></li>
+								<li class="profile-menu">
+									<a href="profile.php">Profile</a>
+									<ul class="logout-dropdown">
+										<li><a href="logout.php" class="logout-btn">Logout</a></li>
+									</ul>
+								</li>
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
-								<li><a href="logout.php" class="btn btn-danger logout-btn">Logout</a></li> <!-- Logout Button -->
 							</ul>
 						</nav>
+
 
 
 					</div>
