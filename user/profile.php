@@ -134,6 +134,8 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
+alert("Error updating profile: "); 
+
 
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
@@ -213,7 +215,6 @@ $(document).ready(function() {
         const phone = $("#phone").val();
         const address = $("#address").val();
 
-		alert("Error updating profile: "); 
         $.ajax({
             type: "POST",
             url: "update_profile.php", // Update this with the correct path to your update script
