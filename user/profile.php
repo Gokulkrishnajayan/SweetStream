@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
-	<title>Profile</title>
+	<title>About</title>
 	
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
@@ -34,6 +34,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
+	
+	<!-- form updation -->
+	<script src="assets/js/form-updation.js"></script>
 
 </head>
 <body>	
@@ -59,8 +62,8 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 								<li><a href="shop.php">Shop</a></li>
 								<li><a href="order.php">Order</a></li>
 								<li><a href="about.php">About</a></li>
-								<li class="current-list-item"><a href="contact.php">Contact</a></li>
-								<li><a href="profile.php">Profile</a></li>
+								<li><a href="contact.php">Contact</a></li>
+								<li class="current-list-item"><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
@@ -114,123 +117,54 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	</div>
 	<!-- end breadcrumb section -->
 
-	<?php
-	// Include your database connection and session handling
-	include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
-
-	// Create connection
-	$conn = new mysqli($host, $user, $password, $dbname);
-
-	// Fetch user data from the database
-	$userId = $_SESSION['user_id']; // Assuming user_id is stored in the session
-	$sql = "SELECT name, email, phone_no, address FROM user_table WHERE id = ?";
-	$stmt = $conn->prepare($sql);
-	$stmt->bind_param("i", $userId);
-	$stmt->execute();
-	$result = $stmt->get_result();
-
-	if ($result->num_rows > 0) {
-	    $user = $result->fetch_assoc();
-	} else {
-	    $user = []; // Fallback if no user is found
-	}
-
-	$stmt->close();
-	$conn->close();
-	?>
-
 	<!-- profile section -->
-	<div class="profile-section mt-150 mb-150">
-	    <div class="container">
-	        <div class="row">
-	            <div class="col-lg-8 offset-lg-2">
-	                <div class="profile-card shadow-lg p-4 rounded">
-	                    <div class="profile-info text-center">
-	                        <h3>Profile Information</h3>
-	                    </div>
-	                    <div class="profile-form">
-	                        <form id="profile-form">
-	                            <div class="form-row">
-	                                <div class="form-group col-md-6">
-	                                    <label for="first-name">First Name:</label>
-	                                    <input type="text" class="form-control" id="first-name" value="<?php echo htmlspecialchars(explode(' ', $user['name'])[0] ?? ''); ?>" disabled>
-	                                </div>
-	                                <div class="form-group col-md-6">
-	                                    <label for="last-name">Last Name:</label>
-	                                    <input type="text" class="form-control" id="last-name" value="<?php echo htmlspecialchars(explode(' ', $user['name'])[1] ?? ''); ?>" disabled>
-	                                </div>
-	                            </div>
-	                            <div class="form-group">
-	                                <label for="email">Email:</label>
-	                                <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled>
-	                            </div>
-	                            <div class="form-group">
-	                                <label for="phone">Phone Number:</label>
-	                                <input type="text" class="form-control" id="phone" value="<?php echo htmlspecialchars($user['phone_no'] ?? ''); ?>" disabled>
-	                            </div>
-	                            <div class="form-group">
-	                                <label for="address">Address:</label>
-	                                <textarea class="form-control" id="address" rows="3" disabled><?php echo htmlspecialchars($user['address'] ?? ''); ?></textarea>
-	                            </div>
-	                            <div class="button-group">
-	                                <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-	                                <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
-	                                <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
-	                            </div>
-	                        </form>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-	<!-- end profile section -->
+<div class="profile-section mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="profile-card shadow-lg p-4 rounded">
+                    <div class="profile-info text-center">
+                        <h3>Profile Information</h3>
+                    </div>
+                    <div class="profile-form">
+                        <form id="profile-form">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="first-name">First Name:</label>
+                                    <input type="text" class="form-control" id="first-name" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="last-name">Last Name:</label>
+                                    <input type="text" class="form-control" id="last-name" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number:</label>
+                                <input type="text" class="form-control" id="phone" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address:</label>
+                                <textarea class="form-control" id="address" rows="3" disabled></textarea>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+                                <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
+                                <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end profile section -->
 
-	<script src="assets/js/jquery-1.11.3.min.js"></script>
-	<script>
-	$(document).ready(function() {
-	    $("#edit-btn").click(function() {
-	        $("input, textarea").prop("disabled", false);
-	        $("#save-btn, #cancel-btn").show();
-	        $(this).hide();
-	    });
-
-	    $("#cancel-btn").click(function() {
-	        $("input, textarea").prop("disabled", true);
-	        $("#save-btn, #cancel-btn").hide();
-	        $("#edit-btn").show();
-	    });
-
-	    $("#save-btn").click(function() {
-	        const firstName = $("#first-name").val();
-	        const lastName = $("#last-name").val();
-	        const email = $("#email").val();
-	        const phone = $("#phone").val();
-	        const address = $("#address").val();
-
-	        $.ajax({
-	            type: "POST",
-	            url: "update_profile.php", // Update this with the correct path to your update script
-	            data: {
-	                first_name: firstName,
-	                last_name: lastName,
-	                email: email,
-	                phone: phone,
-	                address: address
-	            },
-	            success: function(response) {
-	                alert("Profile updated successfully!");
-	                $("input, textarea").prop("disabled", true);
-	                $("#save-btn, #cancel-btn").hide();
-	                $("#edit-btn").show();
-	            },
-	            error: function() {
-	                alert("Error updating profile. Please try again.");
-	            }
-	        });
-	    });
-	});
-	</script>
+	
 
 	<!-- footer -->
 	<div class="footer-area">
@@ -284,7 +218,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights Reserved.</p>
+					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>,  All Rights Reserved.</p>
 				</div>
 				<div class="col-lg-6 text-right col-md-12">
 					<div class="social-icons">
@@ -302,12 +236,31 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	</div>
 	<!-- end copyright -->
 
+
+	
+	
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>
 	<!-- bootstrap -->
 	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- other scripts -->
+	<!-- count down -->
+	<script src="assets/js/jquery.countdown.js"></script>
+	<!-- isotope -->
+	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<!-- waypoints -->
+	<script src="assets/js/waypoints.js"></script>
+	<!-- owl carousel -->
+	<script src="assets/js/owl.carousel.min.js"></script>
+	<!-- magnific popup -->
+	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<!-- mean menu -->
+	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<!-- sticker js -->
+	<script src="assets/js/sticker.js"></script>
+	<!-- main js -->
 	<script src="assets/js/main.js"></script>
+	<!-- form updation -->
+	<script src="assets/js/form-updation.js"></script>
 
 </body>
 </html>
