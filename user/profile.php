@@ -35,6 +35,34 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
+	<style>
+		/* Add this to your main CSS file */
+.logout-btn {
+    color: #fff; /* Text color */
+    background-color: #dc3545; /* Bootstrap's danger color */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding for the button */
+    text-decoration: none; /* Remove underline */
+}
+
+.logout-btn:hover {
+    background-color: #c82333; /* Darker red on hover */
+    color: #fff; /* Ensure text remains white */
+}
+
+.main-menu ul li {
+    display: inline-block; /* Align items horizontally */
+    margin-right: 20px; /* Spacing between menu items */
+}
+
+.main-menu ul li a {
+    color: #333; /* Default link color */
+    text-decoration: none; /* Remove underline */
+    padding: 10px; /* Add padding */
+}
+
+	</style>
+
 </head>
 <body>	
 	<!-- header -->
@@ -65,9 +93,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
-								<li><a href="logout.php" class="btn btn-danger">Logout</a></li> <!-- Logout Button -->
+								<li><a href="logout.php" class="btn btn-danger logout-btn">Logout</a></li> <!-- Logout Button -->
 							</ul>
 						</nav>
+
 
 					</div>
 				</div>
