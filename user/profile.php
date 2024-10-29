@@ -134,7 +134,6 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
-alert("Error updating profile: "); 
 
 
 if ($result->num_rows > 0) {
