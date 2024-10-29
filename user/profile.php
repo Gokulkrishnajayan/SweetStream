@@ -190,7 +190,6 @@ $conn->close();
 </div>
 <!-- end profile section -->
 
-<script src="assets/js/jquery-1.11.3.min.js"></script>
 <script>
 $(document).ready(function() {
     $("#edit-btn").click(function() {
