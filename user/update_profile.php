@@ -1,7 +1,7 @@
 <?php
 // Include your database connection and session handling
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
-session_start(); // Start session to access user data
+session_start(); // Start session to access user data 
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {

@@ -122,7 +122,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 	<?php
 // Include your database connection and session handling
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
-session_start(); // Start session to access user data
+
 
 // Create connection
 $conn = new mysqli($host, $user, $password, $dbname);
@@ -192,21 +192,8 @@ $conn->close();
     </div>
 </div>
 <!-- end profile section -->
-
 <script>
 $(document).ready(function() {
-    $("#edit-btn").click(function() {
-        $("input, textarea").prop("disabled", false);
-        $("#save-btn, #cancel-btn").show();
-        $(this).hide();
-    });
-
-    $("#cancel-btn").click(function() {
-        $("input, textarea").prop("disabled", true);
-        $("#save-btn, #cancel-btn").hide();
-        $("#edit-btn").show();
-    });
-
     $("#save-btn").click(function() {
         const firstName = $("#first-name").val();
         const lastName = $("#last-name").val();
@@ -216,7 +203,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "update_profile.php", // Update this with the correct path to your update script
+            url: "update_profile.php", // Ensure this path is correct
             data: {
                 first_name: firstName,
                 last_name: lastName,
@@ -237,6 +224,7 @@ $(document).ready(function() {
     });
 });
 </script>
+
 
 	<!-- footer -->
 	<div class="footer-area">
