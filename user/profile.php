@@ -35,36 +35,6 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
 
-	<style>
-/* Hide the logout dropdown by default */
-.logout-dropdown {
-    display: none; /* Hidden by default */
-    position: absolute; /* Position it absolutely */
-    background-color: #fff; /* Background color to match the nav */
-    border: 1px solid #ddd; /* Optional border for styling */
-    z-index: 1000; /* Ensure it appears above other elements */
-}
-
-/* Show the logout dropdown on hover over the profile menu */
-.profile-menu:hover .logout-dropdown {
-    display: block; /* Show dropdown */
-}
-
-/* Style for the logout button */
-.logout-btn {
-    color: #333; /* Match with the nav link color */
-    padding: 10px 15px; /* Padding for the button */
-    text-decoration: none; /* Remove underline */
-    display: block; /* Make it block-level for full width */
-}
-
-.logout-btn:hover {
-    background-color: #f0f0f0; /* Light grey on hover */
-}
-
-
-	</style>
-
 </head>
 <body>	
 	<!-- header -->
@@ -88,12 +58,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 								<li><a href="order.php">Order</a></li>
 								<li><a href="about.php">About</a></li>
 								<li><a href="contact.php">Contact</a></li>
-								<li class="profile-menu">
-									<a href="profile.php">Profile</a>
-									<ul class="logout-dropdown">
-										<li><a href="logout.php" class="logout-btn">Logout</a></li>
-									</ul>
-								</li>
+								<li class="current-list-item"><a href="profile.php">Profile</a></li>
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
@@ -102,9 +67,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 								</li>
 							</ul>
 						</nav>
-
-
-
+						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						<div class="mobile-menu"></div>
+						<!-- menu end -->
 					</div>
 				</div>
 			</div>
