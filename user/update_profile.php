@@ -1,7 +1,14 @@
 <?php
-// Include your database connection
+// Include your database connection and session handling
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
+session_start(); // Start session to access user data
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(403); // Forbidden
+    echo json_encode(["error" => "Unauthorized access."]);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Create connection
@@ -9,9 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        http_response_code(500); // Internal Server Error
+        echo json_encode(["error" => "Database connection failed: " . $conn->connect_error]);
+        exit;
     }
-    
+
     $userId = $_SESSION['user_id']; // Get user ID from session
 
     // Fetch current user data
@@ -20,14 +29,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("i", $userId);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    // Check if user exists
+    if ($result->num_rows === 0) {
+        http_response_code(404); // Not Found
+        echo json_encode(["error" => "User not found."]);
+        exit;
+    }
+
     $currentUser = $result->fetch_assoc();
 
-    // Get new values
+    // Get new values and validate/sanitize them
     $firstName = $conn->real_escape_string(trim($_POST['first_name']));
     $lastName = $conn->real_escape_string(trim($_POST['last_name']));
-    $email = $conn->real_escape_string(trim($_POST['email']));
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $phone = $conn->real_escape_string(trim($_POST['phone']));
     $address = $conn->real_escape_string(trim($_POST['address']));
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400); // Bad Request
+        echo json_encode(["error" => "Invalid email format."]);
+        exit;
+    }
 
     $fullName = $firstName . ' ' . $lastName;
 
@@ -39,15 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bind_param("ssssi", $fullName, $email, $phone, $address, $userId);
 
         if ($stmt->execute()) {
-            echo "Profile updated successfully.";
+            echo json_encode(["success" => "Profile updated successfully."]);
         } else {
-            echo "Error updating profile: " . $stmt->error;
+            http_response_code(500); // Internal Server Error
+            echo json_encode(["error" => "Error updating profile: " . $stmt->error]);
         }
     } else {
-        echo "No changes detected.";
+        echo json_encode(["info" => "No changes detected."]);
     }
 
     $stmt->close();
     $conn->close();
+} else {
+    http_response_code(405); // Method Not Allowed
+    echo json_encode(["error" => "Invalid request method."]);
 }
 ?>
