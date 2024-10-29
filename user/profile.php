@@ -117,33 +117,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 	</div>
 	<!-- end breadcrumb section -->
 
-	<?php
-// Include your database connection and session handling
-include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
-
-// Create connection
-$conn = new mysqli($host, $user, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch user data from the database
-$userId = $_SESSION['user_id']; // Assuming user_id is stored in the session
-$sql = "SELECT name, email, phone_no, address FROM user_table WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-$stmt->close();
-$conn->close();
-?>
-
-<!-- profile section -->
+	<!-- profile section -->
 <div class="profile-section mt-150 mb-150">
     <div class="container">
         <div class="row">
@@ -157,24 +131,24 @@ $conn->close();
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="first-name">First Name:</label>
-                                    <input type="text" class="form-control" id="first-name" value="<?php echo htmlspecialchars(explode(' ', $user['name'])[0]); ?>" disabled>
+                                    <input type="text" class="form-control" id="first-name" disabled>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="last-name">Last Name:</label>
-                                    <input type="text" class="form-control" id="last-name" value="<?php echo htmlspecialchars(explode(' ', $user['name'])[1]); ?>" disabled>
+                                    <input type="text" class="form-control" id="last-name" disabled>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($user['email']); ?>" disabled>
+                                <input type="email" class="form-control" id="email" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number:</label>
-                                <input type="text" class="form-control" id="phone" value="<?php echo htmlspecialchars($user['phone_no']); ?>" disabled>
+                                <input type="text" class="form-control" id="phone" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="address">Address:</label>
-                                <textarea class="form-control" id="address" rows="3" disabled><?php echo htmlspecialchars($user['address']); ?></textarea>
+                                <textarea class="form-control" id="address" rows="3" disabled></textarea>
                             </div>
                             <div class="button-group">
                                 <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
@@ -189,51 +163,6 @@ $conn->close();
     </div>
 </div>
 <!-- end profile section -->
-
-<script>
-$(document).ready(function() {
-    $("#edit-btn").click(function() {
-        $("input, textarea").prop("disabled", false);
-        $("#save-btn, #cancel-btn").show();
-        $(this).hide();
-    });
-
-    $("#cancel-btn").click(function() {
-        $("input, textarea").prop("disabled", true);
-        $("#save-btn, #cancel-btn").hide();
-        $("#edit-btn").show();
-    });
-
-    $("#save-btn").click(function() {
-        const firstName = $("#first-name").val();
-        const lastName = $("#last-name").val();
-        const email = $("#email").val();
-        const phone = $("#phone").val();
-        const address = $("#address").val();
-
-        $.ajax({
-            type: "POST",
-            url: "update_profile.php", // The script that handles the update
-            data: {
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                phone: phone,
-                address: address
-            },
-            success: function(response) {
-                alert("Profile updated successfully!");
-                $("input, textarea").prop("disabled", true);
-                $("#save-btn, #cancel-btn").hide();
-                $("#edit-btn").show();
-            },
-            error: function() {
-                alert("Error updating profile. Please try again.");
-            }
-        });
-    });
-});
-</script>
 
 	
 
