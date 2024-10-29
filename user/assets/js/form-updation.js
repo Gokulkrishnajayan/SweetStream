@@ -1,28 +1,45 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const editBtn = document.getElementById('edit-btn');
-    const saveBtn = document.getElementById('save-btn');
-    const cancelBtn = document.getElementById('cancel-btn');
-    const formFields = document.querySelectorAll('.profile-form input, .profile-form textarea');
-
-    editBtn.addEventListener('click', function () {
-        formFields.forEach(field => field.disabled = false);
-        editBtn.style.display = 'none';
-        saveBtn.style.display = 'inline-block';
-        cancelBtn.style.display = 'inline-block';
+$(function() {
+    // Edit button functionality
+    $("#edit-btn").click(function() {
+        $("input, textarea").prop("disabled", false); // Enable inputs
+        $("#edit-btn").hide();
+        $("#save-btn, #cancel-btn").show();
     });
 
-    saveBtn.addEventListener('click', function () {
-        // Add your save logic here
-        formFields.forEach(field => field.disabled = true);
-        editBtn.style.display = 'inline-block';
-        saveBtn.style.display = 'none';
-        cancelBtn.style.display = 'none';
+    // Cancel button functionality
+    $("#cancel-btn").click(function() {
+        $("input, textarea").prop("disabled", true); // Disable inputs
+        $("#save-btn, #cancel-btn").hide();
+        $("#edit-btn").show();
     });
 
-    cancelBtn.addEventListener('click', function () {
-        formFields.forEach(field => field.disabled = true);
-        editBtn.style.display = 'inline-block';
-        saveBtn.style.display = 'none';
-        cancelBtn.style.display = 'none';
+    // Save button functionality with AJAX
+    $("#save-btn").click(function() {
+        const name = $("#name").val();
+        const email = $("#email").val();
+        const phone = $("#phone").val();
+        const address = $("#address").val();
+
+        $.ajax({
+            type: "POST",
+            url: "update_profile.php",
+            data: {
+                name: name,
+                email: email,
+                phone: phone,
+                address: address
+            },
+            success: function(response) {
+                alert(response); // Alert response message
+                if (response.includes("successfully")) {
+                    $("input, textarea").prop("disabled", true); // Disable inputs
+                    $("#save-btn, #cancel-btn").hide();
+                    $("#edit-btn").show();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Error updating profile: " + errorThrown);
+            }
+        });
     });
 });
