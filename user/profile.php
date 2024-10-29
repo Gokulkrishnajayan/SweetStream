@@ -117,53 +117,122 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 	</div>
 	<!-- end breadcrumb section -->
 
-	<!-- profile section -->
-<div class="profile-section mt-150 mb-150">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="profile-card shadow-lg p-4 rounded">
-                    <div class="profile-info text-center">
-                        <h3>Profile Information</h3>
-                    </div>
-                    <div class="profile-form">
-                        <form id="profile-form">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="first-name">First Name:</label>
-                                    <input type="text" class="form-control" id="first-name" disabled>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="last-name">Last Name:</label>
-                                    <input type="text" class="form-control" id="last-name" disabled>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number:</label>
-                                <input type="text" class="form-control" id="phone" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="address">Address:</label>
-                                <textarea class="form-control" id="address" rows="3" disabled></textarea>
-                            </div>
-                            <div class="button-group">
-                                <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-                                <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
-                                <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end profile section -->
+	<?php
+	// Include your database connection and session handling
+	include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 
+	// Create connection
+	$conn = new mysqli($host, $user, $password, $dbname);
+
+	// Fetch user data from the database
+	$userId = $_SESSION['user_id']; // Assuming user_id is stored in the session
+	$sql = "SELECT name, email, phone_no, address FROM user_table WHERE id = ?";
+	$stmt = $conn->prepare($sql);
+	$stmt->bind_param("i", $userId);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	if ($result->num_rows > 0) {
+	    $user = $result->fetch_assoc();
+	} else {
+	    $user = []; // Fallback if no user is found
+	}
+
+	$stmt->close();
+	$conn->close();
+	?>
+
+	<!-- profile section -->
+	<div class="profile-section mt-150 mb-150">
+	    <div class="container">
+	        <div class="row">
+	            <div class="col-lg-8 offset-lg-2">
+	                <div class="profile-card shadow-lg p-4 rounded">
+	                    <div class="profile-info text-center">
+	                        <h3>Profile Information</h3>
+	                    </div>
+	                    <div class="profile-form">
+	                        <form id="profile-form">
+	                            <div class="form-row">
+	                                <div class="form-group col-md-6">
+	                                    <label for="first-name">First Name:</label>
+	                                    <input type="text" class="form-control" id="first-name" value="<?php echo htmlspecialchars(explode(' ', $user['name'])[0] ?? ''); ?>" disabled>
+	                                </div>
+	                                <div class="form-group col-md-6">
+	                                    <label for="last-name">Last Name:</label>
+	                                    <input type="text" class="form-control" id="last-name" value="<?php echo htmlspecialchars(explode(' ', $user['name'])[1] ?? ''); ?>" disabled>
+	                                </div>
+	                            </div>
+	                            <div class="form-group">
+	                                <label for="email">Email:</label>
+	                                <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled>
+	                            </div>
+	                            <div class="form-group">
+	                                <label for="phone">Phone Number:</label>
+	                                <input type="text" class="form-control" id="phone" value="<?php echo htmlspecialchars($user['phone_no'] ?? ''); ?>" disabled>
+	                            </div>
+	                            <div class="form-group">
+	                                <label for="address">Address:</label>
+	                                <textarea class="form-control" id="address" rows="3" disabled><?php echo htmlspecialchars($user['address'] ?? ''); ?></textarea>
+	                            </div>
+	                            <div class="button-group">
+	                                <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+	                                <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
+	                                <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<!-- end profile section -->
+
+	<script>
+	$(document).ready(function() {
+	    $("#edit-btn").click(function() {
+	        $("input, textarea").prop("disabled", false);
+	        $("#save-btn, #cancel-btn").show();
+	        $(this).hide();
+	    });
+
+	    $("#cancel-btn").click(function() {
+	        $("input, textarea").prop("disabled", true);
+	        $("#save-btn, #cancel-btn").hide();
+	        $("#edit-btn").show();
+	    });
+
+	    $("#save-btn").click(function() {
+	        const firstName = $("#first-name").val();
+	        const lastName = $("#last-name").val();
+	        const email = $("#email").val();
+	        const phone = $("#phone").val();
+	        const address = $("#address").val();
+
+	        $.ajax({
+	            type: "POST",
+	            url: "update_profile.php", // Update this with the correct path to your update script
+	            data: {
+	                first_name: firstName,
+	                last_name: lastName,
+	                email: email,
+	                phone: phone,
+	                address: address
+	            },
+	            success: function(response) {
+	                alert("Profile updated successfully!");
+	                $("input, textarea").prop("disabled", true);
+	                $("#save-btn, #cancel-btn").hide();
+	                $("#edit-btn").show();
+	            },
+	            error: function() {
+	                alert("Error updating profile. Please try again.");
+	            }
+	        });
+	    });
+	});
+	</script>
 	
 
 	<!-- footer -->
