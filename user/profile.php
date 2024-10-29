@@ -146,8 +146,32 @@ $conn->close();
             });
 
             $("#save-btn").click(function() {
-                // Add AJAX to save changes here
-                alert("Save changes functionality needs to be implemented.");
+                const firstName = $("#first-name").val();
+                const lastName = $("#last-name").val();
+                const email = $("#email").val();
+                const phone = $("#phone").val();
+                const address = $("#address").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "update_profile.php", // The script that handles the update
+                    data: {
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        phone: phone,
+                        address: address
+                    },
+                    success: function(response) {
+                        alert("Profile updated successfully!");
+                        $("input, textarea").prop("disabled", true);
+                        $("#save-btn, #cancel-btn").hide();
+                        $("#edit-btn").show();
+                    },
+                    error: function() {
+                        alert("Error updating profile. Please try again.");
+                    }
+                });
             });
         });
     </script>
