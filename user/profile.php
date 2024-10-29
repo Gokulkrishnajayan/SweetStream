@@ -65,11 +65,10 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_user.php';
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
+								<li><a href="logout.php" class="btn btn-danger">Logout</a></li> <!-- Logout Button -->
 							</ul>
 						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
+
 					</div>
 				</div>
 			</div>
