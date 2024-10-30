@@ -115,7 +115,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
 
         <ul class="navbar-nav flex-fill w-100 mb-2">
           <li class="nav-item w-100">
-            <a class="nav-link" href="page-orders.html">
+            <a class="nav-link" href="page-orders.php">
               <i class="fe fe-shopping-cart fe-16"></i>
               <span class="ml-3 item-text">Order</span>
             </a>
