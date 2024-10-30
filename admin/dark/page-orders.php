@@ -1,3 +1,6 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
+?>
 <!doctype html>
 <html lang="en">
 
@@ -287,281 +290,83 @@
                   </div>
                 </div>
               </div>
+
+
+              <?php
+              // Include the database connection file
+              include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
+              try {
+                  // Create a new PDO instance
+                  $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+                  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                  
+                  // Fetch data from the delivery_table
+                  $stmt = $pdo->query("SELECT * FROM delivery_table");
+                  $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+              } catch (PDOException $e) {
+                  echo json_encode(['success' => false, 'message' => 'Could not connect to the database: ' . $e->getMessage()]);
+                  exit;
+              }
+              ?>
+              
               <table class="table border table-hover bg-white">
-                <thead>
-                  <tr role="row">
-                    <th>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="all">
-                        <label class="custom-control-label" for="all"></label>
-                      </div>
-                    </th>
-                    <th>ID</th>
-                    <th>Purchase Date</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Ship To</th>
-                    <th>Total</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="align-center">
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1331</td>
-                    <td>2020-12-26 01:32:21</td>
-                    <td>Kasimir Lindsey</td>
-                    <td>(697) 486-2101</td>
-                    <td>996-3523 Et Ave</td>
-                    <td>$3.64</td>
-                    <td> Paypal</td>
-                    <td><span class="dot dot-lg bg-success mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="align-center">
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1156</td>
-                    <td>2020-04-21 00:38:38</td>
-                    <td>Melinda Levy</td>
-                    <td>(748) 927-4423</td>
-                    <td>Ap #516-8821 Vitae Street</td>
-                    <td>$4.18</td>
-                    <td> Paypal</td>
-                    <td><span class="dot dot-lg bg-warning mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1038</td>
-                    <td>2019-06-25 19:13:36</td>
-                    <td>Aubrey Sweeney</td>
-                    <td>(422) 405-2736</td>
-                    <td>Ap #598-7581 Tellus Av.</td>
-                    <td>$4.98</td>
-                    <td>Credit Card </td>
-                    <td><span class="dot dot-lg bg-primary mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1227</td>
-                    <td>2021-01-22 13:28:00</td>
-                    <td>Timon Bauer</td>
-                    <td>(690) 965-1551</td>
-                    <td>840-2188 Placerat, Rd.</td>
-                    <td>$3.46</td>
-                    <td> Paypal</td>
-                    <td><span class="dot dot-lg bg-primary mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1956</td>
-                    <td>2019-11-11 16:23:17</td>
-                    <td>Kelly Barrera</td>
-                    <td>(117) 625-6737</td>
-                    <td>816 Ornare, Street</td>
-                    <td>$4.16</td>
-                    <td>Credit Card </td>
-                    <td><span class="dot dot-lg bg-success mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1669</td>
-                    <td>2021-04-12 07:07:13</td>
-                    <td>Kellie Roach</td>
-                    <td>(422) 748-1761</td>
-                    <td>5432 A St.</td>
-                    <td>$3.53</td>
-                    <td> Paypal</td>
-                    <td><span class="dot dot-lg bg-success mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1909</td>
-                    <td>2020-05-14 00:23:11</td>
-                    <td>Lani Diaz</td>
-                    <td>(767) 486-2253</td>
-                    <td>3328 Ut Street</td>
-                    <td>$4.29</td>
-                    <td> Paypal</td>
-                    <td><span class="dot dot-lg bg-warning mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1234</td>
-                    <td>2020-01-25 07:56:57</td>
-                    <td>Hadley Raymond</td>
-                    <td>(356) 732-2834</td>
-                    <td>917-1461 Aliquam St.</td>
-                    <td>$3.94</td>
-                    <td>Credit Card </td>
-                    <td><span class="dot dot-lg bg-primary mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input">
-                        <label class="custom-control-label"></label>
-                      </div>
-                    </td>
-                    <td>1085</td>
-                    <td>2020-10-08 20:15:34</td>
-                    <td>Simone Wright</td>
-                    <td>(545) 742-5090</td>
-                    <td>877-711 Dolor Rd.</td>
-                    <td>$3.36</td>
-                    <td>Credit Card </td>
-                    <td><span class="dot dot-lg bg-success mr-2"></span></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="#">Edit</a>
-                          <a class="dropdown-item" href="#">Remove</a>
-                          <a class="dropdown-item" href="#">Assign</a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
+                  <thead>
+                      <tr role="row">
+                          <th>
+                              <div class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input" id="all">
+                                  <label class="custom-control-label" for="all"></label>
+                              </div>
+                          </th>
+                          <th>ID</th>
+                          <th>Delivery Date</th>
+                          <th>Name</th>
+                          <th>Phone</th>
+                          <th>Address</th>
+                          <th>Total</th>
+                          <th>Payment</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <?php foreach ($orders as $order): ?>
+                      <tr>
+                          <td class="align-center">
+                              <div class="custom-control custom-checkbox">
+                                  <input type="checkbox" class="custom-control-input">
+                                  <label class="custom-control-label"></label>
+                              </div>
+                          </td>
+                          <td><?php echo htmlspecialchars($order['did']); ?></td>
+                          <td><?php echo htmlspecialchars($order['delivery_date_time']); ?></td>
+                          <td><?php echo htmlspecialchars($order['user_id']); ?></td>
+                          <td><?php echo htmlspecialchars($order['phone_no']); ?></td>
+                          <td><?php echo htmlspecialchars($order['address']); ?></td>
+                          <td><?php echo htmlspecialchars('$' . $order['price']); ?></td>
+                          <td><?php echo htmlspecialchars($order['payment_details']); ?></td>
+                          <td><span class="dot dot-lg <?php echo $order['status'] === 'completed' ? 'bg-success' : 'bg-warning'; ?> mr-2"></span></td>
+                          <td>
+                              <div class="dropdown">
+                                  <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <span class="text-muted sr-only">Action</span>
+                                  </button>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                      <a class="dropdown-item" href="#">Edit</a>
+                                      <a class="dropdown-item" href="#">Remove</a>
+                                      <a class="dropdown-item" href="#">Assign</a>
+                                  </div>
+                              </div>
+                          </td>
+                      </tr>
+                      <?php endforeach; ?>
+                  </tbody>
               </table>
+              
+
+
+
               <nav aria-label="Table Paging" class="my-3">
                 <ul class="pagination justify-content-end mb-0">
                   <li class="page-item"><a class="page-link" href="#">Previous</a></li>
