@@ -340,7 +340,12 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
                               </div>
                           </td>
                           <td><?php echo htmlspecialchars($order['did']); ?></td>
-                          <td><?php echo htmlspecialchars($order['delivery_date_time']); ?></td>
+                          <td>
+                              <?php 
+                              $dateTime = new DateTime($order['delivery_date_time']);
+                              echo $dateTime->format('Y-m-d h:i A'); // Format in 12-hour with AM/PM
+                              ?>
+                          </td>
                           <td><?php echo htmlspecialchars($order['user_id']); ?></td>
                           <td><?php echo htmlspecialchars($order['phone_no']); ?></td>
                           <td><?php echo htmlspecialchars($order['address']); ?></td>
