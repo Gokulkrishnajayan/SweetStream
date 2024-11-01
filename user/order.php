@@ -162,7 +162,7 @@ while ($row = $result->fetch_assoc()) {
             'total_price' => 0,
             'total_quantity' => 0,
             'status' => $row['status'],
-            'date_time' => date('Y-m-d H:i', strtotime($row['delivery_date_time'])),
+            'date_time' => date('Y-m-d H:i A', strtotime($row['delivery_date_time'])),
             'order_id' => $row['did']
         ];
     }

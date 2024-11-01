@@ -90,7 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Invalid payment method.");
     }
 
-    $current_datetime = date('Y-m-d H:i:s'); // Current date and time
+   $current_datetime = new DateTime("now", new DateTimeZone('Asia/Kolkata'));
+   $current_datetime=$current_datetime->format('Y-m-d h:i:s A');
+
 
     $conn->begin_transaction();
     $order_ids = []; // Store all inserted order IDs
