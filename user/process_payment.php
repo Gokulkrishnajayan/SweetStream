@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $payment_details = "Paid using UPI.";
             break;
         case 'cash_on_delivery':
-            $payment_details = "Cash on Delivery selected.";
+            $payment_details = "Cash on Delivery.";
             break;
         default:
             die("Invalid payment method.");
