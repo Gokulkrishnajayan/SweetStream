@@ -7,6 +7,7 @@
 // $password = ''; // Database password
 // $dbname = 'sweetstream'; // Database name
 
+
 // Database configuration of online server
 
 $host = 'sql104.infinityfree.com'; // Your database host
