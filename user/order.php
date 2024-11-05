@@ -53,26 +53,113 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
                                 <h3 class="orange-text">SweetStream</h3>
                             </a>
                         </div>
-                        <!-- menu start -->
-						<nav class="main-menu">
-							<ul>
-								<li><a href="index.php">Home</a></li>
-								<li><a href="shop.php">Shop</a></li>
-								<li class="current-list-item"><a href="order.php">Order</a></li>
-								<li><a href="about.php">About</a></li>
-								<li><a href="contact.php">Contact</a></li>
-								<li><a href="profile.php">Profile</a></li>
-								<li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
-										<!-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> -->
-									</div>
-								</li>
-							</ul>
-						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-						<div class="mobile-menu"></div>
-						<!-- menu end -->
+<!-- menu start -->
+<nav class="main-menu">
+    <ul>
+        <li><a href="index.php">Home</a></li>
+        <li><a href="shop.php">Shop</a></li>
+        <li class="current-list-item"><a href="order.php">Order</a></li>
+        <li><a href="about.php">About</a></li>
+        <li><a href="contact.php">Contact</a></li>
+        
+        <!-- Small screen Profile and Logout links -->
+        <li class="smallscreenlog" ><a href="profile.php">Profile</a></li>
+        <li class="smallscreenlog" 
+        ><a href="logout.php">Logout</a></li>
+
+        <!-- Profile with Dropdown for larger screens -->
+        <li class="profile-menu">
+            <a href="profile.php">Profile</a>
+            <ul class="dropdown">
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </li>
+
+        <li>
+            <div class="header-icons">
+                <a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </li>
+    </ul>
+</nav>
+<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+<div class="mobile-menu"></div>
+<!-- menu end -->
+
+<style>
+/* Main styling for profile menu */
+.profile-menu {
+    position: relative;
+}
+
+/* Hide the dropdown by default */
+.profile-menu .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    margin: 0;
+    padding: 0;
+}
+
+.smallscreenlog {
+        display: none; /* Display small screen elements */
+    }
+
+
+/* Show dropdown on hover for larger screens */
+.profile-menu:hover .dropdown {
+    display: block;
+}
+
+/* Styling for dropdown items */
+.profile-menu .dropdown li a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* Change background on hover */
+.profile-menu .dropdown li a:hover {
+    background-color: #f2f2f2;
+}
+
+/* Media queries */
+
+/* For smaller screens (up to 768px) */
+@media (max-width: 768px) {
+    /* Show small screen links and hide profile menu */
+    .smallscreenlog {
+        display: block; /* Display small screen elements */
+    }
+    .profile-menu {
+        display: none; /* Hide profile menu on smaller screens */
+    }
+}
+
+/* For larger screens (above 768px) */
+@media (min-width: 769px) {
+    /* Hide small screen links and show profile menu */
+    .smallscreenlog {
+        display: none; /* Hide small screen elements on larger screens */
+    }
+    .profile-menu {
+        display: block; /* Show profile menu on larger screens */
+    }
+}
+</style>
+
+
+
+
+
                     </div>
                 </div>
             </div>
