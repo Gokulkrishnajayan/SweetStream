@@ -1,6 +1,5 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
-
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 $conn = new mysqli($host, $user, $password, $dbname);
 
@@ -144,42 +143,14 @@ $conn = new mysqli($host, $user, $password, $dbname);
     </div>
     <!-- End Header -->
 
-   
-    <?php
-// SQL query to join and group delivery, product, and user data
-$sql = "
-    SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time,
-           u.name AS customer_name, u.phone_no AS customer_phone
-    FROM delivery_table d
-    JOIN user_table u ON d.user_id = u.id
-    GROUP BY d.user_id, d.delivery_date_time
-    ORDER BY d.delivery_date_time DESC
-";
-$result = $conn->query($sql);
-
-// Prepare grouped orders
-$orders = [];
-while ($row = $result->fetch_assoc()) {
-    $orders[] = [
-        'order_id' => $row['did'],
-        'customer_name' => $row['customer_name'],
-        'address' => $row['address'],
-        'phone_no' => $row['customer_phone'],
-        'status' => $row['status'],
-        'user_id' => $row['user_id'],
-        'order_date' => $row['delivery_date_time']
-    ];
-}
-?>
-
-<!-- Order Tracking Section -->
+  
+    <!-- order-tracking-section -->
 <div class="order-tracking-section">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <h3 class="text-center">Your Recent Orders</h3>
 
-                <!-- Search Area for Order Tracking -->
                 <div class="search-area2 mb-4">
                     <div class="input-group">
                         <input type="text" class="form-control search-input" placeholder="Search by product name or order ID">
@@ -191,22 +162,10 @@ while ($row = $result->fetch_assoc()) {
                     </div>
                 </div>
 
-                <?php foreach ($orders as $order): ?>
-                <div class="tracking-card">
-                    <!-- Display grouped order summary -->
-                    <div class="order-item">
-                        <div class="order-info">
-                            <h5>Order ID: #<?php echo $order['order_id']; ?></h5>
-                            <p>Customer: <?php echo $order['customer_name']; ?></p>
-                            <p>Address: <?php echo $order['address']; ?></p>
-                            <p>Phone: <?php echo $order['phone_no']; ?></p>
-                        </div>
-                        <div class="order-status">
-                            <button class="btn btn-primary" onclick="openModal('<?php echo $order['customer_name']; ?>', '<?php echo $order['user_id']; ?>', '<?php echo $order['order_date']; ?>')">Accept Order</button>
-                        </div>
-                    </div>
+                <!-- Container for displaying orders -->
+                <div id="orderList">
+                    <?php include 'your_orders_list_endpoint.php'; ?>
                 </div>
-                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -225,13 +184,16 @@ while ($row = $result->fetch_assoc()) {
 </div>
 
 <script>
-function openModal(customerName, userId, orderDate) {
-    console.log('Opening modal for User ID:', userId, 'Order Date:', orderDate); // Debugging
+let selectedUserId = null;
+let selectedOrderDate = null;
+
+function openModal(orderId, userId, orderDate) {
+    selectedUserId = userId;
+    selectedOrderDate = orderDate;
 
     const modal = document.getElementById('orderModal');
     modal.style.display = 'flex';
 
-    // Fetch order details using AJAX
     fetch('fetch_order_details.php', {
         method: 'POST',
         headers: {
@@ -267,10 +229,60 @@ function checkAllCheckboxes() {
     document.getElementById('confirmOrder').disabled = !allChecked;
 }
 
+function confirmOrder() {
+    const currentUserId = <?php echo json_encode($_SESSION['user_id']); ?>;
+
+    fetch('update_delivery_person.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            user_id: selectedUserId, 
+            order_date: selectedOrderDate,
+            delivery_person_id: currentUserId,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Order confirmed and dispatched successfully!");
+            closeModal();
+            refreshOrders();
+        } else {
+            alert("Failed to confirm order. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error confirming order:", error);
+        alert("An error occurred. Please try again later.");
+    });
+}
+
 function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
+
+// Refresh the orders list without reloading the entire page
+function refreshOrders() {
+    fetch('your_orders_list_endpoint.php')
+        .then(response => response.text())
+        .then(html => {
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = html;
+
+            // Check if there are no orders and display message if needed
+            if (!orderList.innerHTML.trim()) {
+                orderList.innerHTML = "<p class='text-center'>No pending orders available.</p>";
+            }
+        })
+        .catch(error => console.error("Error refreshing orders:", error));
+}
 </script>
+
+
+
+
 
 <style>
     .modal {
