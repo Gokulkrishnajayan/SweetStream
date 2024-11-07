@@ -220,7 +220,7 @@ $result = $stmt->get_result();
     </div>
 </div>
 
-<script>
+<scri
 let selectedUserId = null;
 let selectedOrderDate = null;
 

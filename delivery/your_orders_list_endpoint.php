@@ -1,56 +1,50 @@
 <?php
-// Include database connection
+// Database connection
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
-
-// Get search term from URL (GET)
-$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
-
-// SQL query to retrieve orders, including order ID, customer name, address, and status
+// SQL query to join and group delivery, product, and user data
 $sql = "
     SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time,
         u.name AS customer_name, u.phone_no AS customer_phone
     FROM delivery_table d
     JOIN user_table u ON d.user_id = u.id
     WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL)
+    GROUP BY d.user_id, d.delivery_date_time
+    ORDER BY d.delivery_date_time DESC
 ";
 
-// If search term exists, filter the query based on the search input
-if ($searchTerm) {
-    $sql .= " AND (d.did LIKE ? OR u.name LIKE ? OR d.address LIKE ?)";
+$result = $conn->query($sql);
+$orders = [];
+
+while ($row = $result->fetch_assoc()) {
+    $orders[] = [
+        'order_id' => $row['did'],
+        'customer_name' => $row['customer_name'],
+        'address' => $row['address'],
+        'phone_no' => $row['customer_phone'],
+        'status' => $row['status'],
+        'user_id' => $row['user_id'],
+        'order_date' => $row['delivery_date_time']
+    ];
 }
 
-// Add sorting by delivery date
-$sql .= " ORDER BY d.delivery_date_time DESC";
-
-// Prepare the SQL statement
-$stmt = $conn->prepare($sql);
-
-// Bind parameters if there is a search term
-if ($searchTerm) {
-    $searchTerm = "%" . $searchTerm . "%";  // Wildcards for LIKE search
-    $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
-}
-
-// Execute the query
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Generate the HTML for the order list
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo '<div class="tracking-card">
-            <div class="card-title">
-                <h5 class="text-primary">' . htmlspecialchars($row['customer_name']) . ' (Order ID: ' . htmlspecialchars($row['did']) . ')</h5>
-            </div>
-            <div class="card-details">
-                <p><strong>Order Date:</strong> ' . date('d M Y, H:i', strtotime($row['delivery_date_time'])) . '</p>
-                <p><strong>Delivery Address:</strong> ' . htmlspecialchars($row['address']) . '</p>
-                <p><strong>Status:</strong> ' . ucfirst(htmlspecialchars($row['status'])) . '</p>
-                <p><strong>Customer Phone:</strong> ' . htmlspecialchars($row['customer_phone']) . '</p>
-            </div>
-        </div>';
-    }
+if (empty($orders)) {
+    echo "<p class='text-center'>No pending orders available.</p>";
 } else {
-    echo '<div class="alert alert-warning">No orders found for the given search criteria.</div>';
+    foreach ($orders as $order) {
+        echo "
+            <div class='tracking-card'>
+                <div class='order-item'>
+                    <div class='order-info'>
+                        <h5>Order ID: #{$order['order_id']}</h5>
+                        <p>Customer: {$order['customer_name']}</p>
+                        <p>Address: {$order['address']}</p>
+                        <p>Phone: {$order['phone_no']}</p>
+                    </div>
+                    <div class='order-status'>
+                        <button class='btn btn-primary' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>
+                    </div>
+                </div>
+            </div>";
+    }
 }
 ?>
