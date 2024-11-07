@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($userPrivilege === "user") {
             header("Location: ../user/index.php");
         } elseif ($userPrivilege === "delivery") {
-            header("Location: ../delivery/index.html");
+            header("Location: ../delivery/index.php");
         }
         exit;
 

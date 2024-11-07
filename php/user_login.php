@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../user/index.php");
         }
         elseif("delivery"=== $user['privilege']){
-            header("Location: ../delivery/index.html");
+            header("Location: ../delivery/index.php");
         }
         exit;
     } else {

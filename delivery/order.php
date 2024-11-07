@@ -124,7 +124,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
                         </div>
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="index.html">Home</a></li>
+                                <li><a href="index.php">Home</a></li>
                                 <li><a href="task.html">Task</a></li>
                                 <li class="current-list-item"><a href="order.php">Order</a></li>
                                 <li><a href="profile.html">Profile</a></li>
@@ -430,7 +430,7 @@ function refreshOrders() {
                 <div class="footer-box pages">
                     <h2 class="widget-title">Pages</h2>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.php">Home</a></li>
                         <li><a href="about.html">About</a></li>
                         <li><a href="services.html">Shop</a></li>
                         <li><a href="news.html">News</a></li>
@@ -442,7 +442,7 @@ function refreshOrders() {
                 <div class="footer-box subscribe">
                     <h2 class="widget-title">Subscribe</h2>
                     <p>Subscribe to our mailing list to get the latest updates.</p>
-                    <form action="index.html">
+                    <form action="index.php">
                         <input type="email" placeholder="Email">
                         <button type="submit"><i class="fas fa-paper-plane"></i></button>
                     </form>
