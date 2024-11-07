@@ -128,7 +128,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
                                 <li><a href="index.php">Home</a></li>
 								<li><a href="task.html">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
-                                <li class="current-list-item"><a href="profile.html">Profile</a></li>
+                                <li class="current-list-item"><a href="profile.php">Profile</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
