@@ -1,3 +1,9 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_delivery.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+$conn = new mysqli($host, $user, $password, $dbname);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -139,7 +145,41 @@
     <!-- End Header -->
 	
 	<!-- profile section -->
-<div class="profile-section mt-150 mb-150">
+
+	<?php
+
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php'; // Include connection
+
+$conn = new mysqli($host, $user, $password, $dbname); // Initialize connection
+
+// Check for connection error
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get user_id from session
+$user_id = $_SESSION['user_id'] ?? null;
+
+if ($user_id) {
+    $query = "SELECT name, phone_no, email, address FROM user_table WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc(); // Fetch user data
+
+    if (!$user) {
+        echo "<script>alert('User not found');</script>";
+    }
+} else {
+    echo "<script>alert('User not logged in');</script>";
+}
+?>
+
+
+
+	<!-- profile section -->
+	<div class="profile-section mt-150 mb-150">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2">
@@ -148,41 +188,44 @@
                         <h3>Profile Information</h3>
                     </div>
                     <div class="profile-form">
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="first-name">First Name:</label>
-                                    <input type="text" class="form-control" id="first-name" value="John" disabled>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="last-name">Last Name:</label>
-                                    <input type="text" class="form-control" id="last-name" value="Doe" disabled>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" value="johndoe@example.com" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number:</label>
-                                <input type="text" class="form-control" id="phone" value="123-456-7890" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="address">Address:</label>
-                                <textarea class="form-control" id="address" rows="3" disabled>123 Main St, Anytown, USA</textarea>
-                            </div>
-                            <div class="button-group">
-                                <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
-                                <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
-                                <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
-                            </div>
-                        </form>
+					<form id="profile-form" method="post">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" 
+                   value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" disabled>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" 
+                   value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" disabled>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone Number:</label>
+        <input type="text" class="form-control" id="phone" name="phone" 
+               value="<?php echo htmlspecialchars($user['phone_no'] ?? ''); ?>" disabled>
+    </div>
+    <div class="form-group">
+        <label for="address">Address:</label>
+        <textarea class="form-control" id="address" name="address" rows="3" disabled><?php echo htmlspecialchars($user['address'] ?? ''); ?></textarea>
+    </div>
+    <div class="button-group">
+        <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+        <button type="button" class="btn btn-success" id="save-btn" style="display: none;">Save Changes</button>
+        <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none;">Cancel</button>
+    </div>
+</form>
+
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+			</div>
+			</div>
+			</div>
+			
+			<!-- end profile section -->
+
 <!-- end profile section -->
 
 
@@ -281,6 +324,56 @@
 	<script src="../user/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="../user/assets/js/main.js"></script>
+    
+    
+<script>
+$(function() {
+    // Edit button functionality
+    $("#edit-btn").click(function() {
+        $("input, textarea").prop("disabled", false); // Enable inputs
+        $("#edit-btn").hide();
+        $("#save-btn, #cancel-btn").show();
+    });
+
+    // Cancel button functionality
+    $("#cancel-btn").click(function() {
+        $("input, textarea").prop("disabled", true); // Disable inputs
+        $("#save-btn, #cancel-btn").hide();
+        $("#edit-btn").show();
+    });
+
+    // Save button functionality with AJAX
+    $("#save-btn").click(function() {
+        const name = $("#name").val();
+        const email = $("#email").val();
+        const phone = $("#phone").val();
+        const address = $("#address").val();
+
+        $.ajax({
+            type: "POST",
+            url: "update_profile.php",
+            data: {
+                name: name,
+                email: email,
+                phone: phone,
+                address: address
+            },
+            success: function(response) {
+                alert(response); // Alert response message
+                if (response.includes("successfully")) {
+                    $("input, textarea").prop("disabled", true); // Disable inputs
+                    $("#save-btn, #cancel-btn").hide();
+                    $("#edit-btn").show();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Error updating profile: " + errorThrown);
+            }
+        });
+    });
+});
+</script>
+
 
 </body>
 </html>
