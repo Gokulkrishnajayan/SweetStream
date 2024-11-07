@@ -3,6 +3,40 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_delivery.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 $conn = new mysqli($host, $user, $password, $dbname);
 
+// Check if there is a search term
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+
+$sql = "
+    SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time,
+        u.name AS customer_name, u.phone_no AS customer_phone
+    FROM delivery_table d
+    JOIN user_table u ON d.user_id = u.id
+    WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL)
+";
+
+// If search term exists, filter the query based on the search input
+if ($searchTerm) {
+    $sql .= " AND (d.did LIKE ? OR u.name LIKE ? OR d.address LIKE ?)";
+}
+
+// Add sorting by delivery date
+$sql .= " ORDER BY d.delivery_date_time DESC";
+
+// Prepare the SQL statement
+$stmt = $conn->prepare($sql);
+
+// Bind parameters if there is a search term
+if ($searchTerm) {
+    $searchTerm = "%" . $searchTerm . "%";  // Wildcards for LIKE search
+    $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
+}
+
+// Execute the query
+$stmt->execute();
+$result = $stmt->get_result();
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -152,15 +186,18 @@ $conn = new mysqli($host, $user, $password, $dbname);
                 <h3 class="text-center">Your Recent Orders</h3>
 
                 <div class="search-area2 mb-4">
-                    <div class="input-group">
-                        <input type="text" class="form-control search-input" placeholder="Search by product name or order ID">
-                        <div class="input-group-append">
-                            <button class="btn btn-success search-button" type="submit">
-                                Search <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <form method="GET" action="" id="searchForm">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control search-input" placeholder="Search by order ID, customer name, or address" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+            <div class="input-group-append">
+                <button class="btn btn-success search-button" type="submit">
+                    Search <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
 
                 <!-- Container for displaying orders -->
                 <div id="orderList">
@@ -263,9 +300,9 @@ function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
 
-// Refresh the orders list without reloading the entire page
-function refreshOrders() {
-    fetch('your_orders_list_endpoint.php')
+// Refresh the orders list based on the search query without reloading the entire page
+function refreshOrders(searchTerm = '') {
+    fetch('your_orders_list_endpoint.php?search=' + searchTerm)
         .then(response => response.text())
         .then(html => {
             const orderList = document.getElementById('orderList');
@@ -278,6 +315,33 @@ function refreshOrders() {
         })
         .catch(error => console.error("Error refreshing orders:", error));
 }
+
+// Handle search functionality
+document.querySelector('.search-button').addEventListener('click', function(e) {
+    e.preventDefault();  // Prevent the default form submit
+
+    const searchTerm = document.querySelector('.search-input').value.trim();
+
+    if (searchTerm !== '') {
+        refreshOrders(searchTerm);
+    } else {
+        refreshOrders();  // Refresh without search term (show all orders)
+    }
+});
+
+// Handle Enter key press for search (optional enhancement)
+document.querySelector('.search-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const searchTerm = e.target.value.trim();
+        if (searchTerm !== '') {
+            refreshOrders(searchTerm);
+        } else {
+            refreshOrders();
+        }
+    }
+});
+
 </script>
 
 
