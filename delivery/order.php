@@ -153,6 +153,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
 
                 <!-- Search Area -->
                 <div class="search-area2 mb-4">
+                    <!-- Search Form with GET Method -->
                     <form method="GET" action="">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control search-input" placeholder="Search by order ID, username, or address" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
