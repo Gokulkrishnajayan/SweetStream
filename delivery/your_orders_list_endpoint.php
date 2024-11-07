@@ -5,7 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
 // Check if a search term is provided
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
-// SQL query to fetch orders with optional search filters
+// Create a SQL query with optional search filters
 $sql = "
     SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time, d.delivery_dispatched_time,
            u.name AS customer_name, u.phone_no AS customer_phone
