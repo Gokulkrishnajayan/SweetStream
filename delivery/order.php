@@ -127,7 +127,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
                                 <li><a href="index.php">Home</a></li>
                                 <li><a href="task.html">Task</a></li>
                                 <li class="current-list-item"><a href="order.php">Order</a></li>
-                                <li><a href="profile.php">Profile</a></li>
+                                <li><a href="profile.html">Profile</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
@@ -144,26 +144,22 @@ $conn = new mysqli($host, $user, $password, $dbname);
     <!-- End Header -->
 
   
-   <!-- order-tracking-section -->
+    <!-- order-tracking-section -->
 <div class="order-tracking-section">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <h3 class="text-center">Your Recent Orders</h3>
 
-                <!-- Search Area -->
                 <div class="search-area2 mb-4">
-                    <!-- Search Form with GET Method -->
-                    <form method="GET" action="">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control search-input" placeholder="Search by order ID, username, or address" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-                            <div class="input-group-append">
-                                <button class="btn btn-success search-button" type="submit">
-                                    Search <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" placeholder="Search by product name or order ID">
+                        <div class="input-group-append">
+                            <button class="btn btn-success search-button" type="submit">
+                                Search <i class="fas fa-search"></i>
+                            </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <!-- Container for displaying orders -->
@@ -174,7 +170,6 @@ $conn = new mysqli($host, $user, $password, $dbname);
         </div>
     </div>
 </div>
-
 
 <!-- Modal Structure -->
 <div id="orderModal" class="modal">
