@@ -185,18 +185,17 @@ $result = $stmt->get_result();
             <div class="col-lg-12">
                 <h3 class="text-center">Your Recent Orders</h3>
 
+               
                 <div class="search-area2 mb-4">
-    <form method="GET" action="" id="searchForm">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control search-input" placeholder="Search by order ID, customer name, or address" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-            <div class="input-group-append">
-                <button class="btn btn-success search-button" type="submit">
-                    Search <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" placeholder="Search by product name or order ID">
+                        <div class="input-group-append">
+                            <button class="btn btn-success search-button" type="submit">
+                                Search <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
 
                 <!-- Container for displaying orders -->
@@ -220,7 +219,7 @@ $result = $stmt->get_result();
     </div>
 </div>
 
-<scri
+<script>
 let selectedUserId = null;
 let selectedOrderDate = null;
 
