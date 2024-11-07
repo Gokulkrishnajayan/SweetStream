@@ -126,7 +126,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
                         <nav class="main-menu">
                             <ul>
                                 <li><a href="index.php">Home</a></li>
-								<li><a href="task.html">Task</a></li>
+								<li><a href="task.php">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
                                 <li class="current-list-item"><a href="profile.php">Profile</a></li>
                                 <li>

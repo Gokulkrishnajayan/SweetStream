@@ -1,3 +1,9 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_delivery.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+$conn = new mysqli($host, $user, $password, $dbname);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,7 +111,7 @@
                         <nav class="main-menu">
                             <ul>
                                 <li><a href="index.php">Home</a></li>
-                                <li class="current-list-item"><a href="task.html">Task</a></li>
+                                <li class="current-list-item"><a href="task.php">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
                                 <li><a href="profile.php">Profile</a></li>
                                 <li>
@@ -122,6 +128,51 @@
         </div>
     </div>
     <!-- End Header -->
+
+    <?php
+// SQL query to retrieve orders for the current delivery user, with products grouped by user_id and delivery_date_time
+$sql = "
+SELECT d.did, d.delivery_date_time, d.user_id, d.address, d.status,
+       u.name AS customer_name, u.phone_no AS customer_phone,
+       SUM(d.product_quantity) AS total_quantity,
+       SUM(d.product_quantity * d.price) + 50 AS total_price,
+       GROUP_CONCAT(CONCAT('<li>', p.pname, ' - ', d.product_quantity, ' liter','</li>') SEPARATOR '') AS products,
+       d.payment_status
+FROM delivery_table d
+JOIN user_table u ON d.user_id = u.id
+JOIN product_table p ON d.product_id = p.pid
+WHERE d.deliveryperson_id = ? AND d.status = 'Order Dispatched'
+GROUP BY d.user_id, d.delivery_date_time
+ORDER BY d.delivery_date_time DESC
+";
+
+// Prepare the statement
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION['user_id']); // Bind the logged-in user's ID
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result === false) {
+    echo "Error executing query: " . $conn->error;
+} elseif ($result->num_rows > 0) {
+    $orders = [];
+    while ($row = $result->fetch_assoc()) {
+        $orders[] = [
+            'order_id' => $row['did'],
+            'customer_name' => $row['customer_name'],
+            'address' => $row['address'],
+            'products' => $row['products'],  // Grouped products as list items
+            'total_quantity' => $row['total_quantity'],
+            'total_price' => $row['total_price'],
+            'payment_status' => $row['payment_status'],
+            'status' => $row['status'],
+            'order_date' => $row['delivery_date_time']
+        ];
+    }
+} else {
+    echo "<p>No orders with 'Order Dispatched' status found.</p>";
+}
+?>
 
 <!-- Home Section -->
 <div class="container" style="padding-top: 5px;">
@@ -146,55 +197,49 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>9034215</td>
-                        <td>John Doe</td>
-                        <td>123 Main St, City, Country</td>
-                        <td>
-                            <ul>
-                                <li>Gothambu Payasam - 1 liter</li>
-                                <li>Parrippu Payasam - 2 liters</li>
-                            </ul>
-                        </td>
-                        <td>3</td>
-                        <td>$150.00</td>
-                        <td><strong class="text-success">Paid</strong></td>
-                        <td><span class="badge badge-warning">Pending</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-outline-success btn-sm" onclick="updateStatus(this, 'Delivered')">Delivered</button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(this, 'Unreachable')">Unreachable</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>9034216</td>
-                        <td>Jane Smith</td>
-                        <td>456 Elm St, City, Country</td>
-                        <td>
-                            <ul>
-                                <li>Pineapple Juice - 2 liters</li>
-                                <li>Gothambu Payasam - 1 liter</li>
-                            </ul>
-                        </td>
-                        <td>3</td>
-                        <td>$100.00</td>
-                        <td><strong class="text-success">Paid</strong></td>
-                        <td><span class="badge badge-warning">Pending</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-outline-success btn-sm" onclick="updateStatus(this, 'Delivered')">Delivered</button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(this, 'Unreachable')">Unreachable</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Add more order rows as needed -->
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php foreach ($orders as $order): ?>
+                            <tr>
+                                <td><?php echo $order['order_id']; ?></td>
+                                <td><?php echo $order['customer_name']; ?></td>
+                                <td><?php echo $order['address']; ?></td>
+                                <td>
+                                    <ul><?php echo $order['products']; ?></ul>
+                                </td>
+                                <td><?php echo $order['total_quantity']; ?></td>
+                                <td><?php echo '$' . number_format($order['total_price'], 2); ?></td>
+                                <td>
+                                    <strong class="<?php echo $order['payment_status'] == 'Paid' ? 'text-success' : 'text-danger'; ?>">
+                                        <?php echo ucfirst($order['payment_status']); ?>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <span class="badge badge-<?php echo strtolower($order['status']) == 'order dispatched' ? 'warning' : 'success'; ?>">
+                                        <?php echo ucfirst($order['status']); ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="9" class="text-center">No orders with 'Order Dispatched' status found for your deliveries.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 <!-- End Home Section -->
+
+
+
 
 <!-- Confirmation Modal -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
@@ -299,10 +344,15 @@
 <script>
     let currentButton; // Store the button that was clicked
     let currentStatus; // Store the status to be confirmed
+    let currentOrderId; // Store the order ID of the selected row
 
     function updateStatus(button, status) {
         currentButton = button; // Save the button that was clicked
         currentStatus = status; // Save the status to be confirmed
+
+        // Extract the order ID from the row
+        const row = currentButton.closest('tr');
+        currentOrderId = row.querySelector('td:first-child').textContent.trim(); // Get Order ID from the first column
 
         // Update the modal content
         const orderStatusText = document.getElementById('orderStatus');
@@ -314,30 +364,55 @@
 
     // Event listener for confirm button in modal
     document.getElementById('confirmButton').addEventListener('click', function() {
-        const row = currentButton.closest('tr');
-        const statusCell = row.querySelector('td:nth-child(8) .badge');
-        const deliveredButton = row.querySelector('button.btn-outline-success');
-        const unreachableButton = row.querySelector('button.btn-outline-danger');
+        // Perform AJAX call to update the status in the database
+        fetch('update_delivery_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                order_id: currentOrderId, 
+                status: currentStatus 
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Successfully updated in the database; update the UI
+                const row = currentButton.closest('tr');
+                const statusCell = row.querySelector('td:nth-child(8) .badge');
+                const deliveredButton = row.querySelector('button.btn-outline-success');
+                const unreachableButton = row.querySelector('button.btn-outline-danger');
 
-        if (currentStatus === 'Delivered') {
-            if (statusCell.textContent === 'Pending' || statusCell.textContent === 'Unreachable') {
-                statusCell.classList.remove('badge-warning', 'badge-danger');
-                statusCell.classList.add('badge-success');
-                statusCell.textContent = 'Completed';
-                deliveredButton.disabled = true; // Disable the Delivered button
-                unreachableButton.disabled = true; // Disable the Unreachable button
+                // Update status in the table row
+                if (currentStatus === 'Delivered') {
+                    if (statusCell.textContent === 'Pending' || statusCell.textContent === 'Unreachable') {
+                        statusCell.classList.remove('badge-warning', 'badge-danger');
+                        statusCell.classList.add('badge-success');
+                        statusCell.textContent = 'Completed';
+                        deliveredButton.disabled = true;
+                        unreachableButton.disabled = true;
+                    }
+                } else if (currentStatus === 'Unreachable') {
+                    statusCell.classList.remove('badge-warning');
+                    statusCell.classList.add('badge-danger');
+                    statusCell.textContent = 'Unreachable';
+                    deliveredButton.disabled = false;
+                }
+
+                // Hide the modal
+                $('#confirmationModal').modal('hide');
+            } else {
+                alert('Failed to update status: ' + (data.error || 'Unknown error'));
             }
-        } else if (currentStatus === 'Unreachable') {
-            statusCell.classList.remove('badge-warning');
-            statusCell.classList.add('badge-danger');
-            statusCell.textContent = 'Unreachable';
-            deliveredButton.disabled = false; // Enable the Delivered button again
-        }
-
-        // Hide the modal
-        $('#confirmationModal').modal('hide');
+        })
+        .catch(error => {
+            console.error('Error updating status:', error);
+            alert('An error occurred. Please try again later.');
+        });
     });
 </script>
+
 
 </body>
 </html>

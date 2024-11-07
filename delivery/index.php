@@ -119,7 +119,7 @@
                         <nav class="main-menu">
                             <ul>
                                 <li class="current-list-item"><a href="index.php">Home</a></li>
-                                <li><a href="task.html">Task</a></li>
+                                <li><a href="task.php">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
                                 <li><a href="profile.php">Profile</a></li>
                                 <li>
