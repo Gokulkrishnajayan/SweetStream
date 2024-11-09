@@ -9,7 +9,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Gokul Krishna Jayan from https://imransdesign.com/">
 
 	<!-- title -->
 	<title>Contact</title>
@@ -234,7 +234,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>,  All Rights Reserved.</p>
+					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Gokul Krishna Jayan</a>,  All Rights Reserved.</p>
 				</div>
 				<div class="col-lg-6 text-right col-md-12">
 					<div class="social-icons">
