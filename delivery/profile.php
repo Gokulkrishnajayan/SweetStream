@@ -6,127 +6,121 @@ $conn = new mysqli($host, $user, $password, $dbname);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>SweetStream</title>
-		<link rel="shortcut icon" type="image/png" href="../user/assets/img/favicn.png">
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Poppins:400,700&display=swap" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<link rel="stylesheet" href="../user/assets/css/all.min.css">
-		<link rel="stylesheet" href="../user/assets/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../user/assets/css/main.css">
-	
-		<style>
-			body {
-				background-color: #f8f9fa; /* Light background for contrast */
-			}
-			.top-header-area {
-				position: sticky;  
-				top: 0;           
-				z-index: 1000;    
-				background-color: #051922; 
-				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-				padding: 15px 0;
-			}
-			.site-logo h3 {
-				color: #ffffff;
-				font-family: 'Poppins', sans-serif;
-			}
-			.main-menu a {
-				color: #ffffff;
-				padding: 10px 15px;
-				transition: color 0.3s;
-			}
-			.main-menu a:hover {
-				color: #f39c12;
-			}
-			.welcome-message {
-				text-align: center;
-				margin: 30px 0;
-				font-size: 2rem; 
-				color: #333;
-				font-family: 'Poppins', sans-serif;
-				font-weight: 600;
-			}
-			.footer-area {
-				background-color: #051922;
-				color: #ffffff; 
-				padding: 20px 0;
-			}
-			.thead-dark th {
-				background-color: #343a40; 
-				color: #ffffff;
-			}
-			.table {
-				background-color: #ffffff; 
-				border-radius: 10px; 
-				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-			}
-			.table td {
-				vertical-align: middle; 
-				padding: 15px; 
-			}
-			.badge {
-				padding: 5px 10px; 
-				border-radius: 5px; 
-			}
-			.badge-success {
-				background-color: #28a745; 
-			}
-			.badge-warning {
-				background-color: #ffc107; 
-			}
-			.badge-danger {
-				background-color: #dc3545; 
-			}
-			.card {
-				border-radius: 12px; 
-				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-				transition: transform 0.3s, box-shadow 0.3s;
-			}
-			.card:hover {
-				transform: translateY(-5px);
-				box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-			}
-			/* Chart styles */
-			canvas {
-				max-width: 100%;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-			}
-			/* Button styles */
-			.btn-custom {
-				background-color: #f39c12;
-				color: white;
-				border-radius: 5px;
-				transition: background-color 0.3s;
-			}
-			.btn-custom:hover {
-				background-color: #d68a0a;
-			}
-		</style>
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SweetStream</title>
+    <link rel="shortcut icon" type="image/png" href="../user/assets/img/favicn.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Poppins:400,700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../user/assets/css/all.min.css">
+    <link rel="stylesheet" href="../user/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+
+	<!-- owl carousel -->
+	<link rel="stylesheet" href="../user/assets/css/owl.carousel.css">
+	<!-- magnific popup -->
+	<link rel="stylesheet" href="../user/assets/css/magnific-popup.css">
+	<!-- animate css -->
+	<link rel="stylesheet" href="../user/assets/css/animate.css">
+	<!-- mean menu css -->
+	<link rel="stylesheet" href="../user/assets/css/meanmenu.min.css">
+	<!-- responsive -->
+	<link rel="stylesheet" href="../user/assets/css/responsive.css">
+
+    <style>
+      
+        .top-header-area {
+            position: sticky;  
+            top: 0;       
+            z-index: 1000;    
+            background-color: #051922; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            padding: 15px 0;
+        }
+       
+       
+        .main-menu a:hover {
+            color: #f39c12;
+        }
+     
+        
+        .thead-dark th {
+            background-color: #343a40; 
+            color: #ffffff;
+        }
+        .table {
+            background-color: #ffffff; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .table td {
+            vertical-align: middle; 
+            padding: 15px; 
+        }
+        .badge {
+            padding: 5px 10px; 
+            border-radius: 5px; 
+        }
+        .badge-success {
+            background-color: #28a745; 
+        }
+        .badge-warning {
+            background-color: #ffc107; 
+        }
+        .badge-danger {
+            background-color: #dc3545; 
+        }
+        .card {
+            border-radius: 12px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        /* Chart styles */
+        canvas {
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        /* Button styles */
+        .btn-custom {
+            background-color: #f39c12;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn-custom:hover {
+            background-color: #d68a0a;
+        } 
+    </style>
+</head>
 <body>
-	
-	
-	 <!-- Header -->
-	 <div class="top-header-area" id="sticker">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="main-menu-wrap">
-                        <div class="site-logo">
-                            <a href="#">
-                                <h3 class="orange-text">SweetStream</h3>
-                            </a>
-                        </div>
-                        <nav class="main-menu">
-                            <ul>
+   <!-- header -->
+	<div class="top-header-area" id="sticker">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-sm-12 text-center">
+					<div class="main-menu-wrap">
+
+						<!-- logo -->
+						<div class="site-logo">
+							<a href="#">
+								<h3 class="orange-text">SweetStream</h3>
+							</a>
+						</div>
+						<!-- logo -->
+						
+						<!-- menu start -->
+						<nav class="main-menu">
+                        <ul>
                                 <li><a href="index.php">Home</a></li>
-								<li><a href="task.php">Task</a></li>
+                                <li><a href="task.php">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
                                 <li class="current-list-item"><a href="profile.php">Profile</a></li>
                                 <li>
@@ -135,14 +129,36 @@ $conn = new mysqli($host, $user, $password, $dbname);
                                     </div>
                                 </li>
                             </ul>
-                        </nav>
-                        <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Header -->
+						</nav>
+						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+						<div class="mobile-menu"></div>
+						<!-- menu end -->
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end header -->
+	
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<h3>Search For:</h3>
+							<input type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search area -->
 	
 	<!-- profile section -->
 
