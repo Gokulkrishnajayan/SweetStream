@@ -118,6 +118,7 @@
                                 <li><a href="task.php">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
                                 <li><a href="profile.php">Profile</a></li>
+                                <li><a href="../session/logout.php">Logout</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
@@ -156,7 +157,7 @@
 	<!-- end search area -->
 
     <!-- Dashboard Section -->
-    <div class="container mt-4" style="padding-top: 80px;">
+    <div class="container mt-4">
         <h2 class="text-center welcome-message">Delivery Dashboard</h2>
 
         <div class="row mb-4">

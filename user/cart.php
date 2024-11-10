@@ -56,12 +56,14 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li><a href="index.php">Home</a></li>
+								<li class="current-list-item"><a href="index.php">Home</a></li>
 								<li><a href="shop.php">Shop</a></li>
 								<li><a href="order.php">Order</a></li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="contact.html">Contact</a></li>
+								<li><a href="about.php">About</a></li>
+								<li><a href="contact.php">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
+								<li><a href="../session/logout.php">Logout</a></li>
+								
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
@@ -436,7 +438,7 @@ function checkoutAndUpdateCart() {
 						<ul>
 							<li><a href="index.html">Home</a></li>
 							<li><a href="about.html">About</a></li>
-							<li><a href="services.html">Shop</a></li>
+							<li><a href="shop.php">Shop</a></li>
 							<li><a href="news.html">News</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>

@@ -64,9 +64,6 @@ $result = $stmt->get_result();
 
     <style>
       
-      .order-tracking-section{
-        margin: 80px;
-      }
         .top-header-area {
             position: sticky;  
             top: 0;       
@@ -159,6 +156,7 @@ $result = $stmt->get_result();
                                 <li><a href="task.php">Task</a></li>
                                 <li class="current-list-item"><a href="order.php">Order</a></li>
                                 <li><a href="profile.php">Profile</a></li>
+								<li><a href="../session/logout.php">Logout</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>

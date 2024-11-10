@@ -65,6 +65,8 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 								<li><a href="about.php">About</a></li>
 								<li><a href="contact.php">Contact</a></li>
 								<li><a href="profile.php">Profile</a></li>
+								<li><a href="../session/logout.php">Logout</a></li>
+								
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
@@ -76,7 +78,6 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 						<div class="mobile-menu"></div>
 						<!-- menu end -->
-
 					</div>
 				</div>
 			</div>

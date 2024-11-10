@@ -16,8 +16,7 @@ html {
   font-weight: 400;
   line-height: 28px;
   height: 100%;
-  
-  padding-top: 100px !important;
+  margin-top: 80px !important;
 }
 
 body {
@@ -320,7 +319,7 @@ p:last-child {
 }
 
 .mt-150 {
-  margin-top: 150px;
+  margin-top: 50px;
 }
 
 @media only screen and (max-width: 767.96px) {
@@ -629,9 +628,8 @@ ul.sub-menu li:last-child {
   background-color: transparent;
   position: absolute;
   right: 0;
-  top: 15px;
-  margin-top: 50px;
-  
+  top: 15px;  
+  margin-top:0px;
 }
 
 .mean-bar a.meanmenu-reveal {

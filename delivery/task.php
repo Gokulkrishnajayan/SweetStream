@@ -40,6 +40,10 @@ $conn = new mysqli($host, $user, $password, $dbname);
             padding: 15px 0;
         }
     
+
+        .mean-container .mean-bar {
+            margin-top:0px;
+        }
         .main-menu a {
             color: #ffffff;
             padding: 10px 15px;
@@ -109,6 +113,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
                                 <li class="current-list-item"><a href="task.php">Task</a></li>
                                 <li><a href="order.php">Order</a></li>
                                 <li><a href="profile.php">Profile</a></li>
+                                <li><a href="../session/logout.php">Logout</a></li>
                                 <li>
                                     <div class="header-icons">
                                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
@@ -192,7 +197,7 @@ if ($result === false) {
 ?>
 
 <!-- Home Section -->
-<div class="container" style="padding-top: 80px;">
+<div class="container">
     <div class="welcome-message">
         <h1>Deliveries</h1>
     </div>
