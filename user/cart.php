@@ -56,7 +56,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_user.php';
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li class="current-list-item"><a href="index.php">Home</a></li>
+								<li><a href="index.php">Home</a></li>
 								<li><a href="shop.php">Shop</a></li>
 								<li><a href="order.php">Order</a></li>
 								<li><a href="about.php">About</a></li>
