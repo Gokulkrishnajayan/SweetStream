@@ -192,7 +192,7 @@ if ($result === false) {
         ];
     }
 } else {
-    echo "<p>No orders with 'Order Dispatched' status found.</p>";
+    echo "<p></p>";
 }
 ?>
 
