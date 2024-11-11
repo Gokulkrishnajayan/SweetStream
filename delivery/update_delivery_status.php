@@ -40,9 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Step 2: Update the status and delivery_delivered_time
             // Only update the delivery_delivered_time if the status is "Delivered"
             $updateTime = ($newStatus === 'Delivered') ? ", delivery_delivered_time = NOW()" : "";
+            $updateDispatchedTime = ($newStatus !== 'Order Dispatched') ? ", delivery_dispatched_time = NOW()" : "";
 
-            // SQL query to update the order status and delivery delivered time
-            $updateSql = "UPDATE delivery_table SET status = ?, delivery_dispacted_time = NOW() $updateTime WHERE user_id = ? AND delivery_date_time = ?";
+            // SQL query to update the order status and delivery times
+            $updateSql = "UPDATE delivery_table SET status = ? $updateDispatchedTime $updateTime WHERE did = ?";
             
             // Prepare the update query
             $updateStmt = $conn->prepare($updateSql);
@@ -53,12 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
 
-            // Bind the parameters (status, user_id, and delivery_date_time) to the query
-            if ($newStatus === 'Delivered') {
-                $updateStmt->bind_param("sss", $newStatus, $userId, $deliveryDateTime);
-            } else {
-                $updateStmt->bind_param("ss", $newStatus, $userId);
-            }
+            // Bind the parameters (status and did) to the query
+            $updateStmt->bind_param("si", $newStatus, $orderId);
 
             // Execute the update query
             if ($updateStmt->execute()) {
