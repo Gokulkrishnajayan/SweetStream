@@ -9,7 +9,7 @@ if ($conn->connect_error) {
 }
 
 // Get the raw POST data from the request body
-$data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'), true); 
 
 // Check if data is provided
 if (isset($data['order_id']) && isset($data['status'])) {
