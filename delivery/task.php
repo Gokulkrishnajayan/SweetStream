@@ -380,24 +380,25 @@ if ($result === false) {
 	<!-- main js -->
 	<script src="../user/assets/js/main.js"></script>
     
-<script>
+<<script>
     let currentButton; // Store the button that was clicked
     let currentStatus; // Store the status to be confirmed
     let currentOrderId; // Store the order ID of the selected row
 
-    function updateStatus(button, status) {
-        currentButton = button; // Save the button that was clicked
-        currentStatus = status; // Save the status to be confirmed
+    // Function to handle the click of the "Delivered" or "Unreachable" button
+    function updateStatus(orderId, status) {
+        // Store the button and status clicked
+        currentOrderId = orderId;
+        currentStatus = status;
 
-        // Extract the order ID from the row
-        const row = currentButton.closest('tr');
-        currentOrderId = row.querySelector('td:first-child').textContent.trim(); // Get Order ID from the first column
+        // Show the alert with the action to be taken
+        alert("You are about to mark this order as " + status + ". Please confirm.");
 
         // Update the modal content
         const orderStatusText = document.getElementById('orderStatus');
         orderStatusText.textContent = status === 'Delivered' ? 'Delivered' : 'Unreachable';
 
-        // Show the modal
+        // Show the confirmation modal
         $('#confirmationModal').modal('show');
     }
 
@@ -418,7 +419,7 @@ if ($result === false) {
         .then(data => {
             if (data.success) {
                 // Successfully updated in the database; update the UI
-                const row = currentButton.closest('tr');
+                const row = document.querySelector(`tr td:first-child:contains("${currentOrderId}")`).closest('tr');
                 const statusCell = row.querySelector('td:nth-child(8) .badge');
                 const deliveredButton = row.querySelector('button.btn-outline-success');
                 const unreachableButton = row.querySelector('button.btn-outline-danger');
@@ -451,6 +452,7 @@ if ($result === false) {
         });
     });
 </script>
+
 
 
 </body>
