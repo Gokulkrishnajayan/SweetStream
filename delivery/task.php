@@ -392,7 +392,7 @@ if ($result === false) {
         currentStatus = status;
 
         // Show the alert with the action to be taken
-        alert("You are about to mark this order as " + status + ". Please confirm.");
+        // alert("You are about to mark this order as " + status + ". Please confirm.");
 
         // Update the modal content
         const orderStatusText = document.getElementById('orderStatus');
