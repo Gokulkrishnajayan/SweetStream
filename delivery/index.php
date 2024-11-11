@@ -1,3 +1,9 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_delivery.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+$conn = new mysqli($host, $user, $password, $dbname);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -200,43 +206,112 @@
             </div>
         </div>
 
+
+
+
+        <?php
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Query to fetch the recent deliveries
+$sql = "SELECT d.did, d.delivery_date_time, d.deliveryperson_id, d.status, u.name AS customer_name
+        FROM delivery_table d
+        JOIN user_table u ON d.user_id = u.id
+        WHERE d.deliveryperson_id = ? AND d.status IN ('Order Dispatched', 'Delivered')
+        ORDER BY d.delivery_date_time DESC LIMIT 10";  // Get the latest 10 orders
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION['user_id']); // Bind the logged-in delivery person's ID
+$stmt->execute();
+$result = $stmt->get_result();
+
+$deliveries = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $deliveries[] = [
+            'order_id' => $row['did'],
+            'customer_name' => $row['customer_name'],
+            'status' => $row['status'],
+            'delivery_date_time' => $row['delivery_date_time']
+        ];
+    }
+} else {
+    $deliveries = [];  // Empty array if no data is found
+}
+
+$stmt->close();
+$conn->close();
+?>
+
+
+
+
+
+
+
         <h3 class="text-center welcome-message">Recent Deliveries</h3>
-        <div class="table-responsive mb-4">
-            <table class="table table-striped table-bordered text-center">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Order ID</th>
-                        <th>Customer Name</th>
-                        <th>Delivery Status</th>
-                        <th>Delivery Time</th>
-                    </tr>
-                </thead>
-                <tbody id="recentDeliveries">
-                    <tr>
-                        <td>1</td>
-                        <td>#001</td>
-                        <td>John Doe</td>
-                        <td><span class="badge badge-success">Delivered</span></td>
-                        <td>20 mins</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>#002</td>
-                        <td>Jane Smith</td>
-                        <td><span class="badge badge-warning">Pending</span></td>
-                        <td>15 mins</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>#003</td>
-                        <td>Sam Wilson</td>
-                        <td><span class="badge badge-danger">Unreachable</span></td>
-                        <td>30 mins</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="table-responsive mb-4">
+    <table class="table table-striped table-bordered text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Delivery Status</th>
+                <th>Delivery Time</th>
+            </tr>
+        </thead>
+        <tbody id="recentDeliveries">
+            <?php
+            // Display the fetched deliveries
+            if (count($deliveries) > 0) {
+                $counter = 1; // To display the row number
+                foreach ($deliveries as $delivery) {
+                    // Calculate the delivery time
+                    $deliveryDateTime = new DateTime($delivery['delivery_date_time']);
+                    $currentDateTime = new DateTime();
+                    $interval = $deliveryDateTime->diff($currentDateTime);
+                    $timeDifference = '';
+
+                    // Depending on the status, calculate the time difference
+                    if ($delivery['status'] == 'Delivered') {
+                        // If delivered, show the difference with current time
+                        $timeDifference = $interval->format('%i mins');
+                    } elseif ($delivery['status'] == 'Order Dispatched') {
+                        // If dispatched but not yet delivered, show the difference
+                        $timeDifference = $interval->format('%h hours %i mins');
+                    } else {
+                        // If unreachable, just show 'N/A'
+                        $timeDifference = 'N/A';
+                    }
+            ?>
+                <tr>
+                    <td><?php echo $counter++; ?></td>
+                    <td>#<?php echo str_pad($delivery['order_id'], 3, '0', STR_PAD_LEFT); ?></td>
+                    <td><?php echo $delivery['customer_name']; ?></td>
+                    <td>
+                        <span class="badge 
+                            <?php 
+                                echo $delivery['status'] == 'Delivered' ? 'badge-success' : 
+                                     ($delivery['status'] == 'Order Dispatched' ? 'badge-warning' : 'badge-danger');
+                            ?>">
+                            <?php echo $delivery['status']; ?>
+                        </span>
+                    </td>
+                    <td><?php echo $timeDifference; ?></td>
+                </tr>
+            <?php
+                }
+            } else {
+                echo "<tr><td colspan='5' class='text-center'>No recent deliveries found.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
+
+
     </div>
 
     <!-- Charts Script -->

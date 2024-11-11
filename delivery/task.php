@@ -443,9 +443,12 @@ document.getElementById('confirmButton').addEventListener('click', function() {
                         if (statusCell.textContent === 'Pending' || statusCell.textContent === 'Unreachable') {
                             console.log("Changing status to Completed for order ID:", currentOrderId);
 
+                            // Change the status in the table row to 'Completed'
                             statusCell.classList.remove('badge-warning', 'badge-danger');
                             statusCell.classList.add('badge-success');
                             statusCell.textContent = 'Completed';
+                            
+                            // Disable the buttons
                             deliveredButton.disabled = true;
                             unreachableButton.disabled = true;
                         }
@@ -472,6 +475,7 @@ document.getElementById('confirmButton').addEventListener('click', function() {
         alert('An error occurred. Please try again later.');
     });
 });
+
 
 </script>
 
