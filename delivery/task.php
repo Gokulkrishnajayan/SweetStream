@@ -196,8 +196,6 @@ if ($result === false) {
 }
 ?>
 
-
-
 <!-- Home Section -->
 <div class="container">
     <div class="welcome-message">
@@ -265,9 +263,6 @@ if ($result === false) {
 
 
 
-
-
-
 <!-- Confirmation Modal -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -288,7 +283,6 @@ if ($result === false) {
         </div>
     </div>
 </div>
-
 
 
  
@@ -385,81 +379,79 @@ if ($result === false) {
 	<script src="../user/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="../user/assets/js/main.js"></script>
-
     
-    <script>
-     let currentButton; // Store the button that was clicked
-     let currentStatus; // Store the status to be confirmed
-     let currentOrderId; // Store the order ID of the selected row
+<script>
+    let currentButton; // Store the button that was clicked
+    let currentStatus; // Store the status to be confirmed
+    let currentOrderId; // Store the order ID of the selected row
 
-        function updateStatus(button, status) {
-            currentButton = button; // Save the button that was clicked
-            currentStatus = status; // Save the status to be confirmed
+    function updateStatus(button, status) {
+        currentButton = button; // Save the button that was clicked
+        currentStatus = status; // Save the status to be confirmed
 
-            // Extract the order ID from the row
-            const row = currentButton.closest('tr');
-            currentOrderId = row.querySelector('td:first-child').textContent.trim(); // Get Order ID from the first column
+        // Extract the order ID from the row
+        const row = currentButton.closest('tr');
+        currentOrderId = row.querySelector('td:first-child').textContent.trim(); // Get Order ID from the first column
 
-            // Update the modal content based on status
-            const orderStatusText = document.getElementById('orderStatus');
-            orderStatusText.textContent = status === 'Delivered' ? 'Delivered' : 'Unreachable';
+        // Update the modal content
+        const orderStatusText = document.getElementById('orderStatus');
+        orderStatusText.textContent = status === 'Delivered' ? 'Delivered' : 'Unreachable';
 
-            // Show the modal
-            $('#confirmationModal').modal('show');
-        }
+        // Show the modal
+        $('#confirmationModal').modal('show');
+    }
 
-        // Event listener for confirm button in modal
-        document.getElementById('confirmButton').addEventListener('click', function() {
-            // Perform AJAX call to update the status in the database
-            fetch('update_delivery_status.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    order_id: currentOrderId, 
-                    status: currentStatus 
-                })
+    // Event listener for confirm button in modal
+    document.getElementById('confirmButton').addEventListener('click', function() {
+        // Perform AJAX call to update the status in the database
+        fetch('update_delivery_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                order_id: currentOrderId, 
+                status: currentStatus 
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Successfully updated in the database; update the UI
-                    const row = currentButton.closest('tr');
-                    const statusCell = row.querySelector('td:nth-child(8) .badge');
-                    const deliveredButton = row.querySelector('button.btn-outline-success');
-                    const unreachableButton = row.querySelector('button.btn-outline-danger');
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Successfully updated in the database; update the UI
+                const row = currentButton.closest('tr');
+                const statusCell = row.querySelector('td:nth-child(8) .badge');
+                const deliveredButton = row.querySelector('button.btn-outline-success');
+                const unreachableButton = row.querySelector('button.btn-outline-danger');
 
-                    // Update status in the table row
-                    if (currentStatus === 'Delivered') {
-                        if (statusCell.textContent === 'Order Dispatched' || statusCell.textContent === 'Unreachable') {
-                            statusCell.classList.remove('badge-warning', 'badge-danger');
-                            statusCell.classList.add('badge-success');
-                            statusCell.textContent = 'Completed';
-                            deliveredButton.disabled = true; // Disable Delivered button
-                            unreachableButton.disabled = true; // Disable Unreachable button
-                        }
-                    } else if (currentStatus === 'Unreachable') {
-                        statusCell.classList.remove('badge-warning');
-                        statusCell.classList.add('badge-danger');
-                        statusCell.textContent = 'Unreachable';
-                        deliveredButton.disabled = false; // Enable Delivered button
-                        unreachableButton.disabled = true; // Disable Unreachable button
+                // Update status in the table row
+                if (currentStatus === 'Delivered') {
+                    if (statusCell.textContent === 'Pending' || statusCell.textContent === 'Unreachable') {
+                        statusCell.classList.remove('badge-warning', 'badge-danger');
+                        statusCell.classList.add('badge-success');
+                        statusCell.textContent = 'Completed';
+                        deliveredButton.disabled = true;
+                        unreachableButton.disabled = true;
                     }
-
-                    // Hide the modal
-                    $('#confirmationModal').modal('hide');
-                } else {
-                    alert('Failed to update status: ' + (data.error || 'Unknown error'));
+                } else if (currentStatus === 'Unreachable') {
+                    statusCell.classList.remove('badge-warning');
+                    statusCell.classList.add('badge-danger');
+                    statusCell.textContent = 'Unreachable';
+                    deliveredButton.disabled = false;
                 }
-            })
-            .catch(error => {
-                console.error('Error updating status:', error);
-                alert('An error occurred. Please try again later.');
-            });
-        });
 
+                // Hide the modal
+                $('#confirmationModal').modal('hide');
+            } else {
+                alert('Failed to update status: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error updating status:', error);
+            alert('An error occurred. Please try again later.');
+        });
+    });
 </script>
+
 
 </body>
 </html>
