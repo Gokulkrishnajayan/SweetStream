@@ -16,32 +16,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if both order_id and status are provided
     if ($orderId && $newStatus) {
-        // Determine if we need to update the delivery_delivered_time
-        $updateTime = ($newStatus === 'Delivered') ? ", delivery_delivered_time = NOW()" : "";
-
-        // SQL query to update the order status
-        $sql = "UPDATE delivery_table SET status = ?, delivery_dispatched_time = NOW() $updateTime WHERE did = ?";
+        // Step 1: Get the user_id and delivery_date_time from the database based on order_id
+        $sql = "SELECT user_id, delivery_date_time FROM delivery_table WHERE did = ?";
         $stmt = $conn->prepare($sql);
-
+        
         // Check if the query was prepared successfully
         if ($stmt === false) {
-            echo json_encode(['success' => false, 'error' => 'Failed to prepare the SQL query']);
+            echo json_encode(['success' => false, 'error' => 'Failed to prepare the SQL query to fetch user_id and delivery_date_time']);
             exit();
         }
 
-        // Bind the parameters (status and orderId) to the query
-        $stmt->bind_param("si", $newStatus, $orderId);
+        // Bind the orderId to the query
+        $stmt->bind_param("i", $orderId);
+        
+        // Execute the query
+        $stmt->execute();
+        
+        // Bind the result to variables
+        $stmt->bind_result($userId, $deliveryDateTime);
+        
+        // Fetch the result
+        if ($stmt->fetch()) {
+            // Step 2: Update the status and delivery_delivered_time
+            // Only update the delivery_delivered_time if the status is "Delivered"
+            $updateTime = ($newStatus === 'Delivered') ? ", delivery_delivered_time = NOW()" : "";
 
-        // Execute the query and check for success
-        if ($stmt->execute()) {
-            // Respond with a success message
-            echo json_encode(['success' => true, 'message' => 'Order status updated successfully']);
+            // SQL query to update the order status and delivery delivered time
+            $updateSql = "UPDATE delivery_table SET status = ?, delivery_dispacted_time = NOW() $updateTime WHERE user_id = ? AND delivery_date_time = ?";
+            
+            // Prepare the update query
+            $updateStmt = $conn->prepare($updateSql);
+            
+            // Check if the update query was prepared successfully
+            if ($updateStmt === false) {
+                echo json_encode(['success' => false, 'error' => 'Failed to prepare the SQL query to update the status']);
+                exit();
+            }
+
+            // Bind the parameters (status, user_id, and delivery_date_time) to the query
+            if ($newStatus === 'Delivered') {
+                $updateStmt->bind_param("sss", $newStatus, $userId, $deliveryDateTime);
+            } else {
+                $updateStmt->bind_param("ss", $newStatus, $userId);
+            }
+
+            // Execute the update query
+            if ($updateStmt->execute()) {
+                // Respond with a success message
+                echo json_encode(['success' => true, 'message' => 'Order status updated successfully']);
+            } else {
+                // Respond with an error message if the update query fails
+                echo json_encode(['success' => false, 'error' => 'Database update failed']);
+            }
+
+            // Close the prepared statement for the update
+            $updateStmt->close();
         } else {
-            // Respond with an error message if the query fails
-            echo json_encode(['success' => false, 'error' => 'Database update failed']);
+            // Respond with an error if the orderId does not exist
+            echo json_encode(['success' => false, 'error' => 'Order not found']);
         }
 
-        // Close the prepared statement
+        // Close the prepared statement for the select query
         $stmt->close();
     } else {
         // Respond with an error if the required parameters are missing
