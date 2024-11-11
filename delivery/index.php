@@ -3,7 +3,44 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_delivery.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 $conn = new mysqli($host, $user, $password, $dbname);
 
+
+
+// Initialize arrays for data collection
+$deliveryTimeData = [];
+$statusData = ['Delivered' => 0, 'Pending' => 0, 'Unreachable' => 0];
+
+// SQL query to fetch today's deliveries (only those for today)
+$sql = "SELECT d.delivery_date_time, d.status
+        FROM delivery_table d
+        WHERE d.deliveryperson_id = ? 
+        AND DATE(d.delivery_date_time) = CURDATE()";  // Fetch only today's orders
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION['user_id']); // Bind the logged-in delivery person's ID
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Prepare data for charts and calculate average delivery time
+while ($row = $result->fetch_assoc()) {
+    // Update status count
+    if ($row['status'] == 'Order Dispatched') {
+        $statusData['Pending']++;
+    } elseif (array_key_exists($row['status'], $statusData)) {
+        $statusData[$row['status']]++;
+    }
+    
+    // Calculate the delivery time for the Average Delivery Time chart
+    $deliveryDateTime = new DateTime($row['delivery_date_time']);
+    $currentDateTime = new DateTime();
+    $interval = $deliveryDateTime->diff($currentDateTime);
+    $deliveryTimeData[] = $interval->i; // store the delivery time in minutes
+}
+
+$stmt->close();
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -185,7 +222,7 @@ $conn = new mysqli($host, $user, $password, $dbname);
                     </div>
                 </div>
             </div>
-            <!-- Total Pending Deliveries Card -->
+            <!-- Pending Deliveries Card -->
             <div class="col-lg-4 col-md-6 mb-3">
                 <div class="card shadow border-0 rounded text-center">
                     <div class="card-body">
@@ -194,6 +231,8 @@ $conn = new mysqli($host, $user, $password, $dbname);
                     </div>
                 </div>
             </div>
+
+
         </div>
 
         <h3 class="text-center welcome-message">Delivery Trends</h3>
@@ -313,109 +352,126 @@ $conn->close();
 
 
     </div>
-
-    <!-- Charts Script -->
     <script>
-        // Average Delivery Time Chart
-        const ctx1 = document.getElementById('deliveryTimeChart').getContext('2d');
-        const deliveryTimeChart = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                datasets: [{
-                    label: 'Average Delivery Time (mins)',
-                    data: [20, 25, 30, 22],
-                    borderColor: '#f39c12',
-                    backgroundColor: 'rgba(243, 156, 18, 0.2)',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#f39c12',
-                    pointRadius: 5,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Average Delivery Time Over Weeks',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#e0e0e0',
-                        },
-                        ticks: {
-                            color: '#333',
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: '#333',
-                        }
-                    }
-                }
-            }
-        });
+    // Data for the Average Delivery Time Chart (Today's Data)
+    const deliveryTimeData = <?php echo json_encode($deliveryTimeData); ?>;
+    const statusData = <?php echo json_encode($statusData); ?>;
 
-        // Delivery Status Chart
-        const ctx2 = document.getElementById('deliveryStatusChart').getContext('2d');
-        const deliveryStatusChart = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['Delivered', 'Pending', 'Unreachable'],
-                datasets: [{
-                    label: 'Delivery Status',
-                    data: [120, 20, 10],
-                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
-                    borderColor: '#fff',
-                    borderWidth: 1
-                }]
+    // Calculate average delivery time for today (in minutes)
+    const avgDeliveryTime = deliveryTimeData.length > 0 ? 
+                            (deliveryTimeData.reduce((a, b) => a + b, 0) / deliveryTimeData.length).toFixed(2) : 0;
+
+    // Update the Dashboard with dynamic data for today's deliveries
+    document.getElementById('totalDeliveries').innerText = deliveryTimeData.length;
+    document.getElementById('averageDeliveryTime').innerText = `${avgDeliveryTime} mins`;
+    document.getElementById('pendingDeliveries').innerText = statusData['Pending'] || 0;  // Show Pending count
+
+    // Average Delivery Time Chart (Today's Data)
+    const ctx1 = document.getElementById('deliveryTimeChart').getContext('2d');
+    const deliveryTimeChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],  // Placeholder for weekly labels
+            datasets: [{
+                label: 'Average Delivery Time (mins)',
+                data: [20, 25, 30, 22], // Placeholder data for average delivery time over weeks, you can adjust this as needed
+                borderColor: '#f39c12',
+                backgroundColor: 'rgba(243, 156, 18, 0.2)',
+                borderWidth: 2,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#f39c12',
+                pointRadius: 5,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Average Delivery Time Today',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: '#e0e0e0',
                     },
-                    title: {
-                        display: true,
-                        text: 'Delivery Status Overview',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
+                    ticks: {
+                        color: '#333',
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#e0e0e0',
-                        },
-                        ticks: {
-                            color: '#333',
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: '#333',
-                        }
+                x: {
+                    ticks: {
+                        color: '#333',
                     }
                 }
             }
-        });
-    </script>
+        }
+    });
+
+    // Delivery Status Overview (Delivered, Pending, Unreachable counts)
+    const deliveredCount = statusData['Delivered'] || 0;
+    const pendingCount = statusData['Pending'] || 0;  // Now includes "Pending" + "Order Dispatched"
+    const unreachableCount = statusData['Unreachable'] || 0;
+
+    // Delivery Status Chart
+    const ctx2 = document.getElementById('deliveryStatusChart').getContext('2d');
+    const deliveryStatusChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Delivered', 'Pending', 'Unreachable'],
+            datasets: [{
+                label: 'Delivery Status',
+                data: [deliveredCount, pendingCount, unreachableCount],
+                backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Delivery Status Overview',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: '#e0e0e0',
+                    },
+                    ticks: {
+                        color: '#333',
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#333',
+                    }
+                }
+            }
+        }
+    });
+</script>
+
 
 	<!-- footer -->
 	<div class="footer-area">
