@@ -242,8 +242,8 @@ if ($result === false) {
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn btn-outline-success btn-sm" id="Delivered" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
-                                        <button class="btn btn-outline-danger btn-sm" id="Unreachable"  onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
+                                        <button class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
                                     </div>
                                 </td>
                             </tr>
@@ -450,7 +450,6 @@ if ($result === false) {
             alert('An error occurred. Please try again later.');
         });
     });
-
 </script>
 
 
