@@ -387,6 +387,10 @@ let currentOrderId; // Store the order ID of the selected row
 
 // Function to handle the click of the "Delivered" or "Unreachable" button
 function updateStatus(orderId, status) {
+    console.log("Update Status function triggered");
+    console.log("Order ID:", orderId);
+    console.log("Status:", status);
+
     // Store the button and status clicked
     currentOrderId = orderId;
     currentStatus = status;
@@ -395,12 +399,16 @@ function updateStatus(orderId, status) {
     const orderStatusText = document.getElementById('orderStatus');
     orderStatusText.textContent = status === 'Delivered' ? 'Delivered' : 'Unreachable';
 
+    console.log("Setting modal text to:", orderStatusText.textContent);
+
     // Show the confirmation modal
     $('#confirmationModal').modal('show');
 }
 
 // Event listener for confirm button in modal
 document.getElementById('confirmButton').addEventListener('click', function() {
+    console.log("Confirm button clicked");
+
     // Perform AJAX call to update the status in the database
     fetch('update_delivery_status.php', {
         method: 'POST',
@@ -414,7 +422,11 @@ document.getElementById('confirmButton').addEventListener('click', function() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Response from server:", data);
+        
         if (data.success) {
+            console.log("Status update successful");
+
             // Successfully updated in the database; update the UI
             const rows = document.querySelectorAll('table tbody tr');
             rows.forEach(row => {
@@ -424,9 +436,13 @@ document.getElementById('confirmButton').addEventListener('click', function() {
                 const unreachableButton = row.querySelector('button.btn-outline-danger');
                 
                 if (orderIdCell && orderIdCell.textContent.trim() === String(currentOrderId)) {
+                    console.log("Matching row found. Order ID:", currentOrderId);
+
                     // Update the status in the table row
                     if (currentStatus === 'Delivered') {
                         if (statusCell.textContent === 'Pending' || statusCell.textContent === 'Unreachable') {
+                            console.log("Changing status to Completed for order ID:", currentOrderId);
+
                             statusCell.classList.remove('badge-warning', 'badge-danger');
                             statusCell.classList.add('badge-success');
                             statusCell.textContent = 'Completed';
@@ -434,6 +450,8 @@ document.getElementById('confirmButton').addEventListener('click', function() {
                             unreachableButton.disabled = true;
                         }
                     } else if (currentStatus === 'Unreachable') {
+                        console.log("Changing status to Unreachable for order ID:", currentOrderId);
+
                         statusCell.classList.remove('badge-warning');
                         statusCell.classList.add('badge-danger');
                         statusCell.textContent = 'Unreachable';
@@ -445,6 +463,7 @@ document.getElementById('confirmButton').addEventListener('click', function() {
             // Hide the modal after successful update
             $('#confirmationModal').modal('hide');
         } else {
+            console.error('Failed to update status:', data.error || 'Unknown error');
             alert('Failed to update status: ' + (data.error || 'Unknown error'));
         }
     })
