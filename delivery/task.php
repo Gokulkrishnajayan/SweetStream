@@ -380,7 +380,7 @@ if ($result === false) {
 	<!-- main js -->
 	<script src="../user/assets/js/main.js"></script>
     
-<<script>
+<script>
     let currentButton; // Store the button that was clicked
     let currentStatus; // Store the status to be confirmed
     let currentOrderId; // Store the order ID of the selected row
