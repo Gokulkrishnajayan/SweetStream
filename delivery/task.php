@@ -163,10 +163,11 @@ SELECT d.did, d.delivery_date_time, d.user_id, d.address, d.status,
 FROM delivery_table d
 JOIN user_table u ON d.user_id = u.id
 JOIN product_table p ON d.product_id = p.pid
-WHERE d.deliveryperson_id = ? AND d.status = 'Order Dispatched'
+WHERE d.deliveryperson_id = ? AND d.status IN ('Order Dispatched', 'Unreachable')
 GROUP BY d.user_id, d.delivery_date_time
 ORDER BY d.delivery_date_time DESC
 ";
+
 
 // Prepare the statement
 $stmt = $conn->prepare($sql);
@@ -219,41 +220,62 @@ if ($result === false) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($result->num_rows > 0): ?>
-                        <?php foreach ($orders as $order): ?>
-                            <tr>
-                                <td><?php echo $order['order_id']; ?></td>
-                                <td><?php echo $order['customer_name']; ?></td>
-                                <td><?php echo $order['address']; ?></td>
-                                <td>
-                                    <ul><?php echo $order['products']; ?></ul>
-                                </td>
-                                <td><?php echo $order['total_quantity']; ?></td>
-                                <td><?php echo '$' . number_format($order['total_price'], 2); ?></td>
-                                <td>
-                                    <strong class="<?php echo $order['payment_status'] == 'Paid' ? 'text-success' : 'text-danger'; ?>">
-                                        <?php echo ucfirst($order['payment_status']); ?>
-                                    </strong>
-                                </td>
-                                <td>
-                                    <span class="badge badge-<?php echo strtolower($order['status']) == 'order dispatched' ? 'warning' : 'success'; ?>">
-                                        <?php echo ucfirst($order['status']); ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="9" class="text-center">No orders with 'Order Dispatched' status found for your deliveries.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
+    <?php if ($result->num_rows > 0): ?>
+        <?php foreach ($orders as $order): ?>
+            <tr>
+                <td><?php echo $order['order_id']; ?></td>
+                <td><?php echo $order['customer_name']; ?></td>
+                <td><?php echo $order['address']; ?></td>
+                <td>
+                    <ul><?php echo $order['products']; ?></ul>
+                </td>
+                <td><?php echo $order['total_quantity']; ?></td>
+                <td><?php echo '$' . number_format($order['total_price'], 2); ?></td>
+                <td>
+                    <strong class="<?php echo $order['payment_status'] == 'Paid' ? 'text-success' : 'text-danger'; ?>">
+                        <?php echo ucfirst($order['payment_status']); ?>
+                    </strong>
+                </td>
+                <td>
+                    <?php
+                        // Set badge class based on the status
+                        $statusClass = '';
+                        $statusText = '';
+                        
+                        if ($order['status'] == 'Order Dispatched') {
+                            $statusClass = 'badge-warning'; // Orange for Order Dispatched
+                            $statusText = 'Order Dispatched';
+                        } elseif ($order['status'] == 'Unreachable') {
+                            $statusClass = 'badge-danger'; // Red for Unreachable
+                            $statusText = 'Unreachable';
+                        } elseif ($order['status'] == 'Completed') {
+                            $statusClass = 'badge-success'; // Green for Completed
+                            $statusText = 'Completed';
+                        }
+                    ?>
+                    <span class="badge <?php echo $statusClass; ?>"><?php echo $statusText; ?></span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <!-- Show buttons based on the current status -->
+                        <?php if ($order['status'] != 'Completed'): ?>
+                            <button class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
+                        <?php endif; ?>
+
+                        <?php if ($order['status'] != 'Unreachable'): ?>
+                            <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="9" class="text-center">No orders with 'Order Dispatched' status found for your deliveries.</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
+
             </table>
         </div>
     </div>
