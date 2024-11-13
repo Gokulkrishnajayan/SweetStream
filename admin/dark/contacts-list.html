@@ -56,7 +56,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="#">Profile</a>
-            <a class="dropdown-item" href="#">Logout</a>
+            <a class="dropdown-item" href="../../session/logout.php">Logout</a>
           </div>
         </li>
       </ul>
@@ -136,7 +136,7 @@
         </ul>
         <ul class="navbar-nav flex-fill w-100 mb-2">
           <li class="nav-item w-100">
-            <a class="nav-link" href="files-grid.html">
+            <a class="nav-link" href="files-grid.php">
               <i class="fe fe-database fe-16"></i>
               <span class="ml-3 item-text">Inventory</span>
             </a>
@@ -229,32 +229,34 @@
               <form id="editUserForm">
                 <input type="hidden" id="editUserId">
                 <div class="form-group">
-                  <label for="editName">Name</label>
-                  <input type="text" class="form-control" id="editName" required>
+                    <label for="editName">Name</label>
+                    <input type="text" class="form-control" id="editName" required>
                 </div>
                 <div class="form-group">
-                  <label for="editPhone">Phone</label>
-                  <input type="text" class="form-control" id="editPhone" required>
+                    <label for="editPhone">Phone</label>
+                    <input type="text" class="form-control" id="editPhone" required>
                 </div>
                 <div class="form-group">
-                  <label for="editEmail">Email</label>
-                  <input type="email" class="form-control" id="editEmail" required>
+                    <label for="editEmail">Email</label>
+                    <input type="email" class="form-control" id="editEmail" required>
                 </div>
                 <div class="form-group">
-                  <label for="editAddress">Address</label>
-                  <input type="text" class="form-control" id="editAddress" required>
+                    <label for="editAddress">Address</label>
+                    <input type="text" class="form-control" id="editAddress" required>
                 </div>
                 <div class="form-group">
-                  <label for="editPrivilege">Privilege</label>
-                  <select class="form-control" id="editPrivilege" required>
-                    <option value="" disabled selected>Select Privilege</option>
-                    <option value="user">User</option>
-                    <option value="delivery">Delivery</option>
-                    <option value="admin">Admin</option>
-                  </select>
+                    <label for="editPrivilege">Privilege</label>
+                    <select class="form-control" id="editPrivilege" required>
+                        <option value="" disabled selected>Select Privilege</option>
+                        <option value="user">User</option>
+                        <option value="delivery">Delivery</option>
+                        <option value="admin">Admin</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
-              </form>
+             </form>
+            
+              
             </div>
           </div>
         </div>
@@ -390,6 +392,7 @@
       </div>
     </main> <!-- main -->
   </div> <!-- .wrapper -->
+  
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/moment.min.js"></script>
@@ -413,125 +416,148 @@
   </script>
 
 
+<script>
+  // Fetch and render user data
+  fetch('../fetch_users.php')
+    .then(response => response.json())
+    .then(data => {
+      console.log('Fetched user data:', data); // Debug: Log the fetched user data
 
-  <script>
-    // Fetch and render user data
-    fetch('../fetch_users.php')
-      .then(response => response.json())
-      .then(data => {
-        const tbody = document.querySelector('#userTable tbody');
-        data.forEach(user => {
-          const checkboxId = `checkbox-${user.id}`;
+      const tbody = document.querySelector('#userTable tbody');
+      data.forEach(user => {
+        const checkboxId = `checkbox-${user.id}`;
+        
+        console.log('Rendering row for user:', user); // Debug: Log each user being rendered
 
-          const row = document.createElement('tr');
-          row.innerHTML = `
-                  <td>
-                      <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input" id="${checkboxId}">
-                          <label class="custom-control-label" for="${checkboxId}"></label>
-                      </div>
-                  </td>
-                  <td>${user.id}</td>
-                  <td>${user.name}</td>
-                  <td>${user.phone_no}</td>
-                  <td>${user.email}</td>
-                  <td>${user.address}</td>
-                  <td>${user.privilege}</td>
-                  <td>
-                      <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span class="text-muted sr-only">Action</span>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item edit-user" href="#" data-user='${JSON.stringify(user)}'>Edit</a>
-                          <a class="dropdown-item remove-user" href="#" data-id="${user.id}">Remove</a>
-                      </div>
-                  </td>
-              `;
-          tbody.appendChild(row);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="${checkboxId}">
+                    <label class="custom-control-label" for="${checkboxId}"></label>
+                </div>
+            </td>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.phone_no}</td>
+            <td>${user.email}</td>
+            <td>${user.address}</td>
+            <td>${user.privilege}</td>
+            <td>
+                <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="text-muted sr-only">Action</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item edit-user" href="#" data-user='${JSON.stringify(user)}'>Edit</a>
+                    <a class="dropdown-item remove-user" href="#" data-id="${user.id}">Remove</a>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Attach click event to Edit buttons
+      document.querySelectorAll('.edit-user').forEach(button => {
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          const user = JSON.parse(button.getAttribute('data-user'));
+          console.log('Edit button clicked for user:', user); // Debug: Log the user data being passed to the modal
+          openEditModal(user);
         });
+      });
 
-        // Attach click event to Edit buttons
-        document.querySelectorAll('.edit-user').forEach(button => {
-          button.addEventListener('click', event => {
-            event.preventDefault();
-            const user = JSON.parse(button.getAttribute('data-user'));
-            openEditModal(user);
-          });
+      // Attach click event to Remove buttons
+      document.querySelectorAll('.remove-user').forEach(button => {
+        button.addEventListener('click', event => {
+          event.preventDefault();
+          const userId = button.getAttribute('data-id');
+          console.log('Remove button clicked for user ID:', userId); // Debug: Log user ID for removal
+          removeUser(userId, button.closest('tr'));
         });
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error); // Debug: Log any errors while fetching data
+    });
 
-        // Attach click event to Remove buttons
-        document.querySelectorAll('.remove-user').forEach(button => {
-          button.addEventListener('click', event => {
-            event.preventDefault();
-            const userId = button.getAttribute('data-id');
-            removeUser(userId, button.closest('tr'));
-          });
-        });
-      })
-      .catch(error => console.error('Error fetching data:', error));
+  // Open the modal and prefill the form with user data
+  function openEditModal(user) {
+    console.log('Opening edit modal for user:', user); // Debug: Log the user being edited
+    $('#editUserId').val(user.id);
+    $('#editName').val(user.name);
+    $('#editPhone').val(user.phone_no);
+    $('#editEmail').val(user.email);
+    $('#editAddress').val(user.address);
+    $('#editPrivilege').val(user.privilege);
+    $('#editUserModal').modal('show');
+  }
 
-    // Open the modal and prefill the form with user data
-    function openEditModal(user) {
-      $('#editUserId').val(user.id);
-      $('#editName').val(user.name);
-      $('#editPhone').val(user.phone_no);
-      $('#editEmail').val(user.email);
-      $('#editAddress').val(user.address);
-      $('#editPrivilege').val(user.privilege);
-      $('#editUserModal').modal('show');
-    }
+  $('#editUserForm').on('submit', function (event) {
+  event.preventDefault(); // Prevent default form submission
 
-    // Handle form submission to update the user
-    $('#editUserForm').on('submit', function (event) {
-      event.preventDefault();
-      const userData = {
-        id: $('#editUserId').val(),
-        name: $('#editName').val(),
-        phone_no: $('#editPhone').val(),
-        email: $('#editEmail').val(),
-        address: $('#editAddress').val(),
-        privilege: $('#editPrivilege').val()
-      };
+  // Log the user data to make sure it's being correctly captured
+  const userData = {
+    id: $('#editUserId').val(),
+    name: $('#editName').val(),
+    phone_no: $('#editPhone').val(),
+    email: $('#editEmail').val(),
+    address: $('#editAddress').val(),
+    privilege: $('#editPrivilege').val()
+  };
 
-      // Send the updated data to the backend
+  console.log('Form submitted with user data:', userData); // Debug: Log the user data
+
+  // Now send the updated data to the backend
       fetch('../update_user.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
       })
+      .then(response => {
+        console.log('Response status:', response.status); // Debug: Log the response status
+        return response.json();
+      })
+      .then(result => {
+        console.log('Update result:', result); // Debug: Log the result of the update operation
+        if (result.success) {
+          alert('User updated successfully!');
+          location.reload(); // Reload the page to reflect changes
+        } else {
+          alert('Error updating user: ' + result.message);
+        }
+      })
+      .catch(error => {
+      console.error('Error updating user:', error); // Debug: Log any errors during update
+  });
+});
+
+  // Function to remove user
+  function removeUser(userId, row) {
+    console.log('Confirming removal of user with ID:', userId); // Debug: Log the user ID being removed
+
+    if (confirm('Are you sure you want to remove this user?')) {
+      fetch('../remove_user.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: userId })
+      })
         .then(response => response.json())
         .then(result => {
+          console.log('Remove result:', result); // Debug: Log the result of the remove operation
           if (result.success) {
-            alert('User updated successfully!');
-            location.reload(); // Reload the page to reflect changes
+            alert('User removed successfully!');
+            row.remove(); // Remove row from the DOM
           } else {
-            alert('Error updating user!');
+            alert('Error removing user!');
           }
         })
-        .catch(error => console.error('Error updating user:', error));
-    });
-
-    // Function to remove user
-    function removeUser(userId, row) {
-      if (confirm('Are you sure you want to remove this user?')) {
-        fetch('../remove_user.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: userId })
-        })
-          .then(response => response.json())
-          .then(result => {
-            if (result.success) {
-              alert('User removed successfully!');
-              row.remove(); // Remove row from the DOM
-            } else {
-              alert('Error removing user!');
-            }
-          })
-          .catch(error => console.error('Error removing user:', error));
-      }
+        .catch(error => {
+          console.error('Error removing user:', error); // Debug: Log any errors during removal
+        });
     }
-  </script>
+  }
+</script>
+
 
 
 

@@ -59,7 +59,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="#">Profile</a>
-            <a class="dropdown-item" href="#">Logout</a>
+            <a class="dropdown-item" href="../../session/logout.php">Logout</a>
           </div>
         </li>
       </ul>
@@ -131,7 +131,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
         </ul>
         <ul class="navbar-nav flex-fill w-100 mb-2">
           <li class="nav-item w-100">
-            <a class="nav-link" href="files-list.html">
+            <a class="nav-link" href="files-list.php">
               <i class="fe fe-shopping-bag fe-16"></i>
               <span class="ml-3 item-text">Products</span>
             </a>
@@ -139,7 +139,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
         </ul>
         <ul class="navbar-nav flex-fill w-100 mb-2">
           <li class="nav-item w-100">
-            <a class="nav-link" href="files-grid.html">
+            <a class="nav-link" href="files-grid.php">
               <i class="fe fe-database fe-16"></i>
               <span class="ml-3 item-text">Inventory</span>
             </a>
