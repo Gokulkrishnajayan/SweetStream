@@ -155,219 +155,183 @@
         </ul>
       </nav>
     </aside>
-    <!-- side nav bar end -->
 
-      <main role="main" class="main-content">
+<style>
+  /* Standardized card size */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 400px; /* Set max height for cards */
+  }
 
-        <?php
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$dbname = 'sweetstream';
+  .product-card .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-// Create connection
-$conn = new mysqli($host, $user, $password, $dbname);
+  .product-card .card-body h5 {
+    font-size: 1.125rem;  /* Smaller font size for titles */
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+  .product-card .card-body p {
+    margin-bottom: 0.75rem;
+  }
 
-// Fetch products with name and stock quantity
-$query = "SELECT pid, pname, current_stock FROM product_table";
-$result = $conn->query($query);
+  .product-card .form-inline {
+    margin-top: auto; /* Push the add stock form to the bottom */
+  }
 
-$products = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
+  .card-img-top {
+    height: 180px; /* Set a fixed height for the image */
+    object-fit: cover; /* Ensure the image fits inside the card without stretching */
+  }
+
+  /* Reduce the size of the card and make it responsive */
+  @media (max-width: 768px) {
+    .product-card {
+      height: auto; /* Remove fixed height on smaller screens */
     }
-}
-?>
+  }
 
-<!-- HTML Section -->
-<div class="container-fluid">
+  .product-card .card-body {
+    padding: 1rem; /* Standardize padding inside the card */
+  }
+
+  .product-card .form-inline .form-control {
+    max-width: 80px; /* Limit width of the input field */
+  }
+
+  .product-card .form-inline .btn {
+    max-width: 100px; /* Limit width of the Add Stock button */
+  }
+
+  /* Card container */
+  .file-container {
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+
+</style>
+
+
+<main role="main" class="main-content">
+  <?php
+    $host = 'localhost';
+    $user = 'root';
+    $password = '';
+    $dbname = 'sweetstream';
+
+    // Create connection
+    $conn = new mysqli($host, $user, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Fetch products with name, current stock, and product id
+    $query = "SELECT pid, pname, current_stock, pphoto, pdescription, pprice FROM product_table";
+    $result = $conn->query($query);
+
+    $products = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
+    }
+  ?>
+
+  <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="row align-items-center my-3">
-                <div class="col">
-                    <h2 class="page-title">Stock Inventory</h2>
+      <div class="col-md-12">
+        <div class="row align-items-center my-3">
+          <div class="col">
+            <h2 class="page-title">Stock Inventory</h2>
+          </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#addStockModal">
+              <span class="fe fe-plus fe-16 mr-3"></span>Add Stock
+            </button>
+          </div>
+        </div>
+
+        <div class="file-container border-top">
+          <div class="file-panel mt-4">
+            <h6 class="mb-3">Inventory Overview</h6>
+            <hr class="my-4">
+            <div class="row">
+              <?php foreach ($products as $product): ?>
+                <div class="col-md-6 col-lg-3"> <!-- Reduce width here to make the card smaller -->
+                  <div class="card shadow mb-4 product-card">
+                    <img src="<?php echo htmlspecialchars($product['pphoto']); ?>" class="card-img-top" alt="Product Image">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title"><?php echo htmlspecialchars($product['pname']); ?></h5>
+                      <p class="text-muted">Current Stock: <?php echo $product['current_stock']; ?></p>
+                      <p class="card-text"><?php echo htmlspecialchars($product['pdescription']); ?></p>
+                      <p class="text-success">Price: ₹<?php echo number_format($product['pprice'], 2); ?></p>
+
+                      <!-- Add Stock Form -->
+                      <form action="update_stock.php" method="POST" class="form-inline">
+                        <div class="input-group mb-3">
+                          <input type="number" name="quantity" class="form-control" min="1" placeholder="Quantity" required>
+                          <input type="hidden" name="pid" value="<?php echo $product['pid']; ?>">
+                          <div class="input-group-append">
+                            <button type="submit" class="btn btn-success">Add Stock</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-auto">
-                    <button type="button" class="btn btn-lg btn-primary">
-                        <span class="fe fe-plus fe-16 mr-3"></span>New
-                    </button>
-                </div>
-            </div>
-
-            <div class="file-container border-top">
-                <div class="file-panel mt-4">
-                    <h6 class="mb-3">Inventory Overview</h6>
-                    <hr class="my-4">
-
-                    <div class="row">
-                        <?php foreach ($products as $product): ?>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card shadow mb-4">
-                                    <div class="card-body file-list">
-                                        <div class="d-flex align-items-center">
-                                            <div class="circle circle-md bg-secondary">
-                                                <span class="fe fe-folder fe-16 text-white"></span>
-                                            </div>
-                                            <div class="flex-fill ml-4 fname">
-                                                <strong><?php echo htmlspecialchars($product['name']); ?></strong><br />
-                                                <span class="badge badge-light text-muted">
-                                                    <?php echo $product['current_stock']; ?> in stock
-                                                </span>
-                                            </div>
-                                            <div class="file-action">
-                                                <button type="button" class="btn btn-link dropdown-toggle more-vertical p-0 text-muted mx-auto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="text-muted sr-only">Action</span>
-                                                </button>
-                                                <div class="dropdown-menu m-2">
-                                                    <a class="dropdown-item" href="#"><i class="fe fe-edit-3 fe-12 mr-4"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> <!-- .card-body -->
-                                </div> <!-- .card -->
-                            </div> <!-- .col -->
-                        <?php endforeach; ?>
-                    </div> <!-- .row -->
-
-                </div> <!-- .file-panel -->
-            </div> <!-- .file-container -->
-        </div> <!-- .col -->
-    </div> <!-- .row -->
-</div> <!-- .container-fluid -->
-
-
-
-        
-        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="list-group list-group-flush my-n3">
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-box fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Package has uploaded successfull</strong></small>
-                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-download fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Widgets are updated successfull</strong></small>
-                        <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                        <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-inbox fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Notifications have been sent</strong></small>
-                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                      </div>
-                    </div> <!-- / .row -->
-                  </div>
-                  <div class="list-group-item bg-transparent">
-                    <div class="row align-items-center">
-                      <div class="col-auto">
-                        <span class="fe fe-link fe-24"></span>
-                      </div>
-                      <div class="col">
-                        <small><strong>Link was attached to menu</strong></small>
-                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                      </div>
-                    </div>
-                  </div> <!-- / .row -->
-                </div> <!-- / .list-group -->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
-              </div>
+              <?php endforeach; ?>
             </div>
           </div>
         </div>
-        <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body px-5">
-                <div class="row align-items-center">
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-success justify-content-center">
-                      <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Control area</p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-activity fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Activity</p>
-                  </div>
-                </div>
-                <div class="row align-items-center">
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Droplet</p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Upload</p>
-                  </div>
-                </div>
-                <div class="row align-items-center">
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-users fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Users</p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <div class="squircle bg-primary justify-content-center">
-                      <i class="fe fe-settings fe-32 align-self-center text-white"></i>
-                    </div>
-                    <p>Settings</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Stock Modal -->
+  <div class="modal fade" id="addStockModal" tabindex="-1" role="dialog" aria-labelledby="addStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addStockModalLabel">Add Stock</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </main> <!-- main -->
+        <div class="modal-body">
+          <form action="update_stock.php" method="POST">
+            <div class="form-group">
+              <label for="productSelect">Select Product</label>
+              <select class="form-control" id="productSelect" name="pid" required>
+                <option value="">Select a Product</option>
+                <?php foreach ($products as $product): ?>
+                  <option value="<?php echo $product['pid']; ?>"><?php echo $product['pname']; ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="quantityInput">Quantity to Add</label>
+              <input type="number" class="form-control" id="quantityInput" name="quantity" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Stock</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main> <!-- main -->
+
+
     </div> <!-- .wrapper -->
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>
