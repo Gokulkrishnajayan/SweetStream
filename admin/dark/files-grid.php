@@ -222,11 +222,7 @@
 
 <main role="main" class="main-content">
   <?php
-    $host = 'localhost';
-    $user = 'root';
-    $password = '';
-    $dbname = 'sweetstream';
-
+   include '../../php/db_withcon.php'; // Include database connection
     // Create connection
     $conn = new mysqli($host, $user, $password, $dbname);
 
