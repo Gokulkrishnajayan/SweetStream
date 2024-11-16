@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 12, 2024 at 09:40 PM
+-- Generation Time: Nov 13, 2024 at 09:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -98,7 +98,9 @@ INSERT INTO `delivery_table` (`did`, `product_id`, `user_id`, `product_quantity`
 (48, 63, '18', '1', '133', 'njallikkatile', '7994506507', '7', '2024-11-12 02:28:42', 'Delivered', 'Paid using UPI.', '', '2024-11-12 02:30:36', '2024-11-12 02:30:36'),
 (49, 63, '18', '2', '133', 'njallikkatile', '7994506507', '20', '2024-11-12 02:40:01', 'Delivered', 'Cash on Delivery.', '', '2024-11-12 02:41:04', '2024-11-12 02:41:04'),
 (50, 62, '18', '4', '123', 'njallikkatile', '7994506507', '20', '2024-11-12 02:40:01', 'Delivered', 'Cash on Delivery.', '', '2024-11-12 02:41:04', '2024-11-12 02:41:04'),
-(51, 63, '11', '1', '133', 'njallikkatt', '7994506507', '7', '2024-11-13 02:07:35', 'Delivered', 'Cash on Delivery.', '', '2024-11-13 02:08:31', '2024-11-13 02:08:31');
+(51, 63, '11', '1', '133', 'njallikkatt', '7994506507', '7', '2024-11-13 02:07:35', 'Delivered', 'Cash on Delivery.', '', '2024-11-13 02:08:31', '2024-11-13 02:08:31'),
+(52, 66, '11', '1', '240', 'njallikkatt', '7994506507', '7', '2024-11-13 01:58:26', 'Delivered', 'Paid using UPI.', '', '2024-11-13 13:59:08', '2024-11-13 13:59:08'),
+(53, 66, '21', '4', '240', 'kakkanaad', '7894561230', '7', '2024-11-13 02:14:20', 'Delivered', 'Paid using Net Banking.', '', '2024-11-13 14:16:39', '2024-11-13 14:16:39');
 
 -- --------------------------------------------------------
 
@@ -120,9 +122,9 @@ CREATE TABLE `product_table` (
 --
 
 INSERT INTO `product_table` (`pid`, `pname`, `pphoto`, `pdescription`, `pprice`, `current_stock`) VALUES
-(62, 'payasam aluva', '/SweetStream/product/img_67251a96bf1905.16554596.jpg', '123', '123', ''),
-(63, 'payasam', '/SweetStream/product/img_67251aa64b3d85.19405276.jpg', '123', '133', ''),
-(64, 'parippu', '/SweetStream/product/img_67251ab5537b96.72306276.jpg', '31', '234', '');
+(65, 'palada', '/SweetStream/product/img_67344591e28b03.33040936.jpg', 'Palada Payasam is a rich and creamy traditional Indian dessert that’s a favorite during festivals an', '240', ''),
+(66, 'parippu', '/SweetStream/product/img_673446289b5ff9.10663818.jpg', 'Parippu Payasam is a comforting and delicious sweet dish made with moong dal (yellow lentils), jagge', '240', ''),
+(67, 'gothambu payasam', '/SweetStream/product/img_673447a943e294.74967029.png', 'Gothambu Payasam is a delicious and nutritious Kerala dessert made from cracked wheat (gothambu), ja', '250', '');
 
 -- --------------------------------------------------------
 
@@ -150,7 +152,7 @@ INSERT INTO `user_table` (`id`, `name`, `phone_no`, `email`, `password`, `addres
 (11, 'tony', '7994506507', 'tony@gmail.com', '$2y$10$IRkosU.9PC9MjqO9XQGIh.kaB.MAGumR4Ov2o6paJkCW6C8NJ0h42', 'njallikkatt', 'user'),
 (18, 'blesson', '7994506507', 'blesson@gmail.com', '$2y$10$v3qsYjC0gGx5l/XloHJHJ.JIMrk4MIhvDZoZawer8295hVeswG0x6', 'njallikkatile', 'user'),
 (19, 'dragon', '7994506507', 'dragon@gmail.com', '$2y$10$NC1po2YZl0dx07n6An.BFu1W2/xO4GSfhy1D7JBjhPz.ED/hsFcnu', 'njallikkatile', 'user'),
-(20, 'alphin', '', 'alphin@gmail.com', '$2y$10$xiApa/o/qV1D.eKUbj0vQ.KhPqOV/48dz8wOZBeDQKykh2HSuqn62', NULL, 'delivery');
+(21, 'jacob', '7894561230', 'jacob@gmail.com', '$2y$10$UgTeNM/P4wWr4r7nTe/4..sgUBCfuz5NpewefX/xkyhwJKjFR0lZe', 'kakkanaad', 'user');
 
 --
 -- Indexes for dumped tables
@@ -189,25 +191,25 @@ ALTER TABLE `user_table`
 -- AUTO_INCREMENT for table `cart_table`
 --
 ALTER TABLE `cart_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `delivery_table`
 --
 ALTER TABLE `delivery_table`
-  MODIFY `did` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `did` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `product_table`
 --
 ALTER TABLE `product_table`
-  MODIFY `pid` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `pid` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `user_table`
 --
 ALTER TABLE `user_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
