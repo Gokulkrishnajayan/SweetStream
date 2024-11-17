@@ -185,7 +185,7 @@ $result = $stmt->get_result();
                         <div class="search-bar-tablecell">
                             <h3>Search For:</h3>
                             <input type="text" id="searchInput" placeholder="Order ID, Address, Phone, Customer Name" onkeyup="realTimeSearch()">
-                            <div id="searchResults"></div> <!-- Results will be displayed here -->
+                            <div id="searchResults"></div> <!-- Search results will be displayed here -->
                         </div>
                     </div>
                 </div>
@@ -320,59 +320,26 @@ function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
 
-// Refresh the orders list based on the search query without reloading the entire page
-function refreshOrders(searchTerm = '') {
-    fetch('your_orders_list_endpoint.php?search=' + searchTerm)
-        .then(response => response.text())
-        .then(html => {
-            const orderList = document.getElementById('orderList');
-            orderList.innerHTML = html;
-
-            // Check if there are no orders and display message if needed
-            if (!orderList.innerHTML.trim()) {
-                orderList.innerHTML = "<p class='text-center'>No pending orders available.</p>";
-            }
-        })
-        .catch(error => console.error("Error refreshing orders:", error));
-}
-
-// Handle search functionality
-document.querySelector('.search-button').addEventListener('click', function(e) {
-    e.preventDefault();  // Prevent the default form submit
-
-    const searchTerm = document.querySelector('.search-input').value.trim();
-
-    if (searchTerm !== '') {
-        refreshOrders(searchTerm);
-    } else {
-        refreshOrders();  // Refresh without search term (show all orders)
-    }
-});
-
-// Handle Enter key press for search (optional enhancement)
-document.querySelector('.search-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        const searchTerm = e.target.value.trim();
-        if (searchTerm !== '') {
-            refreshOrders(searchTerm);
-        } else {
-            refreshOrders();
-        }
-    }
-});
 
 
+
+//search dynamic funtionality implementation
 
 function realTimeSearch() {
     var searchTerm = document.getElementById('searchInput').value;
 
-    // Make AJAX request to the server
+    // If the input is empty, clear the results and return
+    if (searchTerm === '') {
+        document.getElementById('searchResults').innerHTML = ''; 
+        return;
+    }
+
+    // Create an AJAX request to send the search term to the server
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'your_search_page.php?search=' + encodeURIComponent(searchTerm), true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // Update the search results
+            // Update the results with the server response (HTML)
             document.getElementById('searchResults').innerHTML = xhr.responseText;
         }
     };

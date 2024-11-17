@@ -1,14 +1,14 @@
 <?php
-// Database connection
+// Include database connection
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
 
 // Get the current logged-in user's ID from session or authentication
-$currentUserId = $_SESSION['user_id']; // Example, replace with your session logic
+$currentUserId = $_SESSION['user_id']; // Example: replace with your session logic
 
 // Get the search term (if it exists)
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
-// SQL query to join and group delivery, product, and user data
+// Base SQL query to get the orders and join the necessary tables
 $sql = "
     SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time, d.deliveryperson_id,
         u.name AS customer_name, u.phone_no AS customer_phone
@@ -17,38 +17,35 @@ $sql = "
     WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned')
 ";
 
-// If there is a search term, filter based on the input (Order ID, Address, Phone No., Customer Name)
+// If there is a search term, filter the query based on multiple fields (Order ID, Customer Name, Address, Phone No.)
 if ($searchTerm) {
     $sql .= " AND (d.did LIKE ? OR u.name LIKE ? OR d.address LIKE ? OR u.phone_no LIKE ?)";
 }
 
-// Grouping by user_id and ordering
-$sql .= " GROUP BY d.user_id, d.delivery_date_time
-          ORDER BY 
+// Sorting by delivery date and prioritizing orders assigned to the current user
+$sql .= " ORDER BY 
               CASE
-                  WHEN d.deliveryperson_id = ? THEN 1  -- Show orders assigned to the current user first
+                  WHEN d.deliveryperson_id = ? THEN 1
                   ELSE 2
               END,
               d.delivery_date_time DESC
 ";
 
-// Prepare SQL statement
+// Prepare the SQL statement
 $stmt = $conn->prepare($sql);
 
-// Bind parameters for the search term
+// Bind the search term and current user ID to the SQL query
 if ($searchTerm) {
-    $searchTerm = "%" . $searchTerm . "%";  // Wildcards for LIKE search
+    $searchTerm = "%" . $searchTerm . "%";  // Wildcards for LIKE
     $stmt->bind_param("sssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $currentUserId);
 } else {
-    // If no search term, just bind the current user's ID
-    $stmt->bind_param("i", $currentUserId);
+    $stmt->bind_param("i", $currentUserId); // If no search term, just bind the current user ID
 }
 
 $stmt->execute();
 $result = $stmt->get_result();
 
 $orders = [];
-
 while ($row = $result->fetch_assoc()) {
     $orders[] = [
         'order_id' => $row['did'],
@@ -63,10 +60,11 @@ while ($row = $result->fetch_assoc()) {
     ];
 }
 
-// If no orders are found, show a default message
+// If no results are found, display a message
 if (empty($orders)) {
     echo "<p class='text-center'>No orders found matching your search.</p>";
 } else {
+    // Loop through and display the search results
     foreach ($orders as $order) {
         // Check if the order is assigned to the current user
         $assignedToCurrentUser = ($order['deliveryperson_id'] == $currentUserId);
@@ -81,9 +79,9 @@ if (empty($orders)) {
                         <p>Phone: {$order['phone_no']}</p>
                     </div>";
 
-        // Order Status section
+        // Display the order status and actions based on assignment
         echo "<div class='order-status'>";
-
+        
         // If the order is assigned to the current user, show "Assigned" and "Cancel" button
         if ($assignedToCurrentUser) {
             echo "
