@@ -204,22 +204,131 @@ $result = $stmt->get_result();
 
                
                <!-- Search Bar Section -->
-	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-                    <div class="search-container">
-    <input type="text" id="searchInput" class="search-input" oninput="realTimeSearch()" placeholder="Search orders by ID, Customer, Address, or Phone...">
-    <div id="searchResults" class="search-results"></div>
+<!-- Search Area -->
+<div class="search-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="close-btn"><i class="fas fa-window-close"></i></span>
+                <div class="search-bar">
+                    <div class="search-bar-tablecell">
+                        <h3>Search For:</h3>
+                        <!-- Input field for real-time search -->
+                        <input type="text" id="searchInput" placeholder="Order ID, Customer Name, Address, Phone..." oninput="realTimeSearch()">
+                        
+                        <!-- Submit button (not needed for real-time search, but left for form compatibility) -->
+                        <button type="submit" onclick="submitSearch()">
+                            Search <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- This div will display real-time search results -->
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </div>
 </div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+
+<!-- Styles for Search Area and Results -->
+<style>
+    .search-area {
+        padding: 30px 0;
+    }
+
+    .search-bar {
+        background-color: #f8f8f8;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .search-bar-tablecell {
+        text-align: center;
+    }
+
+    .search-bar input {
+        width: 80%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    .search-bar input:focus {
+        border-color: #007bff;
+    }
+
+    .search-bar button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        margin-left: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .search-bar button:hover {
+        background-color: #0056b3;
+    }
+
+    .search-results {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .search-results p {
+        padding: 5px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .search-results p:hover {
+        background-color: #e0e0e0;
+    }
+</style>
+
+<!-- Real-time search script -->
+<script>
+    // Function for real-time search
+    function realTimeSearch() {
+        var searchTerm = document.getElementById('searchInput').value;
+
+        // If the search field is empty, clear the results
+        if (searchTerm === '') {
+            document.getElementById('searchResults').innerHTML = ''; 
+            return;
+        }
+
+        // Create an AJAX request to send the search term to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'your_search_page.php?search=' + encodeURIComponent(searchTerm), true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Display the search results dynamically
+                document.getElementById('searchResults').innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+    }
+
+    // Optional: Submit search using the button (for users who prefer to hit "Enter" or click "Search")
+    function submitSearch() {
+        var searchTerm = document.getElementById('searchInput').value;
+        if (searchTerm !== '') {
+            // You could redirect to a search results page, or trigger your search with AJAX
+            window.location.href = 'your_search_page.php?search=' + encodeURIComponent(searchTerm);
+        }
+    }
+</script>
+
 	<!-- end search area -->
 
                 <!-- Container for displaying orders -->
@@ -404,22 +513,6 @@ function cancelOrder(orderId) {
     }
 }
 
-
-// Function to handle real-time search
-function realTimeSearch() {
-    var searchTerm = document.getElementById('searchInput').value;
-
-    // Send the search term to the server via AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'your_orders_list_endpoint.php?search=' + encodeURIComponent(searchTerm), true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Update the results with the server response (HTML)
-            document.getElementById('searchResults').innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send();
-}
 
 </script>
 
