@@ -423,19 +423,6 @@ function updateStatus(orderId, status) {
 
     console.log("Setting modal text to:", orderStatusText.textContent);
 
-    // Disable the "Delivered" or "Unreachable" button
-    const deliveredBtn = document.getElementById('deliveredBtn-' + orderId);
-    const unreachableBtn = document.getElementById('unreachableBtn-' + orderId);
-
-    // Disable the appropriate button based on status
-    if (deliveredBtn && status === 'Delivered') {
-        deliveredBtn.disabled = true;
-    }
-
-    if (unreachableBtn && status === 'Unreachable') {
-        unreachableBtn.disabled = true;
-    }
-
     // Show the confirmation modal
     $('#confirmationModal').modal('show');
 }
