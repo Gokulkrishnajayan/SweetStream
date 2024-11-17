@@ -52,11 +52,6 @@ if ($searchTerm) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch the results
-$orders = [];
-while ($row = $result->fetch_assoc()) {
-    $orders[] = $row;
-}
 ?>
 
 <!DOCTYPE html>
