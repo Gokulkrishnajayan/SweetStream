@@ -11,7 +11,7 @@ $sql = "
         u.name AS customer_name, u.phone_no AS customer_phone
     FROM delivery_table d
     JOIN user_table u ON d.user_id = u.id
-    WHERE (d.status = 'assigned' OR d.deliveryperson_id IS NULL)
+    WHERE (d.status = 'assigned')
 ";
 
 // If search term exists, filter the query based on the search input
