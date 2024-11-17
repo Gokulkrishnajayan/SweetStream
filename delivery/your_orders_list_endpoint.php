@@ -3,7 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
 
 // Get the current logged-in user's ID from session or authentication
-$currentUserId = $_SESSION['user_id']; // Example: replace with your session logic
+$currentUserId = $_SESSION['user_id']; // Replace with your session logic
 
 // Get the search term (if it exists)
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
@@ -11,7 +11,7 @@ $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 // Base SQL query to get the orders and join the necessary tables
 $sql = "
     SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time, d.deliveryperson_id,
-        u.name AS customer_name, u.phone_no AS customer_phone
+           u.name AS customer_name, u.phone_no AS customer_phone
     FROM delivery_table d
     JOIN user_table u ON d.user_id = u.id
     WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned')
@@ -81,7 +81,7 @@ if (empty($orders)) {
 
         // Display the order status and actions based on assignment
         echo "<div class='order-status'>";
-        
+
         // If the order is assigned to the current user, show "Assigned" and "Cancel" button
         if ($assignedToCurrentUser) {
             echo "
