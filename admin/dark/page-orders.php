@@ -351,7 +351,23 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
                           <td><?php echo htmlspecialchars($order['address']); ?></td>
                           <td><?php echo htmlspecialchars('$' . $order['price']); ?></td>
                           <td><?php echo htmlspecialchars($order['payment_details']); ?></td>
-                          <td><span class="dot dot-lg <?php echo $order['status'] === 'completed' ? 'bg-success' : 'bg-warning'; ?> mr-2"></span></td>
+                          <td>
+                              <span class="dot dot-lg 
+                                  <?php 
+                                  if ($order['status'] === 'Delivered') {
+                                      echo 'bg-success';
+                                  } elseif ($order['status'] === 'Pending' || $order['status'] === NULL) {
+                                      echo 'bg-warning';
+                                  } elseif ($order['status'] === 'Unreachable') {
+                                      echo 'bg-danger';
+                                  } elseif ($order['status'] === 'Order Dispatched') {
+                                      echo 'bg-warning';  // Yellow
+                                  } elseif ($order['status'] === 'Assigned') {
+                                      echo 'bg-primary';  // Blue for Assigned
+                                  } 
+                                  ?> 
+                              mr-2"></span>
+                          </td>
                           <td>
                               <div class="dropdown">
                                   <button class="btn btn-sm dropdown-toggle more-vertical" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
