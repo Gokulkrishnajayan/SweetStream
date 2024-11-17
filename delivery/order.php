@@ -230,70 +230,6 @@ $result = $stmt->get_result();
     </div>
 </div>
 
-<!-- Styles for Search Area and Results -->
-<style>
-    .search-area {
-        padding: 30px 0;
-    }
-
-    .search-bar {
-        background-color: #f8f8f8;
-        padding: 20px;
-        border-radius: 8px;
-    }
-
-    .search-bar-tablecell {
-        text-align: center;
-    }
-
-    .search-bar input {
-        width: 80%;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        outline: none;
-    }
-
-    .search-bar input:focus {
-        border-color: #007bff;
-    }
-
-    .search-bar button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        margin-left: 10px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-    .search-bar button:hover {
-        background-color: #0056b3;
-    }
-
-    .search-results {
-        margin-top: 10px;
-        padding: 10px;
-        background-color: #f8f8f8;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .search-results p {
-        padding: 5px;
-        margin: 0;
-        cursor: pointer;
-    }
-
-    .search-results p:hover {
-        background-color: #e0e0e0;
-    }
-</style>
 
 <!-- Real-time search script -->
 <script>
@@ -309,7 +245,7 @@ $result = $stmt->get_result();
 
         // Create an AJAX request to send the search term to the server
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'your_search_page.php?search=' + encodeURIComponent(searchTerm), true);
+        xhr.open('GET', 'your_orders_list_endpoint.php?search=' + encodeURIComponent(searchTerm), true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 // Display the search results dynamically
