@@ -256,16 +256,17 @@ if ($result === false) {
                     <span class="badge <?php echo $statusClass; ?>"><?php echo $statusText; ?></span>
                 </td>
                 <td>
-                    <div class="action-buttons">
-                        <!-- Show buttons based on the current status -->
-                        <?php if ($order['status'] != 'Completed'): ?>
-                            <button class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
-                        <?php endif; ?>
+                <div class="action-buttons">
+                    <!-- Show buttons based on the current status -->
+                    <?php if ($order['status'] != 'Completed'): ?>
+                        <button id="deliveredBtn-<?php echo $order['order_id']; ?>" class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
+                    <?php endif; ?>
 
-                        <?php if ($order['status'] != 'Unreachable'): ?>
-                            <button class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
-                        <?php endif; ?>
-                    </div>
+                    <?php if ($order['status'] != 'Unreachable'): ?>
+                        <button id="unreachableBtn-<?php echo $order['order_id']; ?>" class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
+                    <?php endif; ?>
+                </div>
+
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -423,9 +424,23 @@ function updateStatus(orderId, status) {
 
     console.log("Setting modal text to:", orderStatusText.textContent);
 
+    // Disable the "Delivered" or "Unreachable" button
+    const deliveredBtn = document.getElementById('deliveredBtn-' + orderId);
+    const unreachableBtn = document.getElementById('unreachableBtn-' + orderId);
+
+    // Disable the appropriate button based on status
+    if (deliveredBtn && status === 'Delivered') {
+        deliveredBtn.disabled = true;
+    }
+
+    if (unreachableBtn && status === 'Unreachable') {
+        unreachableBtn.disabled = true;
+    }
+
     // Show the confirmation modal
     $('#confirmationModal').modal('show');
 }
+
 
 // Event listener for confirm button in modal
 document.getElementById('confirmButton').addEventListener('click', function() {
