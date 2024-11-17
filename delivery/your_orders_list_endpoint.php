@@ -57,22 +57,24 @@ if (empty($orders)) {
                         <p>Customer: {$order['customer_name']}</p>
                         <p>Address: {$order['address']}</p>
                         <p>Phone: {$order['phone_no']}</p>
-                    </div>
-                    <div class='order-status'>";
+                    </div>";
 
-        // If the order is assigned to the current user, show "Assigned" and "Cancel" button
+        // Order Status section
+        echo "<div class='order-status'>";
+
+        // If the order is assigned to the current user, show "Assigned" and "Cancel" button in a more professional layout
         if ($assignedToCurrentUser) {
-            echo "<div class='assigned-info'>
-                    <span class='badge badge-info'>Assigned to you</span> 
-                    <button class='btn btn-danger' onclick=\"cancelOrder('{$order['order_id']}')\">Cancel</button>
-                  </div>";
+            echo "
+                <div class='assigned-info'>
+                    <span class='badge badge-info assigned-badge'>Assigned to you</span>
+                    <button class='btn btn-danger cancel-btn' onclick=\"cancelOrder('{$order['order_id']}')\">Cancel</button>
+                </div>";
         }
 
         // Always show the "Accept Order" button
-        echo "<button class='btn btn-primary' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
+        echo "<button class='btn btn-primary accept-btn' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
 
-        echo "
-                    </div>
+        echo "</div>
                 </div>
             </div>";
     }
