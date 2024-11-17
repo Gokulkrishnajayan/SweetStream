@@ -13,10 +13,19 @@ $sql = "
     JOIN user_table u ON d.user_id = u.id
     WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned')
     GROUP BY d.user_id, d.delivery_date_time
-    ORDER BY d.delivery_date_time DESC
+    ORDER BY 
+        CASE
+            WHEN d.deliveryperson_id = ? THEN 1  -- Show orders assigned to the current user first
+            ELSE 2
+        END,
+        d.delivery_date_time DESC
 ";
 
-$result = $conn->query($sql);
+// Prepare SQL statement
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $currentUserId); // Bind the current user's ID
+$stmt->execute();
+$result = $stmt->get_result();
 $orders = [];
 
 while ($row = $result->fetch_assoc()) {
@@ -49,11 +58,12 @@ if (empty($orders)) {
                         <p>Phone: {$order['phone_no']}</p>
                     </div>
                     <div class='order-status'>";
-        
+
+        // If the order is assigned to the current user, show the "Assigned" status
         if ($assignedToCurrentUser) {
             echo "<span class='badge badge-info'>Assigned to you</span>";  // Display 'Assigned to you' if this order is assigned to the current user
         } else {
-            echo "<button class='btn btn-primary' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
+            echo "<button class='btn btn-primary' onclick=\"confirmOrder('{$order['order_id']}')\">Accept Order</button>"; // Confirm button to accept the order
         }
 
         echo "
