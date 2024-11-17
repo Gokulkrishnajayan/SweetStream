@@ -240,6 +240,7 @@ $result = $stmt->get_result();
 let selectedUserId = null;
 let selectedOrderDate = null;
 
+// Open the modal with the order details when an order is clicked
 function openModal(orderId, userId, orderDate) {
     selectedUserId = userId;
     selectedOrderDate = orderDate;
@@ -276,12 +277,14 @@ function openModal(orderId, userId, orderDate) {
     .catch(error => console.error('Error fetching order details:', error));
 }
 
+// Check if all checkboxes are selected to enable the confirm button
 function checkAllCheckboxes() {
     const checkboxes = document.querySelectorAll('#orderDetails input[type="checkbox"]');
     const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
     document.getElementById('confirmOrder').disabled = !allChecked;
 }
 
+// Confirm the order assignment for the current user
 function confirmOrder() {
     const currentUserId = <?php echo json_encode($_SESSION['user_id']); ?>;
 
@@ -290,8 +293,8 @@ function confirmOrder() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-            user_id: selectedUserId, 
+        body: JSON.stringify({
+            user_id: selectedUserId,
             order_date: selectedOrderDate,
             delivery_person_id: currentUserId,
         })
@@ -301,7 +304,7 @@ function confirmOrder() {
         if (data.success) {
             alert("Order confirmed and dispatched successfully!");
             closeModal();
-            refreshOrders();
+            refreshOrders(); // Refresh the orders list
         } else {
             alert("Failed to confirm order. Please try again.");
         }
@@ -312,6 +315,7 @@ function confirmOrder() {
     });
 }
 
+// Close the modal
 function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
 }
@@ -357,6 +361,7 @@ document.querySelector('.search-input').addEventListener('keydown', function(e) 
         }
     }
 });
+
 
 </script>
 
