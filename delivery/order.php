@@ -176,7 +176,7 @@ $result = $stmt->get_result();
 	<!-- end header -->
 	
 	<!-- search area -->
-	<!-- <div class="search-area">
+	<div class="search-area">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -191,7 +191,7 @@ $result = $stmt->get_result();
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 	<!-- end search area -->
 
   
@@ -203,69 +203,17 @@ $result = $stmt->get_result();
                 <h3 class="text-center">Your Recent Orders</h3>
 
                
-               <!-- Search Bar Section -->
-<!-- Search Area -->
-<div class="search-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <span class="close-btn"><i class="fas fa-window-close"></i></span>
-                <div class="search-bar">
-                    <div class="search-bar-tablecell">
-                        <h3>Search For:</h3>
-                        <!-- Input field for real-time search -->
-                        <input type="text" id="searchInput" placeholder="Order ID, Customer Name, Address, Phone..." oninput="realTimeSearch()">
-                        
-                        <!-- Submit button (not needed for real-time search, but left for form compatibility) -->
-                        <button type="submit" onclick="submitSearch()">
-                            Search <i class="fas fa-search"></i>
-                        </button>
+                <div class="search-area2 mb-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" placeholder="Search by product name or order ID">
+                        <div class="input-group-append">
+                            <button class="btn btn-success search-button" type="submit">
+                                Search <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- This div will display real-time search results -->
-                <div id="searchResults" class="search-results"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Real-time search script -->
-<script>
-    // Function for real-time search
-    function realTimeSearch() {
-        var searchTerm = document.getElementById('searchInput').value;
-
-        // If the search field is empty, clear the results
-        if (searchTerm === '') {
-            document.getElementById('searchResults').innerHTML = ''; 
-            return;
-        }
-
-        // Create an AJAX request to send the search term to the server
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'your_orders_list_endpoint.php?search=' + encodeURIComponent(searchTerm), true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Display the search results dynamically
-                document.getElementById('searchResults').innerHTML = xhr.responseText;
-            }
-        };
-        xhr.send();
-    }
-
-    // Optional: Submit search using the button (for users who prefer to hit "Enter" or click "Search")
-    function submitSearch() {
-        var searchTerm = document.getElementById('searchInput').value;
-        if (searchTerm !== '') {
-            // You could redirect to a search results page, or trigger your search with AJAX
-            window.location.href = 'your_search_page.php?search=' + encodeURIComponent(searchTerm);
-        }
-    }
-</script>
-
-	<!-- end search area -->
 
                 <!-- Container for displaying orders -->
                 <div id="orderList">
@@ -421,6 +369,8 @@ document.querySelector('.search-input').addEventListener('keydown', function(e) 
 
 
 
+
+
 function cancelOrder(orderId) {
     // Confirm before canceling the order
     const confirmed = confirm("Are you sure you want to cancel this order?");
@@ -448,7 +398,6 @@ function cancelOrder(orderId) {
         });
     }
 }
-
 
 </script>
 
