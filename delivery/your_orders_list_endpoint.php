@@ -89,10 +89,10 @@ if (empty($orders)) {
                     <span class='badge badge-info assigned-badge'>Assigned to you</span>
                     <button class='btn btn-danger cancel-btn' onclick=\"cancelOrder('{$order['order_id']}')\">Cancel</button>
                 </div>";
+        } else {
+            // If not assigned, display "Accept Order" button
+            echo "<button class='btn btn-primary accept-btn' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
         }
-
-        // Always show the "Accept Order" button
-        echo "<button class='btn btn-primary accept-btn' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
 
         echo "</div>
                 </div>

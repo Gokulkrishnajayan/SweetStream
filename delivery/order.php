@@ -363,29 +363,6 @@ document.querySelector('.search-input').addEventListener('keydown', function(e) 
 });
 
 
-// Real-time search functionality
-function realTimeSearch() {
-    var searchTerm = document.getElementById('searchInput').value;
-
-    // If the input is empty, clear the results and return
-    if (searchTerm === '') {
-        document.getElementById('searchResults').innerHTML = '';
-        return;
-    }
-
-    // Create an AJAX request to send the search term to the server
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/path/to/this_php_file.php?search=' + encodeURIComponent(searchTerm), true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Update the search results with the server response (HTML)
-            document.getElementById('searchResults').innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send();
-}
-
-
 
 
 
