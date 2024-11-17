@@ -37,7 +37,8 @@ while ($row = $result->fetch_assoc()) {
         'status' => $row['status'],
         'user_id' => $row['user_id'],
         'order_date' => $row['delivery_date_time'],
-        'deliveryperson_id' => $row['deliveryperson_id'] // Add deliveryperson_id to check against current user
+        'deliveryperson_id' => $row['deliveryperson_id'], // Add deliveryperson_id to check against current user
+        'assigned_to_user' => ($row['deliveryperson_id'] == $currentUserId) // Flag if the order is assigned to the current user
     ];
 }
 
@@ -59,12 +60,16 @@ if (empty($orders)) {
                     </div>
                     <div class='order-status'>";
 
-        // If the order is assigned to the current user, show the "Assigned" status
+        // If the order is assigned to the current user, show "Assigned" and "Cancel" button
         if ($assignedToCurrentUser) {
-            echo "<span class='badge badge-info'>Assigned to you</span>";  // Display 'Assigned to you' if this order is assigned to the current user
-        } else {
-            echo "<button class='btn btn-primary' onclick=\"confirmOrder('{$order['order_id']}')\">Accept Order</button>"; // Confirm button to accept the order
+            echo "<div class='assigned-info'>
+                    <span class='badge badge-info'>Assigned to you</span> 
+                    <button class='btn btn-danger' onclick=\"cancelOrder('{$order['order_id']}')\">Cancel</button>
+                  </div>";
         }
+
+        // Always show the "Accept Order" button
+        echo "<button class='btn btn-primary' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
 
         echo "
                     </div>

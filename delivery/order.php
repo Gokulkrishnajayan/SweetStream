@@ -363,6 +363,42 @@ document.querySelector('.search-input').addEventListener('keydown', function(e) 
 });
 
 
+
+
+
+
+
+
+
+
+function cancelOrder(orderId) {
+    // Confirm before canceling the order
+    const confirmed = confirm("Are you sure you want to cancel this order?");
+
+    if (confirmed) {
+        fetch('cancel_order.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ order_id: orderId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Order canceled successfully!");
+                refreshOrders();  // Refresh the orders list after cancellation
+            } else {
+                alert("Failed to cancel the order. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error canceling the order:", error);
+            alert("An error occurred. Please try again later.");
+        });
+    }
+}
+
 </script>
 
 
