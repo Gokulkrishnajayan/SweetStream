@@ -176,7 +176,7 @@ $result = $stmt->get_result();
 	<!-- end header -->
 	
 	<!-- search area -->
-	<div class="search-area">
+	<!-- <div class="search-area">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -191,7 +191,7 @@ $result = $stmt->get_result();
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<!-- end search area -->
 
   
@@ -522,85 +522,85 @@ function cancelOrder(orderId) {
 
 
 
-/* Styling for the order card */
-.tracking-card {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    /* Styling for the order card */
+    .tracking-card {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-/* Order Info section */
-.order-item .order-info {
-    margin-bottom: 15px;
-}
+    /* Order Info section */
+    .order-item .order-info {
+        margin-bottom: 15px;
+    }
 
-.order-item .order-info h5 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
+    .order-item .order-info h5 {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+    }
 
-.order-item .order-info p {
-    font-size: 14px;
-    color: #555;
-}
+    .order-item .order-info p {
+        font-size: 14px;
+        color: #555;
+    }
 
-/* Status Section */
-.order-status {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    /* Status Section */
+    .order-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-/* Assigned Info Section */
-.assigned-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+    /* Assigned Info Section */
+    .assigned-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-/* Badge for "Assigned to you" */
-.assigned-badge {
-    background-color: #17a2b8;
-    color: white;
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 20px;
-    font-weight: bold;
-}
+    /* Badge for "Assigned to you" */
+    .assigned-badge {
+        background-color: #17a2b8;
+        color: white;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
 
-/* Cancel Button */
-.cancel-btn {
-    background-color: #dc3545;
-    border: none;
-    padding: 5px 10px;
-    font-size: 14px;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 20px;
-}
+    /* Cancel Button */
+    .cancel-btn {
+        background-color: #dc3545;
+        border: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 20px;
+    }
 
-.cancel-btn:hover {
-    background-color: #c82333;
-}
+    .cancel-btn:hover {
+        background-color: #c82333;
+    }
 
-/* Accept Order Button */
-.accept-btn {
-    background-color: #007bff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
+    /* Accept Order Button */
+    .accept-btn {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.accept-btn:hover {
-    background-color: #0056b3;
-}
+    .accept-btn:hover {
+        background-color: #0056b3;
+    }
 
 
 
