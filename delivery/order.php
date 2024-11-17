@@ -176,7 +176,7 @@ $result = $stmt->get_result();
 	<!-- end header -->
 	
 	<!-- search area -->
-	<div class="search-area">
+	<!-- <div class="search-area">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
@@ -191,7 +191,7 @@ $result = $stmt->get_result();
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<!-- end search area -->
 
   
@@ -204,11 +204,23 @@ $result = $stmt->get_result();
 
                
                <!-- Search Bar Section -->
-<div class="search-container">
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+                    <div class="search-container">
     <input type="text" id="searchInput" class="search-input" oninput="realTimeSearch()" placeholder="Search orders by ID, Customer, Address, or Phone...">
     <div id="searchResults" class="search-results"></div>
 </div>
-
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search area -->
 
                 <!-- Container for displaying orders -->
                 <div id="orderList">
