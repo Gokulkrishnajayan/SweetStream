@@ -397,6 +397,23 @@ function cancelOrder(orderId) {
     }
 }
 
+
+// Function to handle real-time search
+function realTimeSearch() {
+    var searchTerm = document.getElementById('searchInput').value;
+
+    // Send the search term to the server via AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'your_orders_list_endpoint.php?search=' + encodeURIComponent(searchTerm), true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Update the results with the server response (HTML)
+            document.getElementById('searchResults').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+}
+
 </script>
 
 
