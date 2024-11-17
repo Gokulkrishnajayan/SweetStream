@@ -12,8 +12,8 @@ if (isset($data->did, $data->delivery_person_id)) {
     $did = $data->did;
     $deliveryPersonId = $data->delivery_person_id;
 
-    // Prepare the SQL query to assign the delivery person to the order
-    $query = "UPDATE delivery_table SET deliveryperson_id = ? WHERE did = ?";
+    // Prepare the SQL query to assign the delivery person to the order and update the status
+    $query = "UPDATE delivery_table SET deliveryperson_id = ?, status = 'assigned' WHERE did = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ii", $deliveryPersonId, $did);
 

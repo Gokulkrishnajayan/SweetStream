@@ -163,7 +163,7 @@ SELECT d.did, d.delivery_date_time, d.user_id, d.address, d.status,
 FROM delivery_table d
 JOIN user_table u ON d.user_id = u.id
 JOIN product_table p ON d.product_id = p.pid
-WHERE d.deliveryperson_id = ? AND d.status IN ('Order Dispatched', 'Unreachable')
+WHERE d.deliveryperson_id = ? AND d.status IN ('Order Dispatched', 'Unreachable','assigned')
 GROUP BY d.user_id, d.delivery_date_time
 ORDER BY d.delivery_date_time DESC
 ";
