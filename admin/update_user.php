@@ -13,7 +13,7 @@ if (isset($input['id'], $input['name'], $input['phone_no'], $input['email'], $in
     $privilege = $input['privilege'];
 
     // Update query example
-    $query = "UPDATE users SET name = ?, phone_no = ?, email = ?, address = ?, privilege = ? WHERE id = ?";
+    $query = "UPDATE user_table SET name = ?, phone_no = ?, email = ?, address = ?, privilege = ? WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("sssssi", $name, $phone_no, $email, $address, $privilege, $id);
 
