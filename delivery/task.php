@@ -163,7 +163,7 @@ SELECT d.did, d.delivery_date_time, d.user_id, d.address, d.status,
 FROM delivery_table d
 JOIN user_table u ON d.user_id = u.id
 JOIN product_table p ON d.product_id = p.pid
-WHERE d.deliveryperson_id = ? AND d.status IN ('Order Dispatched', 'Unreachable','assigned')
+WHERE d.deliveryperson_id = ? AND d.status IN ('Order Dispatched', 'Unreachable')
 GROUP BY d.user_id, d.delivery_date_time
 ORDER BY d.delivery_date_time DESC
 ";
@@ -256,17 +256,16 @@ if ($result === false) {
                     <span class="badge <?php echo $statusClass; ?>"><?php echo $statusText; ?></span>
                 </td>
                 <td>
-                <div class="action-buttons">
-                    <!-- Show buttons based on the current status -->
-                    <?php if ($order['status'] != 'Completed'): ?>
+                    <div class="action-buttons">
+                        <!-- Show buttons based on the current status -->
+                        <?php if ($order['status'] != 'Completed'): ?>
                         <button id="deliveredBtn-<?php echo $order['order_id']; ?>" class="btn btn-outline-success btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Delivered')">Delivered</button>
-                    <?php endif; ?>
+                        <?php endif; ?>
 
-                    <?php if ($order['status'] != 'Unreachable'): ?>
+                        <?php if ($order['status'] != 'Unreachable'): ?>
                         <button id="unreachableBtn-<?php echo $order['order_id']; ?>" class="btn btn-outline-danger btn-sm" onclick="updateStatus(<?php echo $order['order_id']; ?>, 'Unreachable')">Unreachable</button>
-                    <?php endif; ?>
-                </div>
-
+                        <?php endif; ?>
+                    </div>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -440,7 +439,6 @@ function updateStatus(orderId, status) {
     // Show the confirmation modal
     $('#confirmationModal').modal('show');
 }
-
 
 // Event listener for confirm button in modal
 document.getElementById('confirmButton').addEventListener('click', function() {
