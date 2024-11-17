@@ -203,16 +203,11 @@ $result = $stmt->get_result();
                 <h3 class="text-center">Your Recent Orders</h3>
 
                
-                <div class="search-area2 mb-4">
-                    <div class="input-group">
-                        <input type="text" class="form-control search-input" placeholder="Search by product name or order ID">
-                        <div class="input-group-append">
-                            <button class="btn btn-success search-button" type="submit">
-                                Search <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+               <!-- Search Bar Section -->
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-input" oninput="realTimeSearch()" placeholder="Search orders by ID, Customer, Address, or Phone...">
+    <div id="searchResults" class="search-results"></div>
+</div>
 
 
                 <!-- Container for displaying orders -->
