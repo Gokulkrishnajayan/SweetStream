@@ -1,5 +1,13 @@
 <?php
-// Assuming you have a valid database connection
+
+// Database configuration
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
+
+
+// Create connection
+$conn = new mysqli($host, $user, $password, $dbname);
+
+
 header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
 
