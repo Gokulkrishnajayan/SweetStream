@@ -358,9 +358,10 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
                                       <span class="text-muted sr-only">Action</span>
                                   </button>
                                   <div class="dropdown-menu dropdown-menu-right">
-                                      <a class="dropdown-item" href="#">Edit</a>
-                                      <a class="dropdown-item" href="#">Remove</a>
-                                      <a class="dropdown-item" href="#">Assign</a>
+                                  <a class="dropdown-item" href="#" onclick="openEditModal(<?php echo $order['did']; ?>)">Edit</a>
+                                  <a class="dropdown-item" href="#" onclick="removeOrder(<?php echo $order['did']; ?>)">Remove</a>
+                                  <a class="dropdown-item" href="#" onclick="openAssignModal(<?php echo $order['did']; ?>)">Assign</a>
+
                                   </div>
                               </div>
                           </td>
@@ -387,8 +388,76 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
           
 <!-- main content ends -->
 
+<!-- Edit Order Modal -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editOrderModalLabel">Edit Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editOrderForm">
+          <input type="hidden" id="editOrderId">
+          <div class="form-group">
+            <label for="editDeliveryDate">Delivery Date</label>
+            <input type="datetime-local" class="form-control" id="editDeliveryDate">
+          </div>
+          <div class="form-group">
+            <label for="editPrice">Price</label>
+            <input type="number" class="form-control" id="editPrice">
+          </div>
+          <!-- Add more fields as needed -->
+          <div class="form-group">
+            <label for="editQuantity">Quantity</label>
+            <input type="number" class="form-control" id="editQuantity">
+          </div>
+          <div class="form-group">
+            <label for="editAddress">Address</label>
+            <input type="text" class="form-control" id="editAddress">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- .NOTIFICATION -->
+
+<!-- Assign Delivery Person Modal -->
+<div class="modal fade" id="assignDeliveryModal" tabindex="-1" role="dialog" aria-labelledby="assignDeliveryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignDeliveryModalLabel">Assign Delivery Person</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="assignDeliveryForm">
+          <input type="hidden" id="assignOrderId">
+          <div class="form-group">
+            <label for="deliveryPersonSelect">Select Delivery Person</label>
+            <select class="form-control" id="deliveryPersonSelect">
+              <!-- Delivery person options will be dynamically loaded -->
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Assign</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+        <!-- .NOTIFICATION -->
         <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
@@ -725,5 +794,130 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
       gtag('js', new Date());
       gtag('config', 'UA-56159088-1');
     </script>
-  </body>
-</html>
+
+<script>
+  function openEditModal(orderId) {
+  // Fetch the order details from the server
+  fetch(`../get_order_details.php?did=${orderId}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const order = data.order;
+        document.getElementById('editOrderId').value = order.did;
+        document.getElementById('editDeliveryDate').value = order.delivery_date_time;
+        document.getElementById('editPrice').value = order.price;
+        document.getElementById('editQuantity').value = order.product_quantity;
+        document.getElementById('editAddress').value = order.address;
+        // Open the modal
+        $('#editOrderModal').modal('show');
+      } else {
+        alert('Error fetching order details');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+document.getElementById('editOrderForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  const orderData = {
+    did: document.getElementById('editOrderId').value,
+    delivery_date_time: document.getElementById('editDeliveryDate').value,
+    price: document.getElementById('editPrice').value,
+    product_quantity: document.getElementById('editQuantity').value,
+    address: document.getElementById('editAddress').value
+  };
+
+  // Send the updated data to the server
+  fetch('../update_order.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Order updated successfully');
+      location.reload();  // Reload the page to reflect changes
+    } else {
+      alert('Error updating order: ' + data.message);
+    }
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+
+
+function removeOrder(orderId) {
+  if (confirm('Are you sure you want to remove this order?')) {
+    fetch('../remove_order.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ did: orderId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Order removed successfully');
+        location.reload();  // Reload the page to reflect changes
+      } else {
+        alert('Error removing order: ' + data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  }
+}
+
+
+function openAssignModal(orderId) {
+  document.getElementById('assignOrderId').value = orderId;
+  
+  // Fetch available delivery persons
+  fetch('../get_delivery_persons.php')
+    .then(response => response.json())
+    .then(data => {
+      const selectElement = document.getElementById('deliveryPersonSelect');
+      selectElement.innerHTML = ''; // Clear existing options
+      data.deliveryPersons.forEach(person => {
+        const option = document.createElement('option');
+        option.value = person.id;
+        option.textContent = person.name;
+        selectElement.appendChild(option);
+      });
+
+      // Open the modal
+      $('#assignDeliveryModal').modal('show');
+    })
+    .catch(error => console.error('Error fetching delivery persons:', error));
+}
+
+document.getElementById('assignDeliveryForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  const orderId = document.getElementById('assignOrderId').value;
+  const deliveryPersonId = document.getElementById('deliveryPersonSelect').value;
+
+  fetch('../assign_delivery_person.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ did: orderId, delivery_person_id: deliveryPersonId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Delivery person assigned successfully');
+      location.reload();  // Reload the page to reflect changes
+    } else {
+      alert('Error assigning delivery person: ' + data.message);
+    }
+  })
+  .catch(error => console.error('Error:', error));
+});
+
+</script>
+
+
+
+</body>
+
+  </html>
