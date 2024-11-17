@@ -1,7 +1,11 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_delivery.php';
+// Include session and database connection files
+include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/session/session_delivery.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 $conn = new mysqli($host, $user, $password, $dbname);
+
+// Ensure the delivery person is logged in and their user ID is available in the session
+$deliveryPersonId = $_SESSION['user_id'];  // Assuming the delivery person ID is stored in session
 
 // Get the search term from the query string (if any)
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
@@ -12,42 +16,49 @@ $sql = "
            u.name AS customer_name, u.phone_no AS customer_phone
     FROM delivery_table d
     JOIN user_table u ON d.user_id = u.id
-    WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned')  -- Include 'assigned' status
+    WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned') 
 ";
+
+// If the delivery person is logged in, prioritize their assigned orders
+$sql .= " AND (d.deliveryperson_id = ? OR d.deliveryperson_id IS NULL) ";  // Filter by the current delivery person
 
 // If search term exists, filter the query based on the search input
 if ($searchTerm) {
-    $sql .= " AND (d.did LIKE ? OR u.name LIKE ? OR d.address LIKE ?)";
+    $sql .= " AND (d.did LIKE ? OR u.name LIKE ? OR d.address LIKE ?) ";
 }
 
-// Add sorting by 'assigned' orders first, then delivery date in descending order
+// Add sorting by 'assigned' orders first (assigned to this user), then by delivery date in descending order
 $sql .= " ORDER BY 
             CASE 
-                WHEN d.deliveryperson_id IS NOT NULL THEN 1  -- Assigned orders
-                WHEN d.status = 'pending' THEN 2            -- Pending orders
-                ELSE 3                                      -- Other orders
+                WHEN d.deliveryperson_id = ? THEN 1  -- Orders assigned to this user
+                WHEN d.deliveryperson_id IS NULL THEN 2  -- Orders with no delivery person
+                WHEN d.status = 'pending' THEN 3           -- Pending orders
+                ELSE 4                                      -- Other orders
             END,
             d.delivery_date_time DESC";  // Sort by most recent delivery date
 
 // Prepare the SQL statement
 $stmt = $conn->prepare($sql);
 
-// Bind parameters if there is a search term
+// Bind parameters
 if ($searchTerm) {
     $searchTerm = "%" . $searchTerm . "%";  // Wildcards for LIKE search
-    $stmt->bind_param("sss", $searchTerm, $searchTerm, $searchTerm);
+    $stmt->bind_param("ssss", $deliveryPersonId, $searchTerm, $searchTerm, $searchTerm);
+} else {
+    $stmt->bind_param("s", $deliveryPersonId);  // Bind only delivery person ID when no search term
 }
 
 // Execute the query
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch the results (optional)
+// Fetch the results
 $orders = [];
 while ($row = $result->fetch_assoc()) {
     $orders[] = $row;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
