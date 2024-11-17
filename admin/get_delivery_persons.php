@@ -6,7 +6,7 @@ include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db_connection.php';
 $conn = new mysqli($host, $user, $password, $dbname);
 
 // Prepare the SQL query to get all delivery persons
-$query = "SELECT id, name FROM user_table WHERE privilege = 'delivery_person'";
+$query = "SELECT id, name FROM user_table WHERE privilege = 'delivery'";
 $result = $conn->query($query);
 
 // Check if delivery persons are found
