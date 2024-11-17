@@ -362,7 +362,7 @@ include $_SERVER['DOCUMENT_ROOT'] .'/SweetStream/session/session_admin.php';
                                       echo 'bg-danger';
                                   } elseif ($order['status'] === 'Order Dispatched') {
                                       echo 'bg-warning';  // Yellow
-                                  } elseif ($order['status'] === 'Assigned') {
+                                  } elseif ($order['status'] === 'assigned') {
                                       echo 'bg-primary';  // Blue for Assigned
                                   } 
                                   ?> 
