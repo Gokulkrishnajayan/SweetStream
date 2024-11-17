@@ -1,13 +1,17 @@
 <?php
 // Database connection
 include $_SERVER['DOCUMENT_ROOT'] . '/SweetStream/php/db.php';
+
+// Get the current logged-in user's ID from session or authentication
+$currentUserId = $_SESSION['user_id']; // Example, replace with your session logic
+
 // SQL query to join and group delivery, product, and user data
 $sql = "
-    SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time,
+    SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time, d.deliveryperson_id,
         u.name AS customer_name, u.phone_no AS customer_phone
     FROM delivery_table d
     JOIN user_table u ON d.user_id = u.id
-    WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL)
+    WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned')
     GROUP BY d.user_id, d.delivery_date_time
     ORDER BY d.delivery_date_time DESC
 ";
@@ -23,7 +27,8 @@ while ($row = $result->fetch_assoc()) {
         'phone_no' => $row['customer_phone'],
         'status' => $row['status'],
         'user_id' => $row['user_id'],
-        'order_date' => $row['delivery_date_time']
+        'order_date' => $row['delivery_date_time'],
+        'deliveryperson_id' => $row['deliveryperson_id'] // Add deliveryperson_id to check against current user
     ];
 }
 
@@ -31,6 +36,9 @@ if (empty($orders)) {
     echo "<p class='text-center'>No pending orders available.</p>";
 } else {
     foreach ($orders as $order) {
+        // Check if the order is assigned to the current user
+        $assignedToCurrentUser = ($order['deliveryperson_id'] == $currentUserId);
+
         echo "
             <div class='tracking-card'>
                 <div class='order-item'>
@@ -40,8 +48,15 @@ if (empty($orders)) {
                         <p>Address: {$order['address']}</p>
                         <p>Phone: {$order['phone_no']}</p>
                     </div>
-                    <div class='order-status'>
-                        <button class='btn btn-primary' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>
+                    <div class='order-status'>";
+        
+        if ($assignedToCurrentUser) {
+            echo "<span class='badge badge-info'>Assigned to you</span>";  // Display 'Assigned to you' if this order is assigned to the current user
+        } else {
+            echo "<button class='btn btn-primary' onclick=\"openModal('{$order['order_id']}', '{$order['user_id']}', '{$order['order_date']}')\">Accept Order</button>";
+        }
+
+        echo "
                     </div>
                 </div>
             </div>";
