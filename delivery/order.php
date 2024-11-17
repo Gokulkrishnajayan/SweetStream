@@ -175,23 +175,23 @@ $result = $stmt->get_result();
 	</div>
 	<!-- end header -->
 	
-	<!-- search area -->
-	<div class="search-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
-						<div class="search-bar-tablecell">
-							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<!-- Search Modal -->
+    <div class="search-area" id="searchModal">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <span class="close-btn" id="closeSearchModal"><i class="fas fa-window-close"></i></span>
+                    <div class="search-bar">
+                        <div class="search-bar-tablecell">
+                            <h3>Search For:</h3>
+                            <input type="text" id="searchInput" placeholder="Order ID, Address, Phone, Customer Name" onkeyup="realTimeSearch()">
+                            <div id="searchResults"></div> <!-- Results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<!-- end search area -->
 
   
@@ -364,6 +364,20 @@ document.querySelector('.search-input').addEventListener('keydown', function(e) 
 
 
 
+function realTimeSearch() {
+    var searchTerm = document.getElementById('searchInput').value;
+
+    // Make AJAX request to the server
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'your_search_page.php?search=' + encodeURIComponent(searchTerm), true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Update the search results
+            document.getElementById('searchResults').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+}
 
 
 

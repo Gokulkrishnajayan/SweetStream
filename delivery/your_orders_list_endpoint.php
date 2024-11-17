@@ -63,6 +63,7 @@ while ($row = $result->fetch_assoc()) {
     ];
 }
 
+// If no orders are found, show a default message
 if (empty($orders)) {
     echo "<p class='text-center'>No orders found matching your search.</p>";
 } else {
