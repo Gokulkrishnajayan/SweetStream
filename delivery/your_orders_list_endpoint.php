@@ -8,7 +8,7 @@ $currentUserId = $_SESSION['user_id']; // Example, replace with your session log
 // Get the search term (if it exists)
 $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
-// SQL query to join and group delivery, product, and user data
+// Base SQL query to get the orders and join the necessary tables
 $sql = "
     SELECT d.did, d.address, d.status, d.user_id, d.delivery_date_time, d.deliveryperson_id,
         u.name AS customer_name, u.phone_no AS customer_phone
@@ -17,14 +17,14 @@ $sql = "
     WHERE (d.status = 'pending' OR d.deliveryperson_id IS NULL OR d.status = 'assigned')
 ";
 
-// If there is a search term, filter based on the input (Order ID, Address, Phone No., Customer Name)
-if ($searchTerm) {
+// Only add the search condition if there is a search term
+if (!empty($searchTerm)) {
+    // If there is a search term, filter based on multiple fields (Order ID, Address, Phone No., Customer Name)
     $sql .= " AND (d.did LIKE ? OR u.name LIKE ? OR d.address LIKE ? OR u.phone_no LIKE ?)";
 }
 
 // Grouping by user_id and ordering
-$sql .= " GROUP BY d.user_id, d.delivery_date_time
-          ORDER BY 
+$sql .= " ORDER BY 
               CASE
                   WHEN d.deliveryperson_id = ? THEN 1  -- Show orders assigned to the current user first
                   ELSE 2
@@ -36,7 +36,7 @@ $sql .= " GROUP BY d.user_id, d.delivery_date_time
 $stmt = $conn->prepare($sql);
 
 // Bind parameters for the search term
-if ($searchTerm) {
+if (!empty($searchTerm)) {
     $searchTerm = "%" . $searchTerm . "%";  // Wildcards for LIKE search
     $stmt->bind_param("sssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $currentUserId);
 } else {
@@ -67,6 +67,7 @@ while ($row = $result->fetch_assoc()) {
 if (empty($orders)) {
     echo "<p class='text-center'>No orders found matching your search.</p>";
 } else {
+    // Loop through and display the orders
     foreach ($orders as $order) {
         // Check if the order is assigned to the current user
         $assignedToCurrentUser = ($order['deliveryperson_id'] == $currentUserId);
