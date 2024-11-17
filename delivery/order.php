@@ -580,6 +580,7 @@ function cancelOrder(orderId) {
     color: white;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 20px;
 }
 
 .cancel-btn:hover {
