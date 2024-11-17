@@ -403,7 +403,7 @@ if ($result === false) {
 	<script src="../user/assets/js/main.js"></script>
     
 <script>
-let currentButton; // Store the button that was clicked
+  let currentButton; // Store the button that was clicked
 let currentStatus; // Store the status to be confirmed
 let currentOrderId; // Store the order ID of the selected row
 
@@ -425,6 +425,27 @@ function updateStatus(orderId, status) {
 
     // Show the confirmation modal
     $('#confirmationModal').modal('show');
+
+    // Disable or enable buttons in the table row
+    const rows = document.querySelectorAll('table tbody tr');
+    rows.forEach(row => {
+        const orderIdCell = row.querySelector('td:first-child'); // Assuming order_id is in the first column
+        const deliveredButton = row.querySelector('button.btn-outline-success');
+        const unreachableButton = row.querySelector('button.btn-outline-danger');
+
+        if (orderIdCell && orderIdCell.textContent.trim() === String(currentOrderId)) {
+            console.log("Matching row found. Order ID:", currentOrderId);
+
+            // Disable the unreachable button and enable the delivered button
+            if (status === 'Unreachable') {
+                unreachableButton.disabled = true;  // Disable Unreachable button
+                deliveredButton.disabled = false;  // Enable Delivered button
+            } else if (status === 'Delivered') {
+                deliveredButton.disabled = true;  // Disable Delivered button
+                unreachableButton.disabled = false;  // Enable Unreachable button
+            }
+        }
+    });
 }
 
 // Event listener for confirm button in modal
@@ -480,7 +501,9 @@ document.getElementById('confirmButton').addEventListener('click', function() {
                         statusCell.classList.remove('badge-warning');
                         statusCell.classList.add('badge-danger');
                         statusCell.textContent = 'Unreachable';
-                        deliveredButton.disabled = false; // Re-enable the delivered button for the row
+                        
+                        // Enable the Delivered button again for the row
+                        deliveredButton.disabled = false;
                     }
                 }
             });
