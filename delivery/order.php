@@ -175,23 +175,23 @@ $result = $stmt->get_result();
 	</div>
 	<!-- end header -->
 	
-	<!-- Search Modal -->
-    <div class="search-area" id="searchModal">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <span class="close-btn" id="closeSearchModal"><i class="fas fa-window-close"></i></span>
-                    <div class="search-bar">
-                        <div class="search-bar-tablecell">
-                            <h3>Search For:</h3>
-                            <input type="text" id="searchInput" placeholder="Order ID, Address, Phone, Customer Name" onkeyup="realTimeSearch()">
-                            <div id="searchResults"></div> <!-- Search results will be displayed here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<h3>Search For:</h3>
+							<input type="text" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- end search area -->
 
   
@@ -237,161 +237,196 @@ $result = $stmt->get_result();
 </div>
 
 <script>
-    let selectedUserId = null;
-    let selectedOrderDate = null;
+let selectedUserId = null;
+let selectedOrderDate = null;
 
-    // Open the modal with the order details when an order is clicked
-    function openModal(orderId, userId, orderDate) {
-        selectedUserId = userId;
-        selectedOrderDate = orderDate;
+// Open the modal with the order details when an order is clicked
+function openModal(orderId, userId, orderDate) {
+    selectedUserId = userId;
+    selectedOrderDate = orderDate;
 
-        const modal = document.getElementById('orderModal');
-        modal.style.display = 'flex';
+    const modal = document.getElementById('orderModal');
+    modal.style.display = 'flex';
 
-        fetch('fetch_order_details.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ user_id: userId, order_date: orderDate })
-        })
-        .then(response => response.json())
-        .then(data => {
-            let productList = `<p><strong>Order Date:</strong> ${orderDate}</p><hr>`;
-            data.products.forEach((product, index) => {
-                productList += `
-                    <div class="product-item">
-                        <input type="checkbox" class="product-checkbox" id="productCheckbox${index}" onclick="checkAllCheckboxes()">
-                        <img src="${product.image_url}" alt="${product.product_name}">
-                        <div class="product-info">
-                            <h6>${product.product_name}</h6>
-                            <p>Quantity: ${product.quantity}</p>
-                        </div>
+    fetch('fetch_order_details.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_id: userId, order_date: orderDate })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let productList = `<p><strong>Order Date:</strong> ${orderDate}</p><hr>`;
+        data.products.forEach((product, index) => {
+            productList += `
+                <div class="product-item">
+                    <input type="checkbox" class="product-checkbox" id="productCheckbox${index}" onclick="checkAllCheckboxes()">
+                    <img src="${product.image_url}" alt="${product.product_name}">
+                    <div class="product-info">
+                        <h6>${product.product_name}</h6>
+                        <p>Quantity: ${product.quantity}</p>
                     </div>
-                `;
-            });
+                </div>
+            `;
+        });
 
-            document.getElementById('orderDetails').innerHTML = productList;
-            document.getElementById('confirmOrder').disabled = true;
+        document.getElementById('orderDetails').innerHTML = productList;
+        document.getElementById('confirmOrder').disabled = true;
+    })
+    .catch(error => console.error('Error fetching order details:', error));
+}
+
+// Check if all checkboxes are selected to enable the confirm button
+function checkAllCheckboxes() {
+    const checkboxes = document.querySelectorAll('#orderDetails input[type="checkbox"]');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    document.getElementById('confirmOrder').disabled = !allChecked;
+}
+
+// Confirm the order assignment for the current user
+function confirmOrder() {
+    const currentUserId = <?php echo json_encode($_SESSION['user_id']); ?>;
+
+    fetch('update_delivery_person.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: selectedUserId,
+            order_date: selectedOrderDate,
+            delivery_person_id: currentUserId,
         })
-        .catch(error => console.error('Error fetching order details:', error));
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Order confirmed and dispatched successfully!");
+            closeModal();
+            refreshOrders(); // Refresh the orders list
+        } else {
+            alert("Failed to confirm order. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error confirming order:", error);
+        alert("An error occurred. Please try again later.");
+    });
+}
+
+// Close the modal
+function closeModal() {
+    document.getElementById('orderModal').style.display = 'none';
+}
+
+// Refresh the orders list based on the search query without reloading the entire page
+function refreshOrders(searchTerm = '') {
+    fetch('your_orders_list_endpoint.php?search=' + searchTerm)
+        .then(response => response.text())
+        .then(html => {
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = html;
+
+            // Check if there are no orders and display message if needed
+            if (!orderList.innerHTML.trim()) {
+                orderList.innerHTML = "<p class='text-center'>No pending orders available.</p>";
+            }
+        })
+        .catch(error => console.error("Error refreshing orders:", error));
+}
+
+// Handle search functionality
+document.querySelector('.search-button').addEventListener('click', function(e) {
+    e.preventDefault();  // Prevent the default form submit
+
+    const searchTerm = document.querySelector('.search-input').value.trim();
+
+    if (searchTerm !== '') {
+        refreshOrders(searchTerm);
+    } else {
+        refreshOrders();  // Refresh without search term (show all orders)
+    }
+});
+
+// Handle Enter key press for search (optional enhancement)
+document.querySelector('.search-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const searchTerm = e.target.value.trim();
+        if (searchTerm !== '') {
+            refreshOrders(searchTerm);
+        } else {
+            refreshOrders();
+        }
+    }
+});
+
+
+// Real-time search functionality
+function realTimeSearch() {
+    var searchTerm = document.getElementById('searchInput').value;
+
+    // If the input is empty, clear the results and return
+    if (searchTerm === '') {
+        document.getElementById('searchResults').innerHTML = '';
+        return;
     }
 
-    // Check if all checkboxes are selected to enable the confirm button
-    function checkAllCheckboxes() {
-        const checkboxes = document.querySelectorAll('#orderDetails input[type="checkbox"]');
-        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-        document.getElementById('confirmOrder').disabled = !allChecked;
-    }
+    // Create an AJAX request to send the search term to the server
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/path/to/this_php_file.php?search=' + encodeURIComponent(searchTerm), true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Update the search results with the server response (HTML)
+            document.getElementById('searchResults').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+}
 
-    // Confirm the order assignment for the current user
-    function confirmOrder() {
-        const currentUserId = <?php echo json_encode($_SESSION['user_id']); ?>;
 
-        fetch('update_delivery_person.php', {
+
+
+
+
+
+
+function cancelOrder(orderId) {
+    // Confirm before canceling the order
+    const confirmed = confirm("Are you sure you want to cancel this order?");
+
+    if (confirmed) {
+        fetch('cancel_order.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                user_id: selectedUserId,
-                order_date: selectedOrderDate,
-                delivery_person_id: currentUserId,
-            })
+            body: JSON.stringify({ order_id: orderId })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert("Order confirmed and dispatched successfully!");
-                closeModal();
-                refreshOrders(); // Refresh the orders list
+                alert("Order canceled successfully!");
+                refreshOrders();  // Refresh the orders list after cancellation
             } else {
-                alert("Failed to confirm order. Please try again.");
+                alert("Failed to cancel the order. Please try again.");
             }
         })
         .catch(error => {
-            console.error("Error confirming order:", error);
+            console.error("Error canceling the order:", error);
             alert("An error occurred. Please try again later.");
         });
     }
+}
 
-    // Close the modal
-    function closeModal() {
-        document.getElementById('orderModal').style.display = 'none';
-    }
-
-
-
-
-    //search dynamic funtionality implementation
-
-    // Real-time search functionality
-        function realTimeSearch() {
-            var searchTerm = document.getElementById('searchInput').value;
-
-            // If the input is empty, clear the results and return
-            if (searchTerm === '') {
-                document.getElementById('searchResults').innerHTML = '';
-                return;
-            }
-
-            // Create an AJAX request to send the search term to the server
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/path/to/this_php_file.php?search=' + encodeURIComponent(searchTerm), true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Update the search results with the server response (HTML)
-                    document.getElementById('searchResults').innerHTML = xhr.responseText;
-                }
-            };
-            xhr.send();
-        }
-
-
-
-
-
-
-
-
-    function cancelOrder(orderId) {
-        // Confirm before canceling the order
-        const confirmed = confirm("Are you sure you want to cancel this order?");
-
-        if (confirmed) {
-            fetch('cancel_order.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ order_id: orderId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Order canceled successfully!");
-                    refreshOrders();  // Refresh the orders list after cancellation
-                } else {
-                    alert("Failed to cancel the order. Please try again.");
-                }
-            })
-            .catch(error => {
-                console.error("Error canceling the order:", error);
-                alert("An error occurred. Please try again later.");
-            });
-        }
-    }
-
-    </script>
-
-
+</script>
 
 
 
 
 
 <style>
-
     .modal {
         display: none;
         position: fixed;
